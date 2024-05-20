@@ -14,7 +14,7 @@ Reading language definition from </Applications/Inform.app_old.app/Contents/Reso
 Phase I ... Lexical analysis
 -----------------------------------------------------
 
-I've now read your source text, which is 176 words long.
+I've now read your source text, which is 198 words long.
 
 
 -----------------------------------------------------
@@ -23,7 +23,7 @@ Phase II ... Semantic analysis Ia
 
 I've also read Standard Rules by Graham Nelson, which is 42655 words long.
 I've also read English Language by Graham Nelson, which is 2297 words long.
-I've also read Zorkmids by Philip Riley, which is 2775 words long.
+I've also read Zorkmids by Philip Riley, which is 2944 words long.
 
 
 -----------------------------------------------------
@@ -176,7 +176,7 @@ Phase XIII ... Compilation now complete
 -----------------------------------------------------
 
 Total of 127 files written as streams.
-CPU time: 155 centiseconds
+CPU time: 157 centiseconds
 
 
 That concludes the debugging log from this run of Inform.

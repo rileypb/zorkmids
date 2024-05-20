@@ -2,7 +2,7 @@ Include Zorkmids by Philip Riley.
 
 Lab is a room. "You are in a lab. There is an end table here, which is scenery. There is a [divan] here as well. It is a mentioned supporter."
 
-The desk is a supporter in the Lab. The zorkmid content of the desk is $10. "A desk sits in the corner of the room."
+The desk is an enterable supporter in the Lab. The zorkmid content of the desk is $10. "A desk sits in the corner of the room."
 
 The end table is a scenery supporter in the Lab. The zorkmid content of the end table is $8. 
 
@@ -16,5 +16,8 @@ The bag is a container in the Lab. The zorkmid content of the bag is $51. The ba
 
 
 The pencil is on the desk.
+The chair is an enterable supporter on the desk.
+The player is on the chair.
+the cucumber is on the chair.
 
 test me with "take $11/take $5 from desk/i/put $3 on divan/l/take box/open box/i/take all".

@@ -7,7 +7,8 @@ A room has a Quantity of money called the zorkmid content.
 
 The already described zorkmids is a list of things that varies.
 
-quantity of zorkmids is a thing.
+quantity of zorkmids is a thing. 
+quantity2 of zorkmids is a thing.
 
 Instead of examining a quantity of zorkmids:
 	say "There are ";
@@ -17,8 +18,16 @@ Instead of examining a quantity of zorkmids:
 Rule for printing the name of a quantity of zorkmids:
 	say the zorkmid content of the quantity of zorkmids;
 
+Instead of examining a quantity2 of zorkmids:
+	say "There are ";
+	say the zorkmid content of the quantity2 of zorkmids;
+	say " here."
+
+Rule for printing the name of a quantity2 of zorkmids:
+	say the zorkmid content of the quantity2 of zorkmids;
+
 Before examining: 
-	if the noun is a container:
+	if the noun is a container and the noun is not the holder of the player:
 		if the zorkmid content of the noun > $0:
 			now the zorkmid content of the quantity of zorkmids is the zorkmid content of the noun;
 			now the quantity of zorkmids is contained by the noun;
@@ -55,7 +64,7 @@ Appropriating is an action applying to one quantity of money. Understand "take [
 Appropriating it from is an action applying to one quantity of money and one thing. Understand "take [Quantity of money] from [something]" as appropriating it from.
 
 Check appropriating (this is the can't take too much money rule):
-	if the zorkmid content of the location < the quantity of money understood:
+	if the zorkmid content of the holder of the player < the quantity of money understood:
 		say "[There] [aren't] that much money here." instead;
 		
 Check appropriating (this is the can't take too little money rule):
@@ -65,7 +74,7 @@ Check appropriating (this is the can't take too little money rule):
 		say "[We] [can't] take negative money!" instead;
 		
 Carry out appropriating:
-	now the zorkmid content of the location is the zorkmid content of the location minus the quantity of money understood;
+	now the zorkmid content of the holder of the player is the zorkmid content of the holder of the player minus the quantity of money understood;
 	now the zorkmid content of the player is the zorkmid content of the player plus the quantity of money understood;
 
 Report appropriating:
@@ -330,7 +339,7 @@ Report an actor opening (this is the new reveal any newly visible interior rule)
 The new reveal any newly visible interior rule is listed instead of the reveal any newly visible interior rule in the report opening rules.
 
 Before listing contents of something (called the holder):
-	if the zorkmid content of the holder > $0:
+	if the zorkmid content of the holder > $0 and the holder is not the holder of the player:
 		now the zorkmid content of the quantity of zorkmids is the zorkmid content of the holder;
 		now the quantity of zorkmids is in the holder;
 
@@ -339,13 +348,25 @@ After listing contents of something:
 
 The sneaky rulebook is an object based rulebook.
 
+Instead of taking the quantity2 of zorkmids:
+	try appropriating the zorkmid content of the quantity2 of zorkmids;
+
+First sneaky rule (this is the sneaky nothing rule):
+	if the zorkmid content of the holder of the player > $0:
+		now the zorkmid content of the quantity2 of zorkmids is the zorkmid content of the holder of the player;
+		now the quantity2 of zorkmids is in the holder of the player;
+
 First sneaky rule on something (called T) (this is the sneaky zorkmid rule):
 	if T is not the quantity of zorkmids:
 		if the zorkmid content of T > $0:
 			now the zorkmid content of the quantity of zorkmids is the zorkmid content of T;
 			now the quantity of zorkmids is in T;
 
+First sneaky rule (this is the sneaky reset rule):
+	now the quantity2 of zorkmids is nowhere;
 
-
+Every turn:
+	now the quantity2 of zorkmids is nowhere.
+	
 
 Zorkmids ends here.
