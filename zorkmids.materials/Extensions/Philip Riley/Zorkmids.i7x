@@ -337,4 +337,15 @@ Before listing contents of something (called the holder):
 After listing contents of something:
 	now the quantity of zorkmids is nowhere;
 
+The sneaky rulebook is an object based rulebook.
+
+First sneaky rule on something (called T) (this is the sneaky zorkmid rule):
+	if T is not the quantity of zorkmids:
+		if the zorkmid content of T > $0:
+			now the zorkmid content of the quantity of zorkmids is the zorkmid content of T;
+			now the quantity of zorkmids is in T;
+
+
+
+
 Zorkmids ends here.

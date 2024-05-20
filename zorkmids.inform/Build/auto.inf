@@ -4404,7 +4404,7 @@ Global lightflag = false;
 ! ListWriter.i6t: Memory
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
-Constant REQUISITION_STACK_SIZE = 3*21;
+Constant REQUISITION_STACK_SIZE = 3*22;
 Array requisition_stack --> REQUISITION_STACK_SIZE;
 Global requisition_stack_pointer = 0;
 
@@ -4715,6 +4715,7 @@ Global list_filter_routine;
     c_style = style; c_depth = depth;
 	c_margin = 0; if (style & EXTRAINDENT_BIT) c_margin = 1;
 
+
 	objectloop (a ofclass Object) {
 		give a list_filter_permits;
 		if ((list_filter_routine) && (list_filter_routine(a) == false))
@@ -4722,6 +4723,7 @@ Global list_filter_routine;
 	}
 
     first = c_iterator(first, depth, 0, START_ITF);
+	FollowRulebook( R_839, first, 1);
 	if (first == nothing) {
 		if (style & ISARE_BIT ~= 0) LIST_WRITER_INTERNAL_RM('W');
         else LIST_WRITER_INTERNAL_RM('Y');
@@ -4880,7 +4882,10 @@ Global DBLW_no_classes; Global DBLW_no_objs;
 [ WriteListR o depth from_start
 	partition_classes partition_class_sizes
 	cl memb index k2 l m no_classes q groups_to_do current_lt;
+	FollowRulebook( R_839, o, 1);
     if (o == nothing) return; ! An empty list: no output
+
+
 
     if (from_start) {
     	o = c_iterator(o, depth, 0, COALESCE_ITF); ! Coalesce list and choose new start
@@ -5109,6 +5114,9 @@ Global DBLW_no_classes; Global DBLW_no_objs;
 				if (o has light)           { LIST_WRITER_INTERNAL_RM('A'); LIST_WRITER_INTERNAL_RM('D', o);  parenth_flag = true; }
 				if (o has worn)            { LIST_WRITER_INTERNAL_RM('A'); LIST_WRITER_INTERNAL_RM('L', o); parenth_flag = true; }
 			}
+
+
+			FollowRulebook( R_839, o, 1);
 	
 			if (o has container)
 				if (o has openable) {
@@ -9944,7 +9952,7 @@ Array valued_property_offsets --> valued_property_offsets_SIZE;
 ! Output.i6t: Activities
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
-Constant NUMBER_RULEBOOKS_CREATED = 380;
+Constant NUMBER_RULEBOOKS_CREATED = 381;
 Constant V0_printing_the_name = 0;
 Constant V1_printing_the_plural_name = 1;
 Constant V2_printing_a_number = 2;
@@ -10337,8 +10345,7 @@ Constant REL_BLOCK_HEADER ($100*6 + $$1101)*$10000;
     ;
     if (value == 0) jump Use_LP_0;
     if (NUMBER_TY_Abs(value) >= 1) jump Use_LP_0;
-    if (NUMBER_TY_Abs(value) >= 1) jump Use_LP_1;
-    jump Use_LP_1;
+    jump Use_LP_0;
     rtrue;
 
     ! $1, scaling: x units --> 1 x + 0 stored at runtime (int) (defined as benchmark * 1)
@@ -10359,27 +10366,6 @@ Constant REL_BLOCK_HEADER ($100*6 + $$1101)*$10000;
         }
         print rem;
     }
-    rtrue;
-
-    ! 1zm, scaling: x units --> 1 x + 0 stored at runtime (int) (defined as benchmark * 1)
-    .Use_LP_1;
-    print value;
-    if (rem > 0) {
-        print ".";
-        ! M = 1, ceiling(log_10(M)) = 1
-        S = 1;
-        while ((rem % 10 == 0) && (rem > 0)) {
-            rem = rem/10;
-            S = S/10;
-        }
-        while (rem < S/10) {
-            print "0";
-            S = S/10;
-        }
-        print rem;
-    }
-    print "z";
-    print "m";
     rtrue;
 ];
 [ R_E67 
@@ -11169,7 +11155,7 @@ Object -> I129_desk ""
     with vector 0
     has mark_as_thing
     with IK2_Count 3
-    with IK2_Link I133_pencil
+    with IK2_Link I134_pencil
     with IK6_Count 0
     with IK6_Link I130_end_table
     with KD_Count 6
@@ -11181,12 +11167,12 @@ Object -> I129_desk ""
     with article BC_170
 ;
 
-Object -> -> I133_pencil ""
+Object -> -> I134_pencil ""
     class K2_thing
     with short_name BC_171
     with vector 0
     has mark_as_thing
-    with IK2_Count 7
+    with IK2_Count 8
     with IK2_Link I130_end_table
     with KD_Count 2
     with name 'pencil' 'things//p' 
@@ -11249,9 +11235,9 @@ Object -> I132_box ""
     with vector 0
     has mark_as_thing
     with IK2_Count 6
-    with IK2_Link nothing
+    with IK2_Link I133_bag
     with IK5_Count 0
-    with IK5_Link nothing
+    with IK5_Link I133_bag
     with KD_Count 5
     with name 'box' 'containers//p' 
     with action_bitmap 0 0 0 0 0 0 
@@ -11260,6 +11246,28 @@ Object -> I132_box ""
     with list_together BC_192
     with plural BC_193
     with article BC_194
+;
+
+Object -> I133_bag ""
+    class K5_container
+    with short_name BC_195
+    with p15_zorkmid_content 51
+    has open
+    has openable
+    with vector 0
+    has mark_as_thing
+    with IK2_Count 7
+    with IK2_Link nothing
+    with IK5_Count 1
+    with IK5_Link nothing
+    with KD_Count 5
+    with name 'bag' 'containers//p' 
+    with action_bitmap 0 0 0 0 0 0 
+    with description BC_196
+    with initial BC_197
+    with list_together BC_198
+    with plural BC_199
+    with article BC_200
 ;
 
 Constant I71_german_language = 1;
@@ -11313,16 +11321,16 @@ Constant I123_masculine_gender = 2;
 Constant I124_feminine_gender = 3;
 Array Global_Vars -->
   (false) ! 7 darkness witnessed
-  (BC_195) ! 25 command prompt
+  (BC_201) ! 25 command prompt
   (I73_english_language) ! 29 language of play
-  (BC_196) ! 32 story author
-  (BC_197) ! 33 story headline
-  (BC_198) ! 34 story genre
-  (BC_199) ! 35 story description
+  (BC_202) ! 32 story author
+  (BC_203) ! 33 story headline
+  (BC_204) ! 34 story genre
+  (BC_205) ! 35 story description
   (1) ! 36 release number
   (0) ! 37 story creation year
   (0) ! 45 locale paragraph count
-  (BC_200) ! 60 already described zorkmids
+  (BC_206) ! 60 already described zorkmids
 ;
 
 
@@ -11334,14 +11342,14 @@ Array Global_Vars -->
 
 
 Array T0_final_question_options table  tab_0_0 tab_0_1 tab_0_2 tab_0_3 tab_0_4;
-Array tab_0_0 table $0664 0 (BC_201) (BC_202) (BC_203) (BC_204) (BC_205) ;
+Array tab_0_0 table $0664 0 (BC_207) (BC_208) (BC_209) (BC_210) (BC_211) ;
 Array tab_0_1 table $0465 1 (0) (0) (1) (0) (0) ;
 Array tab_0_2 table $2066 2 (Consult_Grammar_93) (Consult_Grammar_94) (Consult_Grammar_95) (Consult_Grammar_96) (Consult_Grammar_97) ;
 Array tab_0_3 table $0067 3 (IMMEDIATELY_RESTART_VM_R) (IMMEDIATELY_RESTORE_SAVED_R) ( TABLE_NOVALUE) (IMMEDIATELY_QUIT_R) (IMMEDIATELY_UNDO_R) ;
 Array tab_0_4 table $0068 4 ( TABLE_NOVALUE) ( TABLE_NOVALUE) (V27_amusing_a_victorious_pla) ( TABLE_NOVALUE) ( TABLE_NOVALUE) ;
 Array T1_locale_priorities table  tab_1_0 tab_1_1;
-Array tab_1_0 table $0869 NULL ( TABLE_NOVALUE)  TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE;
-Array tab_1_1 table $446a 5 ( TABLE_NOVALUE)  TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE;
+Array tab_1_0 table $0869 NULL ( TABLE_NOVALUE)  TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE;
+Array tab_1_1 table $446a 5 ( TABLE_NOVALUE)  TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE TABLE_NOVALUE;
 Array TB_Blanks -> 
   ! For table T0_final_question_options
   $00  ! Column 0
@@ -11351,7 +11359,7 @@ Array TB_Blanks ->
   $1b  ! Column 4
   
   ! For table T1_locale_priorities
-  $ff $01  ! Column 1
+  $ff $03  ! Column 1
   
   ! End of table
   NULL NULL;
@@ -20311,6 +20319,34 @@ Array ActionHappened --> 0 0 0 0 0 0;
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
+
+! ----------------------------------------------------------------------------------------------------
+! Rules in rulebook: sneaky (B380_sneaky)
+! ----------------------------------------------------------------------------------------------------
+! Rule 1/1 ! First sneaky rule on something ( called T ) ( this is the sneaky zorkmid rule ):
+! ----------------------------------------------------------------------------------------------------
+! From "Zorkmids" by Philip Riley
+! No specific request
+! First sneaky rule on something ( called T ) ( this is the sneaky zorkmid rule ):
+[ R_839 
+    tmp_0 ! Let/loop value, e.g., 'T': thing
+    ;
+    if ((((tmp_0 = parameter_value, (((parameter_value ofclass K2_thing) && (tmp_0=(parameter_value), true))))) || (tmp_0 = 0,false))) { ! Runs only when pattern matches
+    if (debug_rules) DB_Rule(R_839, 839);
+    ! [2: if t is not the quantity of zorkmids]
+    if (((~~((tmp_0 == I126_quantity_of_zorkmids)))))
+    {! [3: if the zorkmid content of t > $0]
+        if (((GProperty(10, tmp_0,p15_zorkmid_content) > 0)))
+        {! [4: now the zorkmid content of the quantity of zorkmids is the zorkmid content of t]
+            WriteGProperty(10, I126_quantity_of_zorkmids,p15_zorkmid_content,GProperty(10, tmp_0,p15_zorkmid_content));
+            ! [5: now the quantity of zorkmids is in t]
+            MoveObject(I126_quantity_of_zorkmids,tmp_0);
+            }
+            }
+            } else if (debug_rules > 1) DB_Rule(R_839, 839, 'action');
+            rfalse;
+];
+! ----------------------------------------------------------------------------------------------------
 ! Definitions of displaced and unbooked rules
 
 ! From the Standard Rules
@@ -22430,7 +22466,7 @@ Array TimedEventTimesTable table 0 0;
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
 
-Array rulebooks_array --> B0_startup B1_turn_sequence B2_shutdown B3_scene_changing B4_when_play_begins B5_when_play_ends B6_when_scene_begins B7_when_scene_ends B8_every_turn B9_action_processing B10_setting_action_variables B11_specific_action_processi B12_player_s_action_awarenes B13_accessibility B14_reaching_inside B15_reaching_outside B16_visibility B17_persuasion B18_unsuccessful_attempt_by B19_before B20_instead B21_check B22_carry_out B23_after B24_report B25_does_the_player_mean B26_multiple_action_processi B27_when_entire_game_begins B28_when_entire_game_ends B29_before_printing_the_name B30_for_printing_the_name B31_after_printing_the_name B32_before_printing_the_plur B33_for_printing_the_plural_ B34_after_printing_the_plura B35_before_printing_a_number B36_for_printing_a_number B37_after_printing_a_number B38_before_printing_room_des B39_for_printing_room_descri B40_after_printing_room_desc B41_before_printing_inventor B42_for_printing_inventory_d B43_after_printing_inventory B44_before_listing_contents B45_for_listing_contents B46_after_listing_contents B47_before_grouping_together B48_for_grouping_together B49_after_grouping_together B50_before_writing_a_paragra B51_for_writing_a_paragraph_ B52_after_writing_a_paragrap B53_before_listing_nondescri B54_for_listing_nondescript_ B55_after_listing_nondescrip B56_before_printing_the_name B57_for_printing_the_name_of B58_after_printing_the_name_ B59_before_printing_the_desc B60_for_printing_the_descrip B61_after_printing_the_descr B62_before_printing_the_anno B63_for_printing_the_announc B64_after_printing_the_annou B65_before_printing_the_anno B66_for_printing_the_announc B67_after_printing_the_annou B68_before_printing_a_refusa B69_for_printing_a_refusal_t B70_after_printing_a_refusal B71_before_constructing_the_ B72_for_constructing_the_sta B73_after_constructing_the_s B74_before_printing_the_bann B75_for_printing_the_banner_ B76_after_printing_the_banne B77_before_reading_a_command B78_for_reading_a_command B79_after_reading_a_command B80_before_deciding_the_scop B81_for_deciding_the_scope B82_after_deciding_the_scope B83_before_deciding_the_conc B84_for_deciding_the_conceal B85_after_deciding_the_conce B86_before_deciding_whether_ B87_for_deciding_whether_all B88_after_deciding_whether_a B89_before_clarifying_the_pa B90_for_clarifying_the_parse B91_after_clarifying_the_par B92_before_asking_which_do_y B93_for_asking_which_do_you_ B94_after_asking_which_do_yo B95_before_printing_a_parser B96_for_printing_a_parser_er B97_after_printing_a_parser_ B98_before_supplying_a_missi B99_for_supplying_a_missing_ B100_after_supplying_a_missi B101_before_supplying_a_miss B102_for_supplying_a_missing B103_after_supplying_a_missi B104_before_implicitly_takin B105_for_implicitly_taking B106_after_implicitly_taking B107_before_starting_the_vir B108_for_starting_the_virtua B109_after_starting_the_virt B110_before_amusing_a_victor B111_for_amusing_a_victoriou B112_after_amusing_a_victori B113_before_printing_the_pla B114_for_printing_the_player B115_after_printing_the_play B116_before_handling_the_fin B117_for_handling_the_final_ B118_after_handling_the_fina B119_before_printing_the_loc B120_for_printing_the_locale B121_after_printing_the_loca B122_before_choosing_notable B123_for_choosing_notable_lo B124_after_choosing_notable_ B125_before_printing_a_local B126_for_printing_a_locale_p B127_after_printing_a_locale B128_before_issuing_the_resp B129_for_issuing_the_respons B130_after_issuing_the_respo B131_check_taking_inventory B132_carry_out_taking_invent B133_report_taking_inventory B134_check_taking B135_carry_out_taking B136_report_taking B137_check_removing_it_from B138_carry_out_removing_it_f B139_report_removing_it_from B140_check_dropping B141_carry_out_dropping B142_report_dropping B143_check_putting_it_on B144_carry_out_putting_it_on B145_report_putting_it_on B146_check_inserting_it_into B147_carry_out_inserting_it_ B148_report_inserting_it_int B149_check_eating B150_carry_out_eating B151_report_eating B152_check_going B153_carry_out_going B154_report_going B155_check_entering B156_carry_out_entering B157_report_entering B158_check_exiting B159_carry_out_exiting B160_report_exiting B161_check_getting_off B162_carry_out_getting_off B163_report_getting_off B164_check_looking B165_carry_out_looking B166_report_looking B167_check_examining B168_carry_out_examining B169_report_examining B170_check_looking_under B171_carry_out_looking_under B172_report_looking_under B173_check_searching B174_carry_out_searching B175_report_searching B176_check_consulting_it_abo B177_carry_out_consulting_it B178_report_consulting_it_ab B179_check_locking_it_with B180_carry_out_locking_it_wi B181_report_locking_it_with B182_check_unlocking_it_with B183_carry_out_unlocking_it_ B184_report_unlocking_it_wit B185_check_switching_on B186_carry_out_switching_on B187_report_switching_on B188_check_switching_off B189_carry_out_switching_off B190_report_switching_off B191_check_opening B192_carry_out_opening B193_report_opening B194_check_closing B195_carry_out_closing B196_report_closing B197_check_wearing B198_carry_out_wearing B199_report_wearing B200_check_taking_off B201_carry_out_taking_off B202_report_taking_off B203_check_giving_it_to B204_carry_out_giving_it_to B205_report_giving_it_to B206_check_showing_it_to B207_carry_out_showing_it_to B208_report_showing_it_to B209_check_waking B210_carry_out_waking B211_report_waking B212_check_throwing_it_at B213_carry_out_throwing_it_a B214_report_throwing_it_at B215_check_attacking B216_carry_out_attacking B217_report_attacking B218_check_kissing B219_carry_out_kissing B220_report_kissing B221_check_answering_it_that B222_carry_out_answering_it_ B223_report_answering_it_tha B224_check_telling_it_about B225_carry_out_telling_it_ab B226_report_telling_it_about B227_check_asking_it_about B228_carry_out_asking_it_abo B229_report_asking_it_about B230_check_asking_it_for B231_carry_out_asking_it_for B232_report_asking_it_for B233_check_waiting B234_carry_out_waiting B235_report_waiting B236_check_touching B237_carry_out_touching B238_report_touching B239_check_waving B240_carry_out_waving B241_report_waving B242_check_pulling B243_carry_out_pulling B244_report_pulling B245_check_pushing B246_carry_out_pushing B247_report_pushing B248_check_turning B249_carry_out_turning B250_report_turning B251_check_pushing_it_to B252_carry_out_pushing_it_to B253_report_pushing_it_to B254_check_squeezing B255_carry_out_squeezing B256_report_squeezing B257_check_saying_yes B258_carry_out_saying_yes B259_report_saying_yes B260_check_saying_no B261_carry_out_saying_no B262_report_saying_no B263_check_burning B264_carry_out_burning B265_report_burning B266_check_waking_up B267_carry_out_waking_up B268_report_waking_up B269_check_thinking B270_carry_out_thinking B271_report_thinking B272_check_smelling B273_carry_out_smelling B274_report_smelling B275_check_listening_to B276_carry_out_listening_to B277_report_listening_to B278_check_tasting B279_carry_out_tasting B280_report_tasting B281_check_cutting B282_carry_out_cutting B283_report_cutting B284_check_jumping B285_carry_out_jumping B286_report_jumping B287_check_tying_it_to B288_carry_out_tying_it_to B289_report_tying_it_to B290_check_drinking B291_carry_out_drinking B292_report_drinking B293_check_saying_sorry B294_carry_out_saying_sorry B295_report_saying_sorry B296_check_swinging B297_carry_out_swinging B298_report_swinging B299_check_rubbing B300_carry_out_rubbing B301_report_rubbing B302_check_setting_it_to B303_carry_out_setting_it_to B304_report_setting_it_to B305_check_waving_hands B306_carry_out_waving_hands B307_report_waving_hands B308_check_buying B309_carry_out_buying B310_report_buying B311_check_climbing B312_carry_out_climbing B313_report_climbing B314_check_sleeping B315_carry_out_sleeping B316_report_sleeping B317_check_quitting_the_game B318_carry_out_quitting_the_ B319_report_quitting_the_gam B320_check_saving_the_game B321_carry_out_saving_the_ga B322_report_saving_the_game B323_check_restoring_the_gam B324_carry_out_restoring_the B325_report_restoring_the_ga B326_check_restarting_the_ga B327_carry_out_restarting_th B328_report_restarting_the_g B329_check_verifying_the_sto B330_carry_out_verifying_the B331_report_verifying_the_st B332_check_switching_the_sto B333_carry_out_switching_the B334_report_switching_the_st B335_check_switching_the_sto B336_carry_out_switching_the B337_report_switching_the_st B338_check_requesting_the_st B339_carry_out_requesting_th B340_report_requesting_the_s B341_check_requesting_the_sc B342_carry_out_requesting_th B343_report_requesting_the_s B344_check_preferring_abbrev B345_carry_out_preferring_ab B346_report_preferring_abbre B347_check_preferring_unabbr B348_carry_out_preferring_un B349_report_preferring_unabb B350_check_preferring_someti B351_carry_out_preferring_so B352_report_preferring_somet B353_check_switching_score_n B354_carry_out_switching_sco B355_report_switching_score_ B356_check_switching_score_n B357_carry_out_switching_sco B358_report_switching_score_ B359_check_requesting_the_pr B360_carry_out_requesting_th B361_report_requesting_the_p B362_check_appropriating B363_carry_out_appropriating B364_report_appropriating B365_check_appropriating_it_ B366_carry_out_appropriating B367_report_appropriating_it B368_check_wasting_money B369_carry_out_wasting_money B370_report_wasting_money B371_check_donating_it_to B372_carry_out_donating_it_t B373_report_donating_it_to B374_check_depositing_it_int B375_carry_out_depositing_it B376_report_depositing_it_in B377_check_depositing_it_ont B378_carry_out_depositing_it B379_report_depositing_it_on 0;
+Array rulebooks_array --> B0_startup B1_turn_sequence B2_shutdown B3_scene_changing B4_when_play_begins B5_when_play_ends B6_when_scene_begins B7_when_scene_ends B8_every_turn B9_action_processing B10_setting_action_variables B11_specific_action_processi B12_player_s_action_awarenes B13_accessibility B14_reaching_inside B15_reaching_outside B16_visibility B17_persuasion B18_unsuccessful_attempt_by B19_before B20_instead B21_check B22_carry_out B23_after B24_report B25_does_the_player_mean B26_multiple_action_processi B27_when_entire_game_begins B28_when_entire_game_ends B29_before_printing_the_name B30_for_printing_the_name B31_after_printing_the_name B32_before_printing_the_plur B33_for_printing_the_plural_ B34_after_printing_the_plura B35_before_printing_a_number B36_for_printing_a_number B37_after_printing_a_number B38_before_printing_room_des B39_for_printing_room_descri B40_after_printing_room_desc B41_before_printing_inventor B42_for_printing_inventory_d B43_after_printing_inventory B44_before_listing_contents B45_for_listing_contents B46_after_listing_contents B47_before_grouping_together B48_for_grouping_together B49_after_grouping_together B50_before_writing_a_paragra B51_for_writing_a_paragraph_ B52_after_writing_a_paragrap B53_before_listing_nondescri B54_for_listing_nondescript_ B55_after_listing_nondescrip B56_before_printing_the_name B57_for_printing_the_name_of B58_after_printing_the_name_ B59_before_printing_the_desc B60_for_printing_the_descrip B61_after_printing_the_descr B62_before_printing_the_anno B63_for_printing_the_announc B64_after_printing_the_annou B65_before_printing_the_anno B66_for_printing_the_announc B67_after_printing_the_annou B68_before_printing_a_refusa B69_for_printing_a_refusal_t B70_after_printing_a_refusal B71_before_constructing_the_ B72_for_constructing_the_sta B73_after_constructing_the_s B74_before_printing_the_bann B75_for_printing_the_banner_ B76_after_printing_the_banne B77_before_reading_a_command B78_for_reading_a_command B79_after_reading_a_command B80_before_deciding_the_scop B81_for_deciding_the_scope B82_after_deciding_the_scope B83_before_deciding_the_conc B84_for_deciding_the_conceal B85_after_deciding_the_conce B86_before_deciding_whether_ B87_for_deciding_whether_all B88_after_deciding_whether_a B89_before_clarifying_the_pa B90_for_clarifying_the_parse B91_after_clarifying_the_par B92_before_asking_which_do_y B93_for_asking_which_do_you_ B94_after_asking_which_do_yo B95_before_printing_a_parser B96_for_printing_a_parser_er B97_after_printing_a_parser_ B98_before_supplying_a_missi B99_for_supplying_a_missing_ B100_after_supplying_a_missi B101_before_supplying_a_miss B102_for_supplying_a_missing B103_after_supplying_a_missi B104_before_implicitly_takin B105_for_implicitly_taking B106_after_implicitly_taking B107_before_starting_the_vir B108_for_starting_the_virtua B109_after_starting_the_virt B110_before_amusing_a_victor B111_for_amusing_a_victoriou B112_after_amusing_a_victori B113_before_printing_the_pla B114_for_printing_the_player B115_after_printing_the_play B116_before_handling_the_fin B117_for_handling_the_final_ B118_after_handling_the_fina B119_before_printing_the_loc B120_for_printing_the_locale B121_after_printing_the_loca B122_before_choosing_notable B123_for_choosing_notable_lo B124_after_choosing_notable_ B125_before_printing_a_local B126_for_printing_a_locale_p B127_after_printing_a_locale B128_before_issuing_the_resp B129_for_issuing_the_respons B130_after_issuing_the_respo B131_check_taking_inventory B132_carry_out_taking_invent B133_report_taking_inventory B134_check_taking B135_carry_out_taking B136_report_taking B137_check_removing_it_from B138_carry_out_removing_it_f B139_report_removing_it_from B140_check_dropping B141_carry_out_dropping B142_report_dropping B143_check_putting_it_on B144_carry_out_putting_it_on B145_report_putting_it_on B146_check_inserting_it_into B147_carry_out_inserting_it_ B148_report_inserting_it_int B149_check_eating B150_carry_out_eating B151_report_eating B152_check_going B153_carry_out_going B154_report_going B155_check_entering B156_carry_out_entering B157_report_entering B158_check_exiting B159_carry_out_exiting B160_report_exiting B161_check_getting_off B162_carry_out_getting_off B163_report_getting_off B164_check_looking B165_carry_out_looking B166_report_looking B167_check_examining B168_carry_out_examining B169_report_examining B170_check_looking_under B171_carry_out_looking_under B172_report_looking_under B173_check_searching B174_carry_out_searching B175_report_searching B176_check_consulting_it_abo B177_carry_out_consulting_it B178_report_consulting_it_ab B179_check_locking_it_with B180_carry_out_locking_it_wi B181_report_locking_it_with B182_check_unlocking_it_with B183_carry_out_unlocking_it_ B184_report_unlocking_it_wit B185_check_switching_on B186_carry_out_switching_on B187_report_switching_on B188_check_switching_off B189_carry_out_switching_off B190_report_switching_off B191_check_opening B192_carry_out_opening B193_report_opening B194_check_closing B195_carry_out_closing B196_report_closing B197_check_wearing B198_carry_out_wearing B199_report_wearing B200_check_taking_off B201_carry_out_taking_off B202_report_taking_off B203_check_giving_it_to B204_carry_out_giving_it_to B205_report_giving_it_to B206_check_showing_it_to B207_carry_out_showing_it_to B208_report_showing_it_to B209_check_waking B210_carry_out_waking B211_report_waking B212_check_throwing_it_at B213_carry_out_throwing_it_a B214_report_throwing_it_at B215_check_attacking B216_carry_out_attacking B217_report_attacking B218_check_kissing B219_carry_out_kissing B220_report_kissing B221_check_answering_it_that B222_carry_out_answering_it_ B223_report_answering_it_tha B224_check_telling_it_about B225_carry_out_telling_it_ab B226_report_telling_it_about B227_check_asking_it_about B228_carry_out_asking_it_abo B229_report_asking_it_about B230_check_asking_it_for B231_carry_out_asking_it_for B232_report_asking_it_for B233_check_waiting B234_carry_out_waiting B235_report_waiting B236_check_touching B237_carry_out_touching B238_report_touching B239_check_waving B240_carry_out_waving B241_report_waving B242_check_pulling B243_carry_out_pulling B244_report_pulling B245_check_pushing B246_carry_out_pushing B247_report_pushing B248_check_turning B249_carry_out_turning B250_report_turning B251_check_pushing_it_to B252_carry_out_pushing_it_to B253_report_pushing_it_to B254_check_squeezing B255_carry_out_squeezing B256_report_squeezing B257_check_saying_yes B258_carry_out_saying_yes B259_report_saying_yes B260_check_saying_no B261_carry_out_saying_no B262_report_saying_no B263_check_burning B264_carry_out_burning B265_report_burning B266_check_waking_up B267_carry_out_waking_up B268_report_waking_up B269_check_thinking B270_carry_out_thinking B271_report_thinking B272_check_smelling B273_carry_out_smelling B274_report_smelling B275_check_listening_to B276_carry_out_listening_to B277_report_listening_to B278_check_tasting B279_carry_out_tasting B280_report_tasting B281_check_cutting B282_carry_out_cutting B283_report_cutting B284_check_jumping B285_carry_out_jumping B286_report_jumping B287_check_tying_it_to B288_carry_out_tying_it_to B289_report_tying_it_to B290_check_drinking B291_carry_out_drinking B292_report_drinking B293_check_saying_sorry B294_carry_out_saying_sorry B295_report_saying_sorry B296_check_swinging B297_carry_out_swinging B298_report_swinging B299_check_rubbing B300_carry_out_rubbing B301_report_rubbing B302_check_setting_it_to B303_carry_out_setting_it_to B304_report_setting_it_to B305_check_waving_hands B306_carry_out_waving_hands B307_report_waving_hands B308_check_buying B309_carry_out_buying B310_report_buying B311_check_climbing B312_carry_out_climbing B313_report_climbing B314_check_sleeping B315_carry_out_sleeping B316_report_sleeping B317_check_quitting_the_game B318_carry_out_quitting_the_ B319_report_quitting_the_gam B320_check_saving_the_game B321_carry_out_saving_the_ga B322_report_saving_the_game B323_check_restoring_the_gam B324_carry_out_restoring_the B325_report_restoring_the_ga B326_check_restarting_the_ga B327_carry_out_restarting_th B328_report_restarting_the_g B329_check_verifying_the_sto B330_carry_out_verifying_the B331_report_verifying_the_st B332_check_switching_the_sto B333_carry_out_switching_the B334_report_switching_the_st B335_check_switching_the_sto B336_carry_out_switching_the B337_report_switching_the_st B338_check_requesting_the_st B339_carry_out_requesting_th B340_report_requesting_the_s B341_check_requesting_the_sc B342_carry_out_requesting_th B343_report_requesting_the_s B344_check_preferring_abbrev B345_carry_out_preferring_ab B346_report_preferring_abbre B347_check_preferring_unabbr B348_carry_out_preferring_un B349_report_preferring_unabb B350_check_preferring_someti B351_carry_out_preferring_so B352_report_preferring_somet B353_check_switching_score_n B354_carry_out_switching_sco B355_report_switching_score_ B356_check_switching_score_n B357_carry_out_switching_sco B358_report_switching_score_ B359_check_requesting_the_pr B360_carry_out_requesting_th B361_report_requesting_the_p B362_check_appropriating B363_carry_out_appropriating B364_report_appropriating B365_check_appropriating_it_ B366_carry_out_appropriating B367_report_appropriating_it B368_check_wasting_money B369_carry_out_wasting_money B370_report_wasting_money B371_check_donating_it_to B372_carry_out_donating_it_t B373_report_donating_it_to B374_check_depositing_it_int B375_carry_out_depositing_it B376_report_depositing_it_in B377_check_depositing_it_ont B378_carry_out_depositing_it B379_report_depositing_it_on B380_sneaky 0;
 
 [ EMPTY_RULEBOOK 
     forbid_breaks ! Implied call parameter
@@ -26616,6 +26652,21 @@ Constant B361_report_requesting_the_p = EMPTY_RULEBOOK;
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
 ];
+[ B380_sneaky 
+    forbid_breaks ! Implied call parameter
+    rv ! return value
+    p ! rulebook parameter
+    ;
+    p = parameter_value;
+    parameter_value = p;
+    rv = R_839();
+    if (rv) {
+        if (rv == 2) return reason_the_action_failed;
+        return R_839;
+    }
+    latest_rule_result-->0 = 0;
+    return 0; ! 1 rule(s)
+];
 
 
 
@@ -28053,7 +28104,7 @@ Global MStack_Frame_Extent = 0;
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
 #IFNDEF MEMORY_ECONOMY;
-Array rulebook_var_creators --> 0 0 0 0 0 0 0 0 0 RBSTVC_9 0 RBSTVC_11 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+Array rulebook_var_creators --> 0 0 0 0 0 0 0 0 0 RBSTVC_9 0 RBSTVC_11 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
 #endif;
 [  RBSTVC_9 
     pos ! Implied call parameter
@@ -29779,7 +29830,7 @@ Array FWMatrix --> NUM_ROOMS*NUM_ROOMS;
 ! Relations.i6t: Relation Route-Finding
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
-Constant MAX_ROUTE_LENGTH = 21 + 32;
+Constant MAX_ROUTE_LENGTH = 22 + 32;
 
 [ RelationRouteTo relation from to count  handler;
 	if (count) {
@@ -30949,6 +31000,7 @@ Array RulebookNames -->
     "check Depositing it onto rulebook" ! 377
     "carry out Depositing it onto rulebook" ! 378
     "report Depositing it onto rulebook" ! 379
+    "sneaky rulebook" ! 380
 ;
 
 
@@ -31252,101 +31304,102 @@ Array RulebookNames -->
         if (R == R_833) { print "new you-can-also-see rule"; rtrue; } ! rule 290
         if (R == R_834) { print "new use initial appearance in room descriptions rule"; rtrue; } ! rule 291
         if (R == R_836) { print "new reveal any newly visible interior rule"; rtrue; } ! rule 292
-        if (R == LITTLE_USED_DO_NOTHING_R) { print "little-used do nothing rule"; rtrue; } ! rule 293
-        if (R == VIRTUAL_MACHINE_STARTUP_R) { print "virtual machine startup rule"; rtrue; } ! rule 294
-        if (R == INITIALISE_MEMORY_R) { print "initialise memory rule"; rtrue; } ! rule 295
-        if (R == SEED_RANDOM_NUMBER_GENERATOR_R) { print "seed random number generator rule"; rtrue; } ! rule 296
-        if (R == UPDATE_CHRONOLOGICAL_RECORDS_R) { print "update chronological records rule"; rtrue; } ! rule 297
-        if (R == POSITION_PLAYER_IN_MODEL_R) { print "position player in model world rule"; rtrue; } ! rule 298
-        if (R == ADJUST_LIGHT_R) { print "adjust light rule"; rtrue; } ! rule 299
-        if (R == ADVANCE_TIME_R) { print "advance time rule"; rtrue; } ! rule 300
-        if (R == GENERATE_ACTION_R) { print "generate action rule"; rtrue; } ! rule 301
-        if (R == NOTE_OBJECT_ACQUISITIONS_R) { print "note object acquisitions rule"; rtrue; } ! rule 302
-        if (R == PARSE_COMMAND_R) { print "parse command rule"; rtrue; } ! rule 303
-        if (R == TIMED_EVENTS_R) { print "timed events rule"; rtrue; } ! rule 304
-        if (R == RESURRECT_PLAYER_IF_ASKED_R) { print "resurrect player if asked rule"; rtrue; } ! rule 305
-        if (R == ASK_FINAL_QUESTION_R) { print "ask the final question rule"; rtrue; } ! rule 306
-        if (R == DetectSceneChange) { print "scene change machinery rule"; rtrue; } ! rule 307
-        if (R == BASIC_ACCESSIBILITY_R) { print "basic accessibility rule"; rtrue; } ! rule 308
-        if (R == BASIC_VISIBILITY_R) { print "basic visibility rule"; rtrue; } ! rule 309
-        if (R == CARRYING_REQUIREMENTS_R) { print "carrying requirements rule"; rtrue; } ! rule 310
-        if (R == REQUESTED_ACTIONS_REQUIRE_R) { print "requested actions require persuasion rule"; rtrue; } ! rule 311
-        if (R == CARRY_OUT_REQUESTED_ACTIONS_R) { print "carry out requested actions rule"; rtrue; } ! rule 312
-        if (R == DESCEND_TO_SPECIFIC_ACTION_R) { print "descend to specific action-processing rule"; rtrue; } ! rule 313
-        if (R == WORK_OUT_DETAILS_OF_SPECIFIC_R) { print "work out details of specific action rule"; rtrue; } ! rule 314
-        if (R == ACCESS_THROUGH_BARRIERS_R) { print "access through barriers rule"; rtrue; } ! rule 315
-        if (R == CANT_REACH_INSIDE_CLOSED_R) { print "can't reach inside closed containers rule"; rtrue; } ! rule 316
-        if (R == CANT_REACH_INSIDE_ROOMS_R) { print "can't reach inside rooms rule"; rtrue; } ! rule 317
-        if (R == CANT_REACH_OUTSIDE_CLOSED_R) { print "can't reach outside closed containers rule"; rtrue; } ! rule 318
-        if (R == LIST_WRITER_INTERNAL_R) { print "list writer internal rule"; rtrue; } ! rule 319
-        if (R == ACTION_PROCESSING_INTERNAL_R) { print "action processing internal rule"; rtrue; } ! rule 320
-        if (R == PARSER_ERROR_INTERNAL_R) { print "parser error internal rule"; rtrue; } ! rule 321
-        if (R == PARSER_N_ERROR_INTERNAL_R) { print "parser nothing error internal rule"; rtrue; } ! rule 322
-        if (R == DARKNESS_NAME_INTERNAL_R) { print "darkness name internal rule"; rtrue; } ! rule 323
-        if (R == PARSER_COMMAND_INTERNAL_R) { print "parser command internal rule"; rtrue; } ! rule 324
-        if (R == PARSER_CLARIF_INTERNAL_R) { print "parser clarification internal rule"; rtrue; } ! rule 325
-        if (R == YES_OR_NO_QUESTION_INTERNAL_R) { print "yes or no question internal rule"; rtrue; } ! rule 326
-        if (R == PRINT_PROTAGONIST_INTERNAL_R) { print "print protagonist internal rule"; rtrue; } ! rule 327
-        if (R == STANDARD_NAME_PRINTING_R) { print "standard name printing rule"; rtrue; } ! rule 328
-        if (R == STANDARD_CONTENTS_LISTING_R) { print "standard contents listing rule"; rtrue; } ! rule 329
-        if (R == STANDARD_IMPLICIT_TAKING_R) { print "standard implicit taking rule"; rtrue; } ! rule 330
-        if (R == ENABLE_GLULX_ACCEL_R) { print "enable Glulx acceleration rule"; rtrue; } ! rule 331
-        if (R == PRINT_OBITUARY_HEADLINE_R) { print "print obituary headline rule"; rtrue; } ! rule 332
-        if (R == PRINT_FINAL_SCORE_R) { print "print final score rule"; rtrue; } ! rule 333
-        if (R == DISPLAY_FINAL_STATUS_LINE_R) { print "display final status line rule"; rtrue; } ! rule 334
-        if (R == IMMEDIATELY_RESTART_VM_R) { print "immediately restart the VM rule"; rtrue; } ! rule 335
-        if (R == IMMEDIATELY_RESTORE_SAVED_R) { print "immediately restore saved game rule"; rtrue; } ! rule 336
-        if (R == IMMEDIATELY_QUIT_R) { print "immediately quit rule"; rtrue; } ! rule 337
-        if (R == IMMEDIATELY_UNDO_R) { print "immediately undo rule"; rtrue; } ! rule 338
-        if (R == READ_FINAL_ANSWER_R) { print "read the final answer rule"; rtrue; } ! rule 339
-        if (R == STANDARD_RESPONSE_ISSUING_R) { print "standard issuing the response text rule"; rtrue; } ! rule 340
-        if (R == QUIT_THE_GAME_R) { print "quit the game rule"; rtrue; } ! rule 341
-        if (R == SAVE_THE_GAME_R) { print "save the game rule"; rtrue; } ! rule 342
-        if (R == RESTORE_THE_GAME_R) { print "restore the game rule"; rtrue; } ! rule 343
-        if (R == RESTART_THE_GAME_R) { print "restart the game rule"; rtrue; } ! rule 344
-        if (R == VERIFY_THE_STORY_FILE_R) { print "verify the story file rule"; rtrue; } ! rule 345
-        if (R == SWITCH_TRANSCRIPT_ON_R) { print "switch the story transcript on rule"; rtrue; } ! rule 346
-        if (R == SWITCH_TRANSCRIPT_OFF_R) { print "switch the story transcript off rule"; rtrue; } ! rule 347
-        if (R == ANNOUNCE_STORY_FILE_VERSION_R) { print "announce the story file version rule"; rtrue; } ! rule 348
-        if (R == ANNOUNCE_SCORE_R) { print "announce the score rule"; rtrue; } ! rule 349
-        if (R == PREFER_ABBREVIATED_R) { print "prefer abbreviated room descriptions rule"; rtrue; } ! rule 350
-        if (R == REP_PREFER_ABBREVIATED_R) { print "standard report preferring abbreviated room descriptions rule"; rtrue; } ! rule 351
-        if (R == PREFER_UNABBREVIATED_R) { print "prefer unabbreviated room descriptions rule"; rtrue; } ! rule 352
-        if (R == REP_PREFER_UNABBREVIATED_R) { print "standard report preferring unabbreviated room descriptions rule"; rtrue; } ! rule 353
-        if (R == PREFER_SOMETIMES_ABBREVIATED_R) { print "prefer sometimes abbreviated room descriptions rule"; rtrue; } ! rule 354
-        if (R == REP_PREFER_SOMETIMES_ABBR_R) { print "standard report preferring sometimes abbreviated room descriptions rule"; rtrue; } ! rule 355
-        if (R == SWITCH_SCORE_NOTIFY_ON_R) { print "switch score notification on rule"; rtrue; } ! rule 356
-        if (R == REP_SWITCH_NOTIFY_ON_R) { print "standard report switching score notification on rule"; rtrue; } ! rule 357
-        if (R == SWITCH_SCORE_NOTIFY_OFF_R) { print "switch score notification off rule"; rtrue; } ! rule 358
-        if (R == REP_SWITCH_NOTIFY_OFF_R) { print "standard report switching score notification off rule"; rtrue; } ! rule 359
-        if (R == ANNOUNCE_PRONOUN_MEANINGS_R) { print "announce the pronoun meanings rule"; rtrue; } ! rule 360
-        if (R == R_16) { print "A first turn sequence rule"; rtrue; } ! rule 361
-        if (R == R_17) { print "A last turn sequence rule"; rtrue; } ! rule 362
-        if (R == R_32) { print "last specific action-processing rule"; rtrue; } ! rule 363
-        if (R == R_174) { print "Setting action variables for exiting"; rtrue; } ! rule 364
-        if (R == R_242) { print "Does the player mean taking off something worn"; rtrue; } ! rule 365
-        if (R == R_799) { print "Instead of examining a quantity of zorkmids"; rtrue; } ! rule 366
-        if (R == R_800) { print "Rule for printing the name of a quantity of zorkmids"; rtrue; } ! rule 367
-        if (R == R_801) { print "Before examining"; rtrue; } ! rule 368
-        if (R == R_803) { print "After examining"; rtrue; } ! rule 369
-        if (R == R_804) { print "Before printing room description details of a container ( called the holder )"; rtrue; } ! rule 370
-        if (R == R_805) { print "Before taking inventory"; rtrue; } ! rule 371
-        if (R == R_806) { print "After taking inventory"; rtrue; } ! rule 372
-        if (R == R_809) { print "Carry out appropriating"; rtrue; } ! rule 373
-        if (R == R_810) { print "Report appropriating"; rtrue; } ! rule 374
-        if (R == R_813) { print "Carry out appropriating it from"; rtrue; } ! rule 375
-        if (R == R_814) { print "Report appropriating it from"; rtrue; } ! rule 376
-        if (R == R_817) { print "Carry out wasting money"; rtrue; } ! rule 377
-        if (R == R_818) { print "Report wasting money"; rtrue; } ! rule 378
-        if (R == R_821) { print "Carry out donating"; rtrue; } ! rule 379
-        if (R == R_822) { print "Report donating"; rtrue; } ! rule 380
-        if (R == R_825) { print "Carry out depositing it into"; rtrue; } ! rule 381
-        if (R == R_826) { print "Report depositing it into"; rtrue; } ! rule 382
-        if (R == R_829) { print "Carry out depositing it onto"; rtrue; } ! rule 383
-        if (R == R_830) { print "Report depositing it onto"; rtrue; } ! rule 384
-        if (R == R_835) { print "last for printing a locale paragraph about rule"; rtrue; } ! rule 385
-        if (R == R_837) { print "Before listing contents of something ( called the holder )"; rtrue; } ! rule 386
-        if (R == R_838) { print "After listing contents of something"; rtrue; } ! rule 387
+        if (R == R_839) { print "sneaky zorkmid rule"; rtrue; } ! rule 293
+        if (R == LITTLE_USED_DO_NOTHING_R) { print "little-used do nothing rule"; rtrue; } ! rule 294
+        if (R == VIRTUAL_MACHINE_STARTUP_R) { print "virtual machine startup rule"; rtrue; } ! rule 295
+        if (R == INITIALISE_MEMORY_R) { print "initialise memory rule"; rtrue; } ! rule 296
+        if (R == SEED_RANDOM_NUMBER_GENERATOR_R) { print "seed random number generator rule"; rtrue; } ! rule 297
+        if (R == UPDATE_CHRONOLOGICAL_RECORDS_R) { print "update chronological records rule"; rtrue; } ! rule 298
+        if (R == POSITION_PLAYER_IN_MODEL_R) { print "position player in model world rule"; rtrue; } ! rule 299
+        if (R == ADJUST_LIGHT_R) { print "adjust light rule"; rtrue; } ! rule 300
+        if (R == ADVANCE_TIME_R) { print "advance time rule"; rtrue; } ! rule 301
+        if (R == GENERATE_ACTION_R) { print "generate action rule"; rtrue; } ! rule 302
+        if (R == NOTE_OBJECT_ACQUISITIONS_R) { print "note object acquisitions rule"; rtrue; } ! rule 303
+        if (R == PARSE_COMMAND_R) { print "parse command rule"; rtrue; } ! rule 304
+        if (R == TIMED_EVENTS_R) { print "timed events rule"; rtrue; } ! rule 305
+        if (R == RESURRECT_PLAYER_IF_ASKED_R) { print "resurrect player if asked rule"; rtrue; } ! rule 306
+        if (R == ASK_FINAL_QUESTION_R) { print "ask the final question rule"; rtrue; } ! rule 307
+        if (R == DetectSceneChange) { print "scene change machinery rule"; rtrue; } ! rule 308
+        if (R == BASIC_ACCESSIBILITY_R) { print "basic accessibility rule"; rtrue; } ! rule 309
+        if (R == BASIC_VISIBILITY_R) { print "basic visibility rule"; rtrue; } ! rule 310
+        if (R == CARRYING_REQUIREMENTS_R) { print "carrying requirements rule"; rtrue; } ! rule 311
+        if (R == REQUESTED_ACTIONS_REQUIRE_R) { print "requested actions require persuasion rule"; rtrue; } ! rule 312
+        if (R == CARRY_OUT_REQUESTED_ACTIONS_R) { print "carry out requested actions rule"; rtrue; } ! rule 313
+        if (R == DESCEND_TO_SPECIFIC_ACTION_R) { print "descend to specific action-processing rule"; rtrue; } ! rule 314
+        if (R == WORK_OUT_DETAILS_OF_SPECIFIC_R) { print "work out details of specific action rule"; rtrue; } ! rule 315
+        if (R == ACCESS_THROUGH_BARRIERS_R) { print "access through barriers rule"; rtrue; } ! rule 316
+        if (R == CANT_REACH_INSIDE_CLOSED_R) { print "can't reach inside closed containers rule"; rtrue; } ! rule 317
+        if (R == CANT_REACH_INSIDE_ROOMS_R) { print "can't reach inside rooms rule"; rtrue; } ! rule 318
+        if (R == CANT_REACH_OUTSIDE_CLOSED_R) { print "can't reach outside closed containers rule"; rtrue; } ! rule 319
+        if (R == LIST_WRITER_INTERNAL_R) { print "list writer internal rule"; rtrue; } ! rule 320
+        if (R == ACTION_PROCESSING_INTERNAL_R) { print "action processing internal rule"; rtrue; } ! rule 321
+        if (R == PARSER_ERROR_INTERNAL_R) { print "parser error internal rule"; rtrue; } ! rule 322
+        if (R == PARSER_N_ERROR_INTERNAL_R) { print "parser nothing error internal rule"; rtrue; } ! rule 323
+        if (R == DARKNESS_NAME_INTERNAL_R) { print "darkness name internal rule"; rtrue; } ! rule 324
+        if (R == PARSER_COMMAND_INTERNAL_R) { print "parser command internal rule"; rtrue; } ! rule 325
+        if (R == PARSER_CLARIF_INTERNAL_R) { print "parser clarification internal rule"; rtrue; } ! rule 326
+        if (R == YES_OR_NO_QUESTION_INTERNAL_R) { print "yes or no question internal rule"; rtrue; } ! rule 327
+        if (R == PRINT_PROTAGONIST_INTERNAL_R) { print "print protagonist internal rule"; rtrue; } ! rule 328
+        if (R == STANDARD_NAME_PRINTING_R) { print "standard name printing rule"; rtrue; } ! rule 329
+        if (R == STANDARD_CONTENTS_LISTING_R) { print "standard contents listing rule"; rtrue; } ! rule 330
+        if (R == STANDARD_IMPLICIT_TAKING_R) { print "standard implicit taking rule"; rtrue; } ! rule 331
+        if (R == ENABLE_GLULX_ACCEL_R) { print "enable Glulx acceleration rule"; rtrue; } ! rule 332
+        if (R == PRINT_OBITUARY_HEADLINE_R) { print "print obituary headline rule"; rtrue; } ! rule 333
+        if (R == PRINT_FINAL_SCORE_R) { print "print final score rule"; rtrue; } ! rule 334
+        if (R == DISPLAY_FINAL_STATUS_LINE_R) { print "display final status line rule"; rtrue; } ! rule 335
+        if (R == IMMEDIATELY_RESTART_VM_R) { print "immediately restart the VM rule"; rtrue; } ! rule 336
+        if (R == IMMEDIATELY_RESTORE_SAVED_R) { print "immediately restore saved game rule"; rtrue; } ! rule 337
+        if (R == IMMEDIATELY_QUIT_R) { print "immediately quit rule"; rtrue; } ! rule 338
+        if (R == IMMEDIATELY_UNDO_R) { print "immediately undo rule"; rtrue; } ! rule 339
+        if (R == READ_FINAL_ANSWER_R) { print "read the final answer rule"; rtrue; } ! rule 340
+        if (R == STANDARD_RESPONSE_ISSUING_R) { print "standard issuing the response text rule"; rtrue; } ! rule 341
+        if (R == QUIT_THE_GAME_R) { print "quit the game rule"; rtrue; } ! rule 342
+        if (R == SAVE_THE_GAME_R) { print "save the game rule"; rtrue; } ! rule 343
+        if (R == RESTORE_THE_GAME_R) { print "restore the game rule"; rtrue; } ! rule 344
+        if (R == RESTART_THE_GAME_R) { print "restart the game rule"; rtrue; } ! rule 345
+        if (R == VERIFY_THE_STORY_FILE_R) { print "verify the story file rule"; rtrue; } ! rule 346
+        if (R == SWITCH_TRANSCRIPT_ON_R) { print "switch the story transcript on rule"; rtrue; } ! rule 347
+        if (R == SWITCH_TRANSCRIPT_OFF_R) { print "switch the story transcript off rule"; rtrue; } ! rule 348
+        if (R == ANNOUNCE_STORY_FILE_VERSION_R) { print "announce the story file version rule"; rtrue; } ! rule 349
+        if (R == ANNOUNCE_SCORE_R) { print "announce the score rule"; rtrue; } ! rule 350
+        if (R == PREFER_ABBREVIATED_R) { print "prefer abbreviated room descriptions rule"; rtrue; } ! rule 351
+        if (R == REP_PREFER_ABBREVIATED_R) { print "standard report preferring abbreviated room descriptions rule"; rtrue; } ! rule 352
+        if (R == PREFER_UNABBREVIATED_R) { print "prefer unabbreviated room descriptions rule"; rtrue; } ! rule 353
+        if (R == REP_PREFER_UNABBREVIATED_R) { print "standard report preferring unabbreviated room descriptions rule"; rtrue; } ! rule 354
+        if (R == PREFER_SOMETIMES_ABBREVIATED_R) { print "prefer sometimes abbreviated room descriptions rule"; rtrue; } ! rule 355
+        if (R == REP_PREFER_SOMETIMES_ABBR_R) { print "standard report preferring sometimes abbreviated room descriptions rule"; rtrue; } ! rule 356
+        if (R == SWITCH_SCORE_NOTIFY_ON_R) { print "switch score notification on rule"; rtrue; } ! rule 357
+        if (R == REP_SWITCH_NOTIFY_ON_R) { print "standard report switching score notification on rule"; rtrue; } ! rule 358
+        if (R == SWITCH_SCORE_NOTIFY_OFF_R) { print "switch score notification off rule"; rtrue; } ! rule 359
+        if (R == REP_SWITCH_NOTIFY_OFF_R) { print "standard report switching score notification off rule"; rtrue; } ! rule 360
+        if (R == ANNOUNCE_PRONOUN_MEANINGS_R) { print "announce the pronoun meanings rule"; rtrue; } ! rule 361
+        if (R == R_16) { print "A first turn sequence rule"; rtrue; } ! rule 362
+        if (R == R_17) { print "A last turn sequence rule"; rtrue; } ! rule 363
+        if (R == R_32) { print "last specific action-processing rule"; rtrue; } ! rule 364
+        if (R == R_174) { print "Setting action variables for exiting"; rtrue; } ! rule 365
+        if (R == R_242) { print "Does the player mean taking off something worn"; rtrue; } ! rule 366
+        if (R == R_799) { print "Instead of examining a quantity of zorkmids"; rtrue; } ! rule 367
+        if (R == R_800) { print "Rule for printing the name of a quantity of zorkmids"; rtrue; } ! rule 368
+        if (R == R_801) { print "Before examining"; rtrue; } ! rule 369
+        if (R == R_803) { print "After examining"; rtrue; } ! rule 370
+        if (R == R_804) { print "Before printing room description details of a container ( called the holder )"; rtrue; } ! rule 371
+        if (R == R_805) { print "Before taking inventory"; rtrue; } ! rule 372
+        if (R == R_806) { print "After taking inventory"; rtrue; } ! rule 373
+        if (R == R_809) { print "Carry out appropriating"; rtrue; } ! rule 374
+        if (R == R_810) { print "Report appropriating"; rtrue; } ! rule 375
+        if (R == R_813) { print "Carry out appropriating it from"; rtrue; } ! rule 376
+        if (R == R_814) { print "Report appropriating it from"; rtrue; } ! rule 377
+        if (R == R_817) { print "Carry out wasting money"; rtrue; } ! rule 378
+        if (R == R_818) { print "Report wasting money"; rtrue; } ! rule 379
+        if (R == R_821) { print "Carry out donating"; rtrue; } ! rule 380
+        if (R == R_822) { print "Report donating"; rtrue; } ! rule 381
+        if (R == R_825) { print "Carry out depositing it into"; rtrue; } ! rule 382
+        if (R == R_826) { print "Report depositing it into"; rtrue; } ! rule 383
+        if (R == R_829) { print "Carry out depositing it onto"; rtrue; } ! rule 384
+        if (R == R_830) { print "Report depositing it onto"; rtrue; } ! rule 385
+        if (R == R_835) { print "last for printing a locale paragraph about rule"; rtrue; } ! rule 386
+        if (R == R_837) { print "Before listing contents of something ( called the holder )"; rtrue; } ! rule 387
+        if (R == R_838) { print "After listing contents of something"; rtrue; } ! rule 388
 
 		print "(nameless rule at address ", R, ")";
 	}
@@ -34159,79 +34212,6 @@ Array PowersOfTen --> 1 10 100 1000 10000 100000 1000000 10000000 100000000 1000
     #endif;
     return GPR_NUMBER;
     .Failed_LP_0;
-    wn = original_wn;
-    ! 1zm, scaling: x units --> 1 x + 0 stored at runtime (int) (defined as benchmark * 1)
-    wpos = 0; mid_word = false; matched_number = 0;
-    if (mid_word == false) {
-        cur_word = NextWordStopped(); wn--;
-        if (cur_word == -1) jump Failed_LP_1;
-    }
-    if (mid_word == false) {
-        mid_word = true;
-        wpos = 0;
-        cur_addr = WordAddress(wn);
-        cur_len = WordLength(wn);
-    }
-    sgn = 1;
-    if (cur_addr->wpos == '-') jump Failed_LP_1;
-    tot = 0; f = false;
-    while ((wpos < cur_len) && (DigitToValue(cur_addr->wpos)>=0)) {
-        f = DigitToValue(cur_addr->wpos);
-        if (sgn == 1) {
-            if ((tot > 214748364) || ((tot == 214748364) && (f > 7)))
-                jump Failed_LP_1;
-        } else {
-            if ((tot > 214748364) || ((tot == 214748364) && (f > 8)))
-                jump Failed_LP_1;
-        }
-        tot = 10*tot + f;
-        f = true;
-        wpos++;
-    }
-    if (f == false) jump Failed_LP_1;
-    tot = 1*tot + matched_number;
-    matched_number = tot;
-    if (wpos == cur_len) {
-        wn++; mid_word = false;
-    }
-    if (mid_word == false) {
-        cur_word = NextWordStopped(); wn--;
-        if (cur_word == -1) jump Failed_LP_1;
-    }
-    if (mid_word == false) {
-        mid_word = true;
-        wpos = 0;
-        cur_addr = WordAddress(wn);
-        cur_len = WordLength(wn);
-    }
-    if (cur_addr->wpos++ ~= 'z' or 'Z') jump Failed_LP_1;
-    if (wpos == cur_len) {
-        wn++; mid_word = false;
-    }
-    if (mid_word == false) {
-        cur_word = NextWordStopped(); wn--;
-        if (cur_word == -1) jump Failed_LP_1;
-    }
-    if (mid_word == false) {
-        mid_word = true;
-        wpos = 0;
-        cur_addr = WordAddress(wn);
-        cur_len = WordLength(wn);
-    }
-    if (cur_addr->wpos++ ~= 'm' or 'M') jump Failed_LP_1;
-    if (wpos == cur_len) {
-        wn++; mid_word = false;
-    }
-    .Succeeded_LP_1;
-    if (mid_word) jump Failed_LP_1;
-    if (sgn<0) matched_number = -1*matched_number;
-    parsed_number = matched_number;
-    parsed_number = 1*parsed_number + 0+x;
-    #ifdef DEBUG;
-    if (parser_trace >= 3) { print "  [parsed value ", parsed_number, " by: 1zm]^"; }
-    #endif;
-    return GPR_NUMBER;
-    .Failed_LP_1;
     wn = original_wn;
     return GPR_FAIL;
 ];
@@ -39775,7 +39755,7 @@ Verb meta 'tree'
 ];
 Array TX_R_0 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_0_R;
 [ TX_R_0_R ;
-    ResponseViaActivity(R_299_RESP_A);
+    ResponseViaActivity(R_300_RESP_A);
 ];
 [ ADJUST_LIGHT_RM 
     code ! Implied call parameter
@@ -39799,7 +39779,7 @@ Array TX_R_0 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_0_R;
 ];
 Array TX_R_1 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_1_R;
 [ TX_R_1_R ;
-    ResponseViaActivity(R_301_RESP_A);
+    ResponseViaActivity(R_302_RESP_A);
 ];
 [ GENERATE_ACTION_RM 
     code ! Implied call parameter
@@ -39824,11 +39804,11 @@ Array TX_R_1 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_1_R;
 ];
 Array TX_R_2 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_2_R;
 [ TX_R_2_R ;
-    ResponseViaActivity(R_301_RESP_B);
+    ResponseViaActivity(R_302_RESP_B);
 ];
 Array TX_R_3 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_3_R;
 [ TX_R_3_R ;
-    ResponseViaActivity(R_308_RESP_A);
+    ResponseViaActivity(R_309_RESP_A);
 ];
 [ BASIC_ACCESSIBILITY_RM 
     code ! Implied call parameter
@@ -39852,7 +39832,7 @@ Array TX_R_3 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_3_R;
 ];
 Array TX_R_4 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_4_R;
 [ TX_R_4_R ;
-    ResponseViaActivity(R_309_RESP_A);
+    ResponseViaActivity(R_310_RESP_A);
 ];
 [ BASIC_VISIBILITY_RM 
     code ! Implied call parameter
@@ -39876,7 +39856,7 @@ Array TX_R_4 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_4_R;
 ];
 Array TX_R_5 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_5_R;
 [ TX_R_5_R ;
-    ResponseViaActivity(R_311_RESP_A);
+    ResponseViaActivity(R_312_RESP_A);
 ];
 [ REQUESTED_ACTIONS_REQUIRE_RM 
     code ! Implied call parameter
@@ -39900,7 +39880,7 @@ Array TX_R_5 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_5_R;
 ];
 Array TX_R_6 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_6_R;
 [ TX_R_6_R ;
-    ResponseViaActivity(R_312_RESP_A);
+    ResponseViaActivity(R_313_RESP_A);
 ];
 [ CARRY_OUT_REQUESTED_ACTIONS_RM 
     code ! Implied call parameter
@@ -39924,7 +39904,7 @@ Array TX_R_6 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_6_R;
 ];
 Array TX_R_7 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_7_R;
 [ TX_R_7_R ;
-    ResponseViaActivity(R_315_RESP_A);
+    ResponseViaActivity(R_316_RESP_A);
 ];
 [ ACCESS_THROUGH_BARRIERS_RM 
     code ! Implied call parameter
@@ -39948,7 +39928,7 @@ Array TX_R_7 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_7_R;
 ];
 Array TX_R_8 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_8_R;
 [ TX_R_8_R ;
-    ResponseViaActivity(R_316_RESP_A);
+    ResponseViaActivity(R_317_RESP_A);
 ];
 [ CANT_REACH_INSIDE_CLOSED_RM 
     code ! Implied call parameter
@@ -39972,7 +39952,7 @@ Array TX_R_8 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_8_R;
 ];
 Array TX_R_9 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_9_R;
 [ TX_R_9_R ;
-    ResponseViaActivity(R_317_RESP_A);
+    ResponseViaActivity(R_318_RESP_A);
 ];
 [ CANT_REACH_INSIDE_ROOMS_RM 
     code ! Implied call parameter
@@ -39996,7 +39976,7 @@ Array TX_R_9 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_9_R;
 ];
 Array TX_R_10 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_10_R;
 [ TX_R_10_R ;
-    ResponseViaActivity(R_318_RESP_A);
+    ResponseViaActivity(R_319_RESP_A);
 ];
 [ CANT_REACH_OUTSIDE_CLOSED_RM 
     code ! Implied call parameter
@@ -40020,7 +40000,7 @@ Array TX_R_10 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_10_R;
 ];
 Array TX_R_11 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_11_R;
 [ TX_R_11_R ;
-    ResponseViaActivity(R_319_RESP_A);
+    ResponseViaActivity(R_320_RESP_A);
 ];
 [ LIST_WRITER_INTERNAL_RM 
     code ! Implied call parameter
@@ -40068,103 +40048,103 @@ Array TX_R_11 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_11_R;
 ];
 Array TX_R_12 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_12_R;
 [ TX_R_12_R ;
-    ResponseViaActivity(R_319_RESP_B);
+    ResponseViaActivity(R_320_RESP_B);
 ];
 Array TX_R_13 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_13_R;
 [ TX_R_13_R ;
-    ResponseViaActivity(R_319_RESP_C);
+    ResponseViaActivity(R_320_RESP_C);
 ];
 Array TX_R_14 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_14_R;
 [ TX_R_14_R ;
-    ResponseViaActivity(R_319_RESP_D);
+    ResponseViaActivity(R_320_RESP_D);
 ];
 Array TX_R_15 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_15_R;
 [ TX_R_15_R ;
-    ResponseViaActivity(R_319_RESP_E);
+    ResponseViaActivity(R_320_RESP_E);
 ];
 Array TX_R_16 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_16_R;
 [ TX_R_16_R ;
-    ResponseViaActivity(R_319_RESP_F);
+    ResponseViaActivity(R_320_RESP_F);
 ];
 Array TX_R_17 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_17_R;
 [ TX_R_17_R ;
-    ResponseViaActivity(R_319_RESP_G);
+    ResponseViaActivity(R_320_RESP_G);
 ];
 Array TX_R_18 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_18_R;
 [ TX_R_18_R ;
-    ResponseViaActivity(R_319_RESP_H);
+    ResponseViaActivity(R_320_RESP_H);
 ];
 Array TX_R_19 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_19_R;
 [ TX_R_19_R ;
-    ResponseViaActivity(R_319_RESP_I);
+    ResponseViaActivity(R_320_RESP_I);
 ];
 Array TX_R_20 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_20_R;
 [ TX_R_20_R ;
-    ResponseViaActivity(R_319_RESP_J);
+    ResponseViaActivity(R_320_RESP_J);
 ];
 Array TX_R_21 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_21_R;
 [ TX_R_21_R ;
-    ResponseViaActivity(R_319_RESP_K);
+    ResponseViaActivity(R_320_RESP_K);
 ];
 Array TX_R_22 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_22_R;
 [ TX_R_22_R ;
-    ResponseViaActivity(R_319_RESP_L);
+    ResponseViaActivity(R_320_RESP_L);
 ];
 Array TX_R_23 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_23_R;
 [ TX_R_23_R ;
-    ResponseViaActivity(R_319_RESP_M);
+    ResponseViaActivity(R_320_RESP_M);
 ];
 Array TX_R_24 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_24_R;
 [ TX_R_24_R ;
-    ResponseViaActivity(R_319_RESP_N);
+    ResponseViaActivity(R_320_RESP_N);
 ];
 Array TX_R_25 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_25_R;
 [ TX_R_25_R ;
-    ResponseViaActivity(R_319_RESP_O);
+    ResponseViaActivity(R_320_RESP_O);
 ];
 Array TX_R_26 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_26_R;
 [ TX_R_26_R ;
-    ResponseViaActivity(R_319_RESP_P);
+    ResponseViaActivity(R_320_RESP_P);
 ];
 Array TX_R_27 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_27_R;
 [ TX_R_27_R ;
-    ResponseViaActivity(R_319_RESP_Q);
+    ResponseViaActivity(R_320_RESP_Q);
 ];
 Array TX_R_28 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_28_R;
 [ TX_R_28_R ;
-    ResponseViaActivity(R_319_RESP_R);
+    ResponseViaActivity(R_320_RESP_R);
 ];
 Array TX_R_29 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_29_R;
 [ TX_R_29_R ;
-    ResponseViaActivity(R_319_RESP_S);
+    ResponseViaActivity(R_320_RESP_S);
 ];
 Array TX_R_30 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_30_R;
 [ TX_R_30_R ;
-    ResponseViaActivity(R_319_RESP_T);
+    ResponseViaActivity(R_320_RESP_T);
 ];
 Array TX_R_31 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_31_R;
 [ TX_R_31_R ;
-    ResponseViaActivity(R_319_RESP_U);
+    ResponseViaActivity(R_320_RESP_U);
 ];
 Array TX_R_32 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_32_R;
 [ TX_R_32_R ;
-    ResponseViaActivity(R_319_RESP_V);
+    ResponseViaActivity(R_320_RESP_V);
 ];
 Array TX_R_33 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_33_R;
 [ TX_R_33_R ;
-    ResponseViaActivity(R_319_RESP_W);
+    ResponseViaActivity(R_320_RESP_W);
 ];
 Array TX_R_34 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_34_R;
 [ TX_R_34_R ;
-    ResponseViaActivity(R_319_RESP_X);
+    ResponseViaActivity(R_320_RESP_X);
 ];
 Array TX_R_35 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_35_R;
 [ TX_R_35_R ;
-    ResponseViaActivity(R_319_RESP_Y);
+    ResponseViaActivity(R_320_RESP_Y);
 ];
 Array TX_R_36 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_36_R;
 [ TX_R_36_R ;
-    ResponseViaActivity(R_320_RESP_A);
+    ResponseViaActivity(R_321_RESP_A);
 ];
 [ ACTION_PROCESSING_INTERNAL_RM 
     code ! Implied call parameter
@@ -40198,47 +40178,47 @@ Array TX_R_36 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_36_R;
 ];
 Array TX_R_37 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_37_R;
 [ TX_R_37_R ;
-    ResponseViaActivity(R_320_RESP_B);
+    ResponseViaActivity(R_321_RESP_B);
 ];
 Array TX_R_38 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_38_R;
 [ TX_R_38_R ;
-    ResponseViaActivity(R_320_RESP_C);
+    ResponseViaActivity(R_321_RESP_C);
 ];
 Array TX_R_39 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_39_R;
 [ TX_R_39_R ;
-    ResponseViaActivity(R_320_RESP_D);
+    ResponseViaActivity(R_321_RESP_D);
 ];
 Array TX_R_40 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_40_R;
 [ TX_R_40_R ;
-    ResponseViaActivity(R_320_RESP_E);
+    ResponseViaActivity(R_321_RESP_E);
 ];
 Array TX_R_41 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_41_R;
 [ TX_R_41_R ;
-    ResponseViaActivity(R_320_RESP_F);
+    ResponseViaActivity(R_321_RESP_F);
 ];
 Array TX_R_42 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_42_R;
 [ TX_R_42_R ;
-    ResponseViaActivity(R_320_RESP_G);
+    ResponseViaActivity(R_321_RESP_G);
 ];
 Array TX_R_43 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_43_R;
 [ TX_R_43_R ;
-    ResponseViaActivity(R_320_RESP_H);
+    ResponseViaActivity(R_321_RESP_H);
 ];
 Array TX_R_44 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_44_R;
 [ TX_R_44_R ;
-    ResponseViaActivity(R_320_RESP_I);
+    ResponseViaActivity(R_321_RESP_I);
 ];
 Array TX_R_45 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_45_R;
 [ TX_R_45_R ;
-    ResponseViaActivity(R_320_RESP_J);
+    ResponseViaActivity(R_321_RESP_J);
 ];
 Array TX_R_46 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_46_R;
 [ TX_R_46_R ;
-    ResponseViaActivity(R_320_RESP_K);
+    ResponseViaActivity(R_321_RESP_K);
 ];
 Array TX_R_47 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_47_R;
 [ TX_R_47_R ;
-    ResponseViaActivity(R_321_RESP_A);
+    ResponseViaActivity(R_322_RESP_A);
 ];
 [ PARSER_ERROR_INTERNAL_RM 
     code ! Implied call parameter
@@ -40285,99 +40265,99 @@ Array TX_R_47 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_47_R;
 ];
 Array TX_R_48 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_48_R;
 [ TX_R_48_R ;
-    ResponseViaActivity(R_321_RESP_B);
+    ResponseViaActivity(R_322_RESP_B);
 ];
 Array TX_R_49 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_49_R;
 [ TX_R_49_R ;
-    ResponseViaActivity(R_321_RESP_C);
+    ResponseViaActivity(R_322_RESP_C);
 ];
 Array TX_R_50 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_50_R;
 [ TX_R_50_R ;
-    ResponseViaActivity(R_321_RESP_D);
+    ResponseViaActivity(R_322_RESP_D);
 ];
 Array TX_R_51 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_51_R;
 [ TX_R_51_R ;
-    ResponseViaActivity(R_321_RESP_E);
+    ResponseViaActivity(R_322_RESP_E);
 ];
 Array TX_R_52 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_52_R;
 [ TX_R_52_R ;
-    ResponseViaActivity(R_321_RESP_F);
+    ResponseViaActivity(R_322_RESP_F);
 ];
 Array TX_R_53 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_53_R;
 [ TX_R_53_R ;
-    ResponseViaActivity(R_321_RESP_G);
+    ResponseViaActivity(R_322_RESP_G);
 ];
 Array TX_R_54 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_54_R;
 [ TX_R_54_R ;
-    ResponseViaActivity(R_321_RESP_H);
+    ResponseViaActivity(R_322_RESP_H);
 ];
 Array TX_R_55 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_55_R;
 [ TX_R_55_R ;
-    ResponseViaActivity(R_321_RESP_I);
+    ResponseViaActivity(R_322_RESP_I);
 ];
 Array TX_R_56 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_56_R;
 [ TX_R_56_R ;
-    ResponseViaActivity(R_321_RESP_J);
+    ResponseViaActivity(R_322_RESP_J);
 ];
 Array TX_R_57 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_57_R;
 [ TX_R_57_R ;
-    ResponseViaActivity(R_321_RESP_K);
+    ResponseViaActivity(R_322_RESP_K);
 ];
 Array TX_R_58 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_58_R;
 [ TX_R_58_R ;
-    ResponseViaActivity(R_321_RESP_L);
+    ResponseViaActivity(R_322_RESP_L);
 ];
 Array TX_R_59 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_59_R;
 [ TX_R_59_R ;
-    ResponseViaActivity(R_321_RESP_M);
+    ResponseViaActivity(R_322_RESP_M);
 ];
 Array TX_R_60 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_60_R;
 [ TX_R_60_R ;
-    ResponseViaActivity(R_321_RESP_N);
+    ResponseViaActivity(R_322_RESP_N);
 ];
 Array TX_R_61 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_61_R;
 [ TX_R_61_R ;
-    ResponseViaActivity(R_321_RESP_O);
+    ResponseViaActivity(R_322_RESP_O);
 ];
 Array TX_R_62 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_62_R;
 [ TX_R_62_R ;
-    ResponseViaActivity(R_321_RESP_P);
+    ResponseViaActivity(R_322_RESP_P);
 ];
 Array TX_R_63 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_63_R;
 [ TX_R_63_R ;
-    ResponseViaActivity(R_321_RESP_Q);
+    ResponseViaActivity(R_322_RESP_Q);
 ];
 Array TX_R_64 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_64_R;
 [ TX_R_64_R ;
-    ResponseViaActivity(R_321_RESP_R);
+    ResponseViaActivity(R_322_RESP_R);
 ];
 Array TX_R_65 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_65_R;
 [ TX_R_65_R ;
-    ResponseViaActivity(R_321_RESP_S);
+    ResponseViaActivity(R_322_RESP_S);
 ];
 Array TX_R_66 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_66_R;
 [ TX_R_66_R ;
-    ResponseViaActivity(R_321_RESP_T);
+    ResponseViaActivity(R_322_RESP_T);
 ];
 Array TX_R_67 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_67_R;
 [ TX_R_67_R ;
-    ResponseViaActivity(R_321_RESP_U);
+    ResponseViaActivity(R_322_RESP_U);
 ];
 Array TX_R_68 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_68_R;
 [ TX_R_68_R ;
-    ResponseViaActivity(R_321_RESP_V);
+    ResponseViaActivity(R_322_RESP_V);
 ];
 Array TX_R_69 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_69_R;
 [ TX_R_69_R ;
-    ResponseViaActivity(R_321_RESP_W);
+    ResponseViaActivity(R_322_RESP_W);
 ];
 Array TX_R_70 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_70_R;
 [ TX_R_70_R ;
-    ResponseViaActivity(R_321_RESP_X);
+    ResponseViaActivity(R_322_RESP_X);
 ];
 Array TX_R_71 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_71_R;
 [ TX_R_71_R ;
-    ResponseViaActivity(R_322_RESP_A);
+    ResponseViaActivity(R_323_RESP_A);
 ];
 [ PARSER_N_ERROR_INTERNAL_RM 
     code ! Implied call parameter
@@ -40406,27 +40386,27 @@ Array TX_R_71 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_71_R;
 ];
 Array TX_R_72 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_72_R;
 [ TX_R_72_R ;
-    ResponseViaActivity(R_322_RESP_B);
+    ResponseViaActivity(R_323_RESP_B);
 ];
 Array TX_R_73 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_73_R;
 [ TX_R_73_R ;
-    ResponseViaActivity(R_322_RESP_C);
+    ResponseViaActivity(R_323_RESP_C);
 ];
 Array TX_R_74 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_74_R;
 [ TX_R_74_R ;
-    ResponseViaActivity(R_322_RESP_D);
+    ResponseViaActivity(R_323_RESP_D);
 ];
 Array TX_R_75 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_75_R;
 [ TX_R_75_R ;
-    ResponseViaActivity(R_322_RESP_E);
+    ResponseViaActivity(R_323_RESP_E);
 ];
 Array TX_R_76 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_76_R;
 [ TX_R_76_R ;
-    ResponseViaActivity(R_322_RESP_F);
+    ResponseViaActivity(R_323_RESP_F);
 ];
 Array TX_R_77 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_77_R;
 [ TX_R_77_R ;
-    ResponseViaActivity(R_323_RESP_A);
+    ResponseViaActivity(R_324_RESP_A);
 ];
 [ DARKNESS_NAME_INTERNAL_RM 
     code ! Implied call parameter
@@ -40450,7 +40430,7 @@ Array TX_R_77 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_77_R;
 ];
 Array TX_R_78 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_78_R;
 [ TX_R_78_R ;
-    ResponseViaActivity(R_324_RESP_A);
+    ResponseViaActivity(R_325_RESP_A);
 ];
 [ PARSER_COMMAND_INTERNAL_RM 
     code ! Implied call parameter
@@ -40477,19 +40457,19 @@ Array TX_R_78 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_78_R;
 ];
 Array TX_R_79 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_79_R;
 [ TX_R_79_R ;
-    ResponseViaActivity(R_324_RESP_B);
+    ResponseViaActivity(R_325_RESP_B);
 ];
 Array TX_R_80 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_80_R;
 [ TX_R_80_R ;
-    ResponseViaActivity(R_324_RESP_C);
+    ResponseViaActivity(R_325_RESP_C);
 ];
 Array TX_R_81 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_81_R;
 [ TX_R_81_R ;
-    ResponseViaActivity(R_324_RESP_D);
+    ResponseViaActivity(R_325_RESP_D);
 ];
 Array TX_R_82 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_82_R;
 [ TX_R_82_R ;
-    ResponseViaActivity(R_325_RESP_A);
+    ResponseViaActivity(R_326_RESP_A);
 ];
 [ PARSER_CLARIF_INTERNAL_RM 
     code ! Implied call parameter
@@ -40520,35 +40500,35 @@ Array TX_R_82 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_82_R;
 ];
 Array TX_R_83 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_83_R;
 [ TX_R_83_R ;
-    ResponseViaActivity(R_325_RESP_B);
+    ResponseViaActivity(R_326_RESP_B);
 ];
 Array TX_R_84 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_84_R;
 [ TX_R_84_R ;
-    ResponseViaActivity(R_325_RESP_C);
+    ResponseViaActivity(R_326_RESP_C);
 ];
 Array TX_R_85 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_85_R;
 [ TX_R_85_R ;
-    ResponseViaActivity(R_325_RESP_D);
+    ResponseViaActivity(R_326_RESP_D);
 ];
 Array TX_R_86 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_86_R;
 [ TX_R_86_R ;
-    ResponseViaActivity(R_325_RESP_E);
+    ResponseViaActivity(R_326_RESP_E);
 ];
 Array TX_R_87 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_87_R;
 [ TX_R_87_R ;
-    ResponseViaActivity(R_325_RESP_F);
+    ResponseViaActivity(R_326_RESP_F);
 ];
 Array TX_R_88 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_88_R;
 [ TX_R_88_R ;
-    ResponseViaActivity(R_325_RESP_G);
+    ResponseViaActivity(R_326_RESP_G);
 ];
 Array TX_R_89 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_89_R;
 [ TX_R_89_R ;
-    ResponseViaActivity(R_325_RESP_H);
+    ResponseViaActivity(R_326_RESP_H);
 ];
 Array TX_R_90 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_90_R;
 [ TX_R_90_R ;
-    ResponseViaActivity(R_326_RESP_A);
+    ResponseViaActivity(R_327_RESP_A);
 ];
 [ YES_OR_NO_QUESTION_INTERNAL_RM 
     code ! Implied call parameter
@@ -40572,7 +40552,7 @@ Array TX_R_90 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_90_R;
 ];
 Array TX_R_91 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_91_R;
 [ TX_R_91_R ;
-    ResponseViaActivity(R_327_RESP_A);
+    ResponseViaActivity(R_328_RESP_A);
 ];
 [ PRINT_PROTAGONIST_INTERNAL_RM 
     code ! Implied call parameter
@@ -40598,15 +40578,15 @@ Array TX_R_91 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_91_R;
 ];
 Array TX_R_92 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_92_R;
 [ TX_R_92_R ;
-    ResponseViaActivity(R_327_RESP_B);
+    ResponseViaActivity(R_328_RESP_B);
 ];
 Array TX_R_93 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_93_R;
 [ TX_R_93_R ;
-    ResponseViaActivity(R_327_RESP_C);
+    ResponseViaActivity(R_328_RESP_C);
 ];
 Array TX_R_94 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_94_R;
 [ TX_R_94_R ;
-    ResponseViaActivity(R_330_RESP_A);
+    ResponseViaActivity(R_331_RESP_A);
 ];
 [ STANDARD_IMPLICIT_TAKING_RM 
     code ! Implied call parameter
@@ -40631,11 +40611,11 @@ Array TX_R_94 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_94_R;
 ];
 Array TX_R_95 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_95_R;
 [ TX_R_95_R ;
-    ResponseViaActivity(R_330_RESP_B);
+    ResponseViaActivity(R_331_RESP_B);
 ];
 Array TX_R_96 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_96_R;
 [ TX_R_96_R ;
-    ResponseViaActivity(R_332_RESP_A);
+    ResponseViaActivity(R_333_RESP_A);
 ];
 [ PRINT_OBITUARY_HEADLINE_RM 
     code ! Implied call parameter
@@ -40661,15 +40641,15 @@ Array TX_R_96 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_96_R;
 ];
 Array TX_R_97 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_97_R;
 [ TX_R_97_R ;
-    ResponseViaActivity(R_332_RESP_B);
+    ResponseViaActivity(R_333_RESP_B);
 ];
 Array TX_R_98 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_98_R;
 [ TX_R_98_R ;
-    ResponseViaActivity(R_332_RESP_C);
+    ResponseViaActivity(R_333_RESP_C);
 ];
 Array TX_R_99 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_99_R;
 [ TX_R_99_R ;
-    ResponseViaActivity(R_338_RESP_A);
+    ResponseViaActivity(R_339_RESP_A);
 ];
 [ IMMEDIATELY_UNDO_RM 
     code ! Implied call parameter
@@ -40698,27 +40678,27 @@ Array TX_R_99 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_99_R;
 ];
 Array TX_R_100 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_100_R;
 [ TX_R_100_R ;
-    ResponseViaActivity(R_338_RESP_B);
+    ResponseViaActivity(R_339_RESP_B);
 ];
 Array TX_R_101 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_101_R;
 [ TX_R_101_R ;
-    ResponseViaActivity(R_338_RESP_C);
+    ResponseViaActivity(R_339_RESP_C);
 ];
 Array TX_R_102 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_102_R;
 [ TX_R_102_R ;
-    ResponseViaActivity(R_338_RESP_D);
+    ResponseViaActivity(R_339_RESP_D);
 ];
 Array TX_R_103 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_103_R;
 [ TX_R_103_R ;
-    ResponseViaActivity(R_338_RESP_E);
+    ResponseViaActivity(R_339_RESP_E);
 ];
 Array TX_R_104 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_104_R;
 [ TX_R_104_R ;
-    ResponseViaActivity(R_338_RESP_F);
+    ResponseViaActivity(R_339_RESP_F);
 ];
 Array TX_R_105 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_105_R;
 [ TX_R_105_R ;
-    ResponseViaActivity(R_341_RESP_A);
+    ResponseViaActivity(R_342_RESP_A);
 ];
 [ QUIT_THE_GAME_RM 
     code ! Implied call parameter
@@ -40742,7 +40722,7 @@ Array TX_R_105 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_105_R;
 ];
 Array TX_R_106 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_106_R;
 [ TX_R_106_R ;
-    ResponseViaActivity(R_342_RESP_A);
+    ResponseViaActivity(R_343_RESP_A);
 ];
 [ SAVE_THE_GAME_RM 
     code ! Implied call parameter
@@ -40767,11 +40747,11 @@ Array TX_R_106 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_106_R;
 ];
 Array TX_R_107 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_107_R;
 [ TX_R_107_R ;
-    ResponseViaActivity(R_342_RESP_B);
+    ResponseViaActivity(R_343_RESP_B);
 ];
 Array TX_R_108 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_108_R;
 [ TX_R_108_R ;
-    ResponseViaActivity(R_343_RESP_A);
+    ResponseViaActivity(R_344_RESP_A);
 ];
 [ RESTORE_THE_GAME_RM 
     code ! Implied call parameter
@@ -40796,11 +40776,11 @@ Array TX_R_108 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_108_R;
 ];
 Array TX_R_109 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_109_R;
 [ TX_R_109_R ;
-    ResponseViaActivity(R_343_RESP_B);
+    ResponseViaActivity(R_344_RESP_B);
 ];
 Array TX_R_110 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_110_R;
 [ TX_R_110_R ;
-    ResponseViaActivity(R_344_RESP_A);
+    ResponseViaActivity(R_345_RESP_A);
 ];
 [ RESTART_THE_GAME_RM 
     code ! Implied call parameter
@@ -40825,11 +40805,11 @@ Array TX_R_110 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_110_R;
 ];
 Array TX_R_111 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_111_R;
 [ TX_R_111_R ;
-    ResponseViaActivity(R_344_RESP_B);
+    ResponseViaActivity(R_345_RESP_B);
 ];
 Array TX_R_112 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_112_R;
 [ TX_R_112_R ;
-    ResponseViaActivity(R_345_RESP_A);
+    ResponseViaActivity(R_346_RESP_A);
 ];
 [ VERIFY_THE_STORY_FILE_RM 
     code ! Implied call parameter
@@ -40854,11 +40834,11 @@ Array TX_R_112 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_112_R;
 ];
 Array TX_R_113 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_113_R;
 [ TX_R_113_R ;
-    ResponseViaActivity(R_345_RESP_B);
+    ResponseViaActivity(R_346_RESP_B);
 ];
 Array TX_R_114 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_114_R;
 [ TX_R_114_R ;
-    ResponseViaActivity(R_346_RESP_A);
+    ResponseViaActivity(R_347_RESP_A);
 ];
 [ SWITCH_TRANSCRIPT_ON_RM 
     code ! Implied call parameter
@@ -40884,15 +40864,15 @@ Array TX_R_114 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_114_R;
 ];
 Array TX_R_115 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_115_R;
 [ TX_R_115_R ;
-    ResponseViaActivity(R_346_RESP_B);
+    ResponseViaActivity(R_347_RESP_B);
 ];
 Array TX_R_116 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_116_R;
 [ TX_R_116_R ;
-    ResponseViaActivity(R_346_RESP_C);
+    ResponseViaActivity(R_347_RESP_C);
 ];
 Array TX_R_117 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_117_R;
 [ TX_R_117_R ;
-    ResponseViaActivity(R_347_RESP_A);
+    ResponseViaActivity(R_348_RESP_A);
 ];
 [ SWITCH_TRANSCRIPT_OFF_RM 
     code ! Implied call parameter
@@ -40918,15 +40898,15 @@ Array TX_R_117 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_117_R;
 ];
 Array TX_R_118 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_118_R;
 [ TX_R_118_R ;
-    ResponseViaActivity(R_347_RESP_B);
+    ResponseViaActivity(R_348_RESP_B);
 ];
 Array TX_R_119 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_119_R;
 [ TX_R_119_R ;
-    ResponseViaActivity(R_347_RESP_C);
+    ResponseViaActivity(R_348_RESP_C);
 ];
 Array TX_R_120 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_120_R;
 [ TX_R_120_R ;
-    ResponseViaActivity(R_349_RESP_A);
+    ResponseViaActivity(R_350_RESP_A);
 ];
 [ ANNOUNCE_SCORE_RM 
     code ! Implied call parameter
@@ -40954,23 +40934,23 @@ Array TX_R_120 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_120_R;
 ];
 Array TX_R_121 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_121_R;
 [ TX_R_121_R ;
-    ResponseViaActivity(R_349_RESP_B);
+    ResponseViaActivity(R_350_RESP_B);
 ];
 Array TX_R_122 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_122_R;
 [ TX_R_122_R ;
-    ResponseViaActivity(R_349_RESP_C);
+    ResponseViaActivity(R_350_RESP_C);
 ];
 Array TX_R_123 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_123_R;
 [ TX_R_123_R ;
-    ResponseViaActivity(R_349_RESP_D);
+    ResponseViaActivity(R_350_RESP_D);
 ];
 Array TX_R_124 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_124_R;
 [ TX_R_124_R ;
-    ResponseViaActivity(R_349_RESP_E);
+    ResponseViaActivity(R_350_RESP_E);
 ];
 Array TX_R_125 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_125_R;
 [ TX_R_125_R ;
-    ResponseViaActivity(R_351_RESP_A);
+    ResponseViaActivity(R_352_RESP_A);
 ];
 [ REP_PREFER_ABBREVIATED_RM 
     code ! Implied call parameter
@@ -40994,7 +40974,7 @@ Array TX_R_125 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_125_R;
 ];
 Array TX_R_126 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_126_R;
 [ TX_R_126_R ;
-    ResponseViaActivity(R_353_RESP_A);
+    ResponseViaActivity(R_354_RESP_A);
 ];
 [ REP_PREFER_UNABBREVIATED_RM 
     code ! Implied call parameter
@@ -41018,7 +40998,7 @@ Array TX_R_126 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_126_R;
 ];
 Array TX_R_127 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_127_R;
 [ TX_R_127_R ;
-    ResponseViaActivity(R_355_RESP_A);
+    ResponseViaActivity(R_356_RESP_A);
 ];
 [ REP_PREFER_SOMETIMES_ABBR_RM 
     code ! Implied call parameter
@@ -41042,7 +41022,7 @@ Array TX_R_127 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_127_R;
 ];
 Array TX_R_128 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_128_R;
 [ TX_R_128_R ;
-    ResponseViaActivity(R_357_RESP_A);
+    ResponseViaActivity(R_358_RESP_A);
 ];
 [ REP_SWITCH_NOTIFY_ON_RM 
     code ! Implied call parameter
@@ -41066,7 +41046,7 @@ Array TX_R_128 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_128_R;
 ];
 Array TX_R_129 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_129_R;
 [ TX_R_129_R ;
-    ResponseViaActivity(R_359_RESP_A);
+    ResponseViaActivity(R_360_RESP_A);
 ];
 [ REP_SWITCH_NOTIFY_OFF_RM 
     code ! Implied call parameter
@@ -41090,7 +41070,7 @@ Array TX_R_129 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_129_R;
 ];
 Array TX_R_130 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_130_R;
 [ TX_R_130_R ;
-    ResponseViaActivity(R_360_RESP_A);
+    ResponseViaActivity(R_361_RESP_A);
 ];
 [ ANNOUNCE_PRONOUN_MEANINGS_RM 
     code ! Implied call parameter
@@ -41117,15 +41097,15 @@ Array TX_R_130 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_130_R;
 ];
 Array TX_R_131 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_131_R;
 [ TX_R_131_R ;
-    ResponseViaActivity(R_360_RESP_B);
+    ResponseViaActivity(R_361_RESP_B);
 ];
 Array TX_R_132 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_132_R;
 [ TX_R_132_R ;
-    ResponseViaActivity(R_360_RESP_C);
+    ResponseViaActivity(R_361_RESP_C);
 ];
 Array TX_R_133 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_133_R;
 [ TX_R_133_R ;
-    ResponseViaActivity(R_360_RESP_D);
+    ResponseViaActivity(R_361_RESP_D);
 ];
 Array TX_R_134 --> CONSTANT_PACKED_TEXT_STORAGE TX_R_134_R;
 [ TX_R_134_R ;
@@ -43409,280 +43389,280 @@ Constant R_290_RESP_E = 265;
 Constant R_290_RESP_F = 266;
 Constant R_291_RESP_A = 267;
 Constant R_292_RESP_A = 268;
-Constant R_299_RESP_A = 269;
-Constant R_301_RESP_A = 270;
-Constant R_301_RESP_B = 271;
-Constant R_308_RESP_A = 272;
-Constant R_309_RESP_A = 273;
-Constant R_311_RESP_A = 274;
-Constant R_312_RESP_A = 275;
-Constant R_315_RESP_A = 276;
-Constant R_316_RESP_A = 277;
-Constant R_317_RESP_A = 278;
-Constant R_318_RESP_A = 279;
-Constant R_319_RESP_A = 280;
-Constant R_319_RESP_B = 281;
-Constant R_319_RESP_C = 282;
-Constant R_319_RESP_D = 283;
-Constant R_319_RESP_E = 284;
-Constant R_319_RESP_F = 285;
-Constant R_319_RESP_G = 286;
-Constant R_319_RESP_H = 287;
-Constant R_319_RESP_I = 288;
-Constant R_319_RESP_J = 289;
-Constant R_319_RESP_K = 290;
-Constant R_319_RESP_L = 291;
-Constant R_319_RESP_M = 292;
-Constant R_319_RESP_N = 293;
-Constant R_319_RESP_O = 294;
-Constant R_319_RESP_P = 295;
-Constant R_319_RESP_Q = 296;
-Constant R_319_RESP_R = 297;
-Constant R_319_RESP_S = 298;
-Constant R_319_RESP_T = 299;
-Constant R_319_RESP_U = 300;
-Constant R_319_RESP_V = 301;
-Constant R_319_RESP_W = 302;
-Constant R_319_RESP_X = 303;
-Constant R_319_RESP_Y = 304;
-Constant R_320_RESP_A = 305;
-Constant R_320_RESP_B = 306;
-Constant R_320_RESP_C = 307;
-Constant R_320_RESP_D = 308;
-Constant R_320_RESP_E = 309;
-Constant R_320_RESP_F = 310;
-Constant R_320_RESP_G = 311;
-Constant R_320_RESP_H = 312;
-Constant R_320_RESP_I = 313;
-Constant R_320_RESP_J = 314;
-Constant R_320_RESP_K = 315;
-Constant R_321_RESP_A = 316;
-Constant R_321_RESP_B = 317;
-Constant R_321_RESP_C = 318;
-Constant R_321_RESP_D = 319;
-Constant R_321_RESP_E = 320;
-Constant R_321_RESP_F = 321;
-Constant R_321_RESP_G = 322;
-Constant R_321_RESP_H = 323;
-Constant R_321_RESP_I = 324;
-Constant R_321_RESP_J = 325;
-Constant R_321_RESP_K = 326;
-Constant R_321_RESP_L = 327;
-Constant R_321_RESP_M = 328;
-Constant R_321_RESP_N = 329;
-Constant R_321_RESP_O = 330;
-Constant R_321_RESP_P = 331;
-Constant R_321_RESP_Q = 332;
-Constant R_321_RESP_R = 333;
-Constant R_321_RESP_S = 334;
-Constant R_321_RESP_T = 335;
-Constant R_321_RESP_U = 336;
-Constant R_321_RESP_V = 337;
-Constant R_321_RESP_W = 338;
-Constant R_321_RESP_X = 339;
-Constant R_322_RESP_A = 340;
-Constant R_322_RESP_B = 341;
-Constant R_322_RESP_C = 342;
-Constant R_322_RESP_D = 343;
-Constant R_322_RESP_E = 344;
-Constant R_322_RESP_F = 345;
-Constant R_323_RESP_A = 346;
-Constant R_324_RESP_A = 347;
-Constant R_324_RESP_B = 348;
-Constant R_324_RESP_C = 349;
-Constant R_324_RESP_D = 350;
-Constant R_325_RESP_A = 351;
-Constant R_325_RESP_B = 352;
-Constant R_325_RESP_C = 353;
-Constant R_325_RESP_D = 354;
-Constant R_325_RESP_E = 355;
-Constant R_325_RESP_F = 356;
-Constant R_325_RESP_G = 357;
-Constant R_325_RESP_H = 358;
-Constant R_326_RESP_A = 359;
-Constant R_327_RESP_A = 360;
-Constant R_327_RESP_B = 361;
-Constant R_327_RESP_C = 362;
-Constant R_330_RESP_A = 363;
-Constant R_330_RESP_B = 364;
-Constant R_332_RESP_A = 365;
-Constant R_332_RESP_B = 366;
-Constant R_332_RESP_C = 367;
-Constant R_338_RESP_A = 368;
-Constant R_338_RESP_B = 369;
-Constant R_338_RESP_C = 370;
-Constant R_338_RESP_D = 371;
-Constant R_338_RESP_E = 372;
-Constant R_338_RESP_F = 373;
-Constant R_341_RESP_A = 374;
-Constant R_342_RESP_A = 375;
-Constant R_342_RESP_B = 376;
-Constant R_343_RESP_A = 377;
-Constant R_343_RESP_B = 378;
-Constant R_344_RESP_A = 379;
-Constant R_344_RESP_B = 380;
-Constant R_345_RESP_A = 381;
-Constant R_345_RESP_B = 382;
-Constant R_346_RESP_A = 383;
-Constant R_346_RESP_B = 384;
-Constant R_346_RESP_C = 385;
-Constant R_347_RESP_A = 386;
-Constant R_347_RESP_B = 387;
-Constant R_347_RESP_C = 388;
-Constant R_349_RESP_A = 389;
-Constant R_349_RESP_B = 390;
-Constant R_349_RESP_C = 391;
-Constant R_349_RESP_D = 392;
-Constant R_349_RESP_E = 393;
-Constant R_351_RESP_A = 394;
-Constant R_353_RESP_A = 395;
-Constant R_355_RESP_A = 396;
-Constant R_357_RESP_A = 397;
-Constant R_359_RESP_A = 398;
-Constant R_360_RESP_A = 399;
-Constant R_360_RESP_B = 400;
-Constant R_360_RESP_C = 401;
-Constant R_360_RESP_D = 402;
+Constant R_300_RESP_A = 269;
+Constant R_302_RESP_A = 270;
+Constant R_302_RESP_B = 271;
+Constant R_309_RESP_A = 272;
+Constant R_310_RESP_A = 273;
+Constant R_312_RESP_A = 274;
+Constant R_313_RESP_A = 275;
+Constant R_316_RESP_A = 276;
+Constant R_317_RESP_A = 277;
+Constant R_318_RESP_A = 278;
+Constant R_319_RESP_A = 279;
+Constant R_320_RESP_A = 280;
+Constant R_320_RESP_B = 281;
+Constant R_320_RESP_C = 282;
+Constant R_320_RESP_D = 283;
+Constant R_320_RESP_E = 284;
+Constant R_320_RESP_F = 285;
+Constant R_320_RESP_G = 286;
+Constant R_320_RESP_H = 287;
+Constant R_320_RESP_I = 288;
+Constant R_320_RESP_J = 289;
+Constant R_320_RESP_K = 290;
+Constant R_320_RESP_L = 291;
+Constant R_320_RESP_M = 292;
+Constant R_320_RESP_N = 293;
+Constant R_320_RESP_O = 294;
+Constant R_320_RESP_P = 295;
+Constant R_320_RESP_Q = 296;
+Constant R_320_RESP_R = 297;
+Constant R_320_RESP_S = 298;
+Constant R_320_RESP_T = 299;
+Constant R_320_RESP_U = 300;
+Constant R_320_RESP_V = 301;
+Constant R_320_RESP_W = 302;
+Constant R_320_RESP_X = 303;
+Constant R_320_RESP_Y = 304;
+Constant R_321_RESP_A = 305;
+Constant R_321_RESP_B = 306;
+Constant R_321_RESP_C = 307;
+Constant R_321_RESP_D = 308;
+Constant R_321_RESP_E = 309;
+Constant R_321_RESP_F = 310;
+Constant R_321_RESP_G = 311;
+Constant R_321_RESP_H = 312;
+Constant R_321_RESP_I = 313;
+Constant R_321_RESP_J = 314;
+Constant R_321_RESP_K = 315;
+Constant R_322_RESP_A = 316;
+Constant R_322_RESP_B = 317;
+Constant R_322_RESP_C = 318;
+Constant R_322_RESP_D = 319;
+Constant R_322_RESP_E = 320;
+Constant R_322_RESP_F = 321;
+Constant R_322_RESP_G = 322;
+Constant R_322_RESP_H = 323;
+Constant R_322_RESP_I = 324;
+Constant R_322_RESP_J = 325;
+Constant R_322_RESP_K = 326;
+Constant R_322_RESP_L = 327;
+Constant R_322_RESP_M = 328;
+Constant R_322_RESP_N = 329;
+Constant R_322_RESP_O = 330;
+Constant R_322_RESP_P = 331;
+Constant R_322_RESP_Q = 332;
+Constant R_322_RESP_R = 333;
+Constant R_322_RESP_S = 334;
+Constant R_322_RESP_T = 335;
+Constant R_322_RESP_U = 336;
+Constant R_322_RESP_V = 337;
+Constant R_322_RESP_W = 338;
+Constant R_322_RESP_X = 339;
+Constant R_323_RESP_A = 340;
+Constant R_323_RESP_B = 341;
+Constant R_323_RESP_C = 342;
+Constant R_323_RESP_D = 343;
+Constant R_323_RESP_E = 344;
+Constant R_323_RESP_F = 345;
+Constant R_324_RESP_A = 346;
+Constant R_325_RESP_A = 347;
+Constant R_325_RESP_B = 348;
+Constant R_325_RESP_C = 349;
+Constant R_325_RESP_D = 350;
+Constant R_326_RESP_A = 351;
+Constant R_326_RESP_B = 352;
+Constant R_326_RESP_C = 353;
+Constant R_326_RESP_D = 354;
+Constant R_326_RESP_E = 355;
+Constant R_326_RESP_F = 356;
+Constant R_326_RESP_G = 357;
+Constant R_326_RESP_H = 358;
+Constant R_327_RESP_A = 359;
+Constant R_328_RESP_A = 360;
+Constant R_328_RESP_B = 361;
+Constant R_328_RESP_C = 362;
+Constant R_331_RESP_A = 363;
+Constant R_331_RESP_B = 364;
+Constant R_333_RESP_A = 365;
+Constant R_333_RESP_B = 366;
+Constant R_333_RESP_C = 367;
+Constant R_339_RESP_A = 368;
+Constant R_339_RESP_B = 369;
+Constant R_339_RESP_C = 370;
+Constant R_339_RESP_D = 371;
+Constant R_339_RESP_E = 372;
+Constant R_339_RESP_F = 373;
+Constant R_342_RESP_A = 374;
+Constant R_343_RESP_A = 375;
+Constant R_343_RESP_B = 376;
+Constant R_344_RESP_A = 377;
+Constant R_344_RESP_B = 378;
+Constant R_345_RESP_A = 379;
+Constant R_345_RESP_B = 380;
+Constant R_346_RESP_A = 381;
+Constant R_346_RESP_B = 382;
+Constant R_347_RESP_A = 383;
+Constant R_347_RESP_B = 384;
+Constant R_347_RESP_C = 385;
+Constant R_348_RESP_A = 386;
+Constant R_348_RESP_B = 387;
+Constant R_348_RESP_C = 388;
+Constant R_350_RESP_A = 389;
+Constant R_350_RESP_B = 390;
+Constant R_350_RESP_C = 391;
+Constant R_350_RESP_D = 392;
+Constant R_350_RESP_E = 393;
+Constant R_352_RESP_A = 394;
+Constant R_354_RESP_A = 395;
+Constant R_356_RESP_A = 396;
+Constant R_358_RESP_A = 397;
+Constant R_360_RESP_A = 398;
+Constant R_361_RESP_A = 399;
+Constant R_361_RESP_B = 400;
+Constant R_361_RESP_C = 401;
+Constant R_361_RESP_D = 402;
 Constant NO_RESPONSES = 402;
 Array ResponseTexts -->
     TX_S_135 TX_S_136 TX_S_139 TX_S_137 TX_S_138 TX_S_140 TX_S_393 TX_S_394 TX_S_395 TX_S_396 TX_S_397 TX_S_398 TX_S_399 TX_S_400 TX_S_401 TX_S_150 TX_S_151 TX_S_152 TX_S_153 TX_S_154 TX_S_155 TX_S_156 TX_S_157 TX_S_158 TX_S_159 TX_S_160 TX_S_161 TX_S_162 TX_S_163 TX_S_164 TX_S_165 TX_S_166 TX_S_167 TX_S_168 TX_S_170 TX_S_169 TX_S_171 TX_S_172 TX_S_173 TX_S_174 TX_S_175 TX_S_176 TX_S_177 TX_S_178 TX_S_179 TX_S_180 TX_S_181 TX_S_182 TX_S_183 TX_S_184 TX_S_185 TX_S_186 TX_S_187 TX_S_188 TX_S_189 TX_S_190 TX_S_191 TX_S_192 TX_S_193 TX_S_194 TX_S_195 TX_S_196 TX_S_197 TX_S_198 TX_S_199 TX_S_200 TX_S_201 TX_S_202 TX_S_203 TX_S_204 TX_S_205 TX_S_206 TX_S_207 TX_S_208 TX_S_209 TX_S_210 TX_S_211 TX_S_212 TX_S_213 TX_S_214 TX_S_215 TX_S_216 TX_S_217 TX_S_218 TX_S_219 TX_S_220 TX_S_221 TX_S_222 TX_S_223 TX_S_224 TX_S_225 TX_S_226 TX_S_227 TX_S_228 TX_S_229 TX_S_230 TX_S_231 TX_S_232 TX_S_233 TX_S_234 TX_S_235 TX_S_236 TX_S_237 TX_S_238 TX_S_239 TX_S_240 TX_S_241 TX_S_242 TX_S_243 TX_S_244 TX_S_245 TX_S_246 TX_S_247 TX_S_248 TX_S_249 TX_S_250 TX_S_251 TX_S_252 TX_S_253 TX_S_254 TX_S_255 TX_S_256 TX_S_257 TX_S_258 TX_S_259 TX_S_260 TX_S_261 TX_S_262 TX_S_263 TX_S_264 TX_S_265 TX_S_266 TX_S_267 TX_S_268 TX_S_269 TX_S_270 TX_S_271 TX_S_272 TX_S_273 TX_S_274 TX_S_275 TX_S_276 TX_S_277 TX_S_278 TX_S_279 TX_S_280 TX_S_281 TX_S_282 TX_S_283 TX_S_284 TX_S_285 TX_S_286 TX_S_287 TX_S_288 TX_S_289 TX_S_290 TX_S_402 TX_S_292 TX_S_293 TX_S_294 TX_S_295 TX_S_296 TX_S_297 TX_S_298 TX_S_299 TX_S_300 TX_S_301 TX_S_302 TX_S_303 TX_S_304 TX_S_305 TX_S_306 TX_S_307 TX_S_308 TX_S_309 TX_S_310 TX_S_311 TX_S_312 TX_S_313 TX_S_314 TX_S_315 TX_S_316 TX_S_317 TX_S_318 TX_S_319 TX_S_320 TX_S_321 TX_S_322 TX_S_323 TX_S_324 TX_S_325 TX_S_326 TX_S_327 TX_S_328 TX_S_329 TX_S_330 TX_S_331 TX_S_332 TX_S_333 TX_S_334 TX_S_335 TX_S_336 TX_S_337 TX_S_338 TX_S_339 TX_S_340 TX_S_341 TX_S_342 TX_S_343 TX_S_344 TX_S_345 TX_S_346 TX_S_347 TX_S_348 TX_S_349 TX_S_350 TX_S_351 TX_S_352 TX_S_353 TX_S_354 TX_S_355 TX_S_356 TX_S_357 TX_S_358 TX_S_359 TX_S_360 TX_S_361 TX_S_362 TX_S_363 TX_S_364 TX_S_365 TX_S_366 TX_S_367 TX_S_368 TX_S_369 TX_S_370 TX_S_371 TX_S_372 TX_S_373 TX_S_374 TX_S_375 TX_S_376 TX_S_377 TX_S_378 TX_S_379 TX_S_380 TX_S_381 TX_S_382 TX_S_383 TX_S_384 TX_S_385 TX_S_386 TX_S_387 TX_S_388 TX_S_389 TX_S_390 TX_S_391 TX_S_392 TX_S_148 TX_S_149 TX_S_141 TX_S_142 TX_S_143 TX_S_144 TX_S_145 TX_S_146 TX_S_147 TX_S_291 TX_S_0 TX_S_1 TX_S_2 TX_S_3 TX_S_4 TX_S_5 TX_S_6 TX_S_7 TX_S_8 TX_S_9 TX_S_10 TX_S_11 TX_S_12 TX_S_13 TX_S_14 TX_S_15 TX_S_16 TX_S_17 TX_S_18 TX_S_19 TX_S_20 TX_S_21 TX_S_22 TX_S_23 TX_S_24 TX_S_25 TX_S_26 TX_S_27 TX_S_28 TX_S_29 TX_S_30 TX_S_31 TX_S_32 TX_S_33 TX_S_34 TX_S_35 TX_S_36 TX_S_37 TX_S_38 TX_S_39 TX_S_40 TX_S_41 TX_S_42 TX_S_43 TX_S_44 TX_S_45 TX_S_46 TX_S_47 TX_S_48 TX_S_49 TX_S_50 TX_S_51 TX_S_52 TX_S_53 TX_S_54 TX_S_55 TX_S_56 TX_S_57 TX_S_58 TX_S_59 TX_S_60 TX_S_61 TX_S_62 TX_S_63 TX_S_64 TX_S_65 TX_S_66 TX_S_67 TX_S_68 TX_S_69 TX_S_70 TX_S_71 TX_S_72 TX_S_73 TX_S_74 TX_S_75 TX_S_76 TX_S_77 TX_S_78 TX_S_79 TX_S_80 TX_S_81 TX_S_82 TX_S_83 TX_S_84 TX_S_85 TX_S_86 TX_S_87 TX_S_88 TX_S_89 TX_S_90 TX_S_91 TX_S_92 TX_S_93 TX_S_94 TX_S_95 TX_S_96 TX_S_97 TX_S_98 TX_S_99 TX_S_100 TX_S_101 TX_S_102 TX_S_103 TX_S_104 TX_S_105 TX_S_106 TX_S_107 TX_S_108 TX_S_109 TX_S_110 TX_S_111 TX_S_112 TX_S_113 TX_S_114 TX_S_115 TX_S_116 TX_S_117 TX_S_118 TX_S_119 TX_S_120 TX_S_121 TX_S_122 TX_S_123 TX_S_124 TX_S_125 TX_S_126 TX_S_127 TX_S_128 TX_S_129 TX_S_130 TX_S_131 TX_S_132 TX_S_133 0 0;
 [ PrintResponse 
     R ! Implied call parameter
     ;
-    if (R == R_299_RESP_A) print (RulePrintingRule) ADJUST_LIGHT_R, " response (A)";
-    if (R == R_301_RESP_A) print (RulePrintingRule) GENERATE_ACTION_R, " response (A)";
-    if (R == R_301_RESP_B) print (RulePrintingRule) GENERATE_ACTION_R, " response (B)";
-    if (R == R_308_RESP_A) print (RulePrintingRule) BASIC_ACCESSIBILITY_R, " response (A)";
-    if (R == R_309_RESP_A) print (RulePrintingRule) BASIC_VISIBILITY_R, " response (A)";
-    if (R == R_311_RESP_A) print (RulePrintingRule) REQUESTED_ACTIONS_REQUIRE_R, " response (A)";
-    if (R == R_312_RESP_A) print (RulePrintingRule) CARRY_OUT_REQUESTED_ACTIONS_R, " response (A)";
-    if (R == R_315_RESP_A) print (RulePrintingRule) ACCESS_THROUGH_BARRIERS_R, " response (A)";
-    if (R == R_316_RESP_A) print (RulePrintingRule) CANT_REACH_INSIDE_CLOSED_R, " response (A)";
-    if (R == R_317_RESP_A) print (RulePrintingRule) CANT_REACH_INSIDE_ROOMS_R, " response (A)";
-    if (R == R_318_RESP_A) print (RulePrintingRule) CANT_REACH_OUTSIDE_CLOSED_R, " response (A)";
-    if (R == R_319_RESP_A) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (A)";
-    if (R == R_319_RESP_B) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (B)";
-    if (R == R_319_RESP_C) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (C)";
-    if (R == R_319_RESP_D) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (D)";
-    if (R == R_319_RESP_E) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (E)";
-    if (R == R_319_RESP_F) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (F)";
-    if (R == R_319_RESP_G) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (G)";
-    if (R == R_319_RESP_H) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (H)";
-    if (R == R_319_RESP_I) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (I)";
-    if (R == R_319_RESP_J) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (J)";
-    if (R == R_319_RESP_K) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (K)";
-    if (R == R_319_RESP_L) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (L)";
-    if (R == R_319_RESP_M) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (M)";
-    if (R == R_319_RESP_N) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (N)";
-    if (R == R_319_RESP_O) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (O)";
-    if (R == R_319_RESP_P) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (P)";
-    if (R == R_319_RESP_Q) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (Q)";
-    if (R == R_319_RESP_R) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (R)";
-    if (R == R_319_RESP_S) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (S)";
-    if (R == R_319_RESP_T) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (T)";
-    if (R == R_319_RESP_U) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (U)";
-    if (R == R_319_RESP_V) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (V)";
-    if (R == R_319_RESP_W) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (W)";
-    if (R == R_319_RESP_X) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (X)";
-    if (R == R_319_RESP_Y) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (Y)";
-    if (R == R_320_RESP_A) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (A)";
-    if (R == R_320_RESP_B) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (B)";
-    if (R == R_320_RESP_C) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (C)";
-    if (R == R_320_RESP_D) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (D)";
-    if (R == R_320_RESP_E) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (E)";
-    if (R == R_320_RESP_F) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (F)";
-    if (R == R_320_RESP_G) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (G)";
-    if (R == R_320_RESP_H) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (H)";
-    if (R == R_320_RESP_I) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (I)";
-    if (R == R_320_RESP_J) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (J)";
-    if (R == R_320_RESP_K) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (K)";
-    if (R == R_321_RESP_A) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (A)";
-    if (R == R_321_RESP_B) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (B)";
-    if (R == R_321_RESP_C) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (C)";
-    if (R == R_321_RESP_D) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (D)";
-    if (R == R_321_RESP_E) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (E)";
-    if (R == R_321_RESP_F) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (F)";
-    if (R == R_321_RESP_G) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (G)";
-    if (R == R_321_RESP_H) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (H)";
-    if (R == R_321_RESP_I) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (I)";
-    if (R == R_321_RESP_J) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (J)";
-    if (R == R_321_RESP_K) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (K)";
-    if (R == R_321_RESP_L) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (L)";
-    if (R == R_321_RESP_M) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (M)";
-    if (R == R_321_RESP_N) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (N)";
-    if (R == R_321_RESP_O) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (O)";
-    if (R == R_321_RESP_P) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (P)";
-    if (R == R_321_RESP_Q) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (Q)";
-    if (R == R_321_RESP_R) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (R)";
-    if (R == R_321_RESP_S) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (S)";
-    if (R == R_321_RESP_T) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (T)";
-    if (R == R_321_RESP_U) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (U)";
-    if (R == R_321_RESP_V) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (V)";
-    if (R == R_321_RESP_W) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (W)";
-    if (R == R_321_RESP_X) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (X)";
-    if (R == R_322_RESP_A) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (A)";
-    if (R == R_322_RESP_B) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (B)";
-    if (R == R_322_RESP_C) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (C)";
-    if (R == R_322_RESP_D) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (D)";
-    if (R == R_322_RESP_E) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (E)";
-    if (R == R_322_RESP_F) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (F)";
-    if (R == R_323_RESP_A) print (RulePrintingRule) DARKNESS_NAME_INTERNAL_R, " response (A)";
-    if (R == R_324_RESP_A) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (A)";
-    if (R == R_324_RESP_B) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (B)";
-    if (R == R_324_RESP_C) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (C)";
-    if (R == R_324_RESP_D) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (D)";
-    if (R == R_325_RESP_A) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (A)";
-    if (R == R_325_RESP_B) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (B)";
-    if (R == R_325_RESP_C) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (C)";
-    if (R == R_325_RESP_D) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (D)";
-    if (R == R_325_RESP_E) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (E)";
-    if (R == R_325_RESP_F) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (F)";
-    if (R == R_325_RESP_G) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (G)";
-    if (R == R_325_RESP_H) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (H)";
-    if (R == R_326_RESP_A) print (RulePrintingRule) YES_OR_NO_QUESTION_INTERNAL_R, " response (A)";
-    if (R == R_327_RESP_A) print (RulePrintingRule) PRINT_PROTAGONIST_INTERNAL_R, " response (A)";
-    if (R == R_327_RESP_B) print (RulePrintingRule) PRINT_PROTAGONIST_INTERNAL_R, " response (B)";
-    if (R == R_327_RESP_C) print (RulePrintingRule) PRINT_PROTAGONIST_INTERNAL_R, " response (C)";
-    if (R == R_330_RESP_A) print (RulePrintingRule) STANDARD_IMPLICIT_TAKING_R, " response (A)";
-    if (R == R_330_RESP_B) print (RulePrintingRule) STANDARD_IMPLICIT_TAKING_R, " response (B)";
-    if (R == R_332_RESP_A) print (RulePrintingRule) PRINT_OBITUARY_HEADLINE_R, " response (A)";
-    if (R == R_332_RESP_B) print (RulePrintingRule) PRINT_OBITUARY_HEADLINE_R, " response (B)";
-    if (R == R_332_RESP_C) print (RulePrintingRule) PRINT_OBITUARY_HEADLINE_R, " response (C)";
-    if (R == R_338_RESP_A) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (A)";
-    if (R == R_338_RESP_B) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (B)";
-    if (R == R_338_RESP_C) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (C)";
-    if (R == R_338_RESP_D) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (D)";
-    if (R == R_338_RESP_E) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (E)";
-    if (R == R_338_RESP_F) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (F)";
-    if (R == R_341_RESP_A) print (RulePrintingRule) QUIT_THE_GAME_R, " response (A)";
-    if (R == R_342_RESP_A) print (RulePrintingRule) SAVE_THE_GAME_R, " response (A)";
-    if (R == R_342_RESP_B) print (RulePrintingRule) SAVE_THE_GAME_R, " response (B)";
-    if (R == R_343_RESP_A) print (RulePrintingRule) RESTORE_THE_GAME_R, " response (A)";
-    if (R == R_343_RESP_B) print (RulePrintingRule) RESTORE_THE_GAME_R, " response (B)";
-    if (R == R_344_RESP_A) print (RulePrintingRule) RESTART_THE_GAME_R, " response (A)";
-    if (R == R_344_RESP_B) print (RulePrintingRule) RESTART_THE_GAME_R, " response (B)";
-    if (R == R_345_RESP_A) print (RulePrintingRule) VERIFY_THE_STORY_FILE_R, " response (A)";
-    if (R == R_345_RESP_B) print (RulePrintingRule) VERIFY_THE_STORY_FILE_R, " response (B)";
-    if (R == R_346_RESP_A) print (RulePrintingRule) SWITCH_TRANSCRIPT_ON_R, " response (A)";
-    if (R == R_346_RESP_B) print (RulePrintingRule) SWITCH_TRANSCRIPT_ON_R, " response (B)";
-    if (R == R_346_RESP_C) print (RulePrintingRule) SWITCH_TRANSCRIPT_ON_R, " response (C)";
-    if (R == R_347_RESP_A) print (RulePrintingRule) SWITCH_TRANSCRIPT_OFF_R, " response (A)";
-    if (R == R_347_RESP_B) print (RulePrintingRule) SWITCH_TRANSCRIPT_OFF_R, " response (B)";
-    if (R == R_347_RESP_C) print (RulePrintingRule) SWITCH_TRANSCRIPT_OFF_R, " response (C)";
-    if (R == R_349_RESP_A) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (A)";
-    if (R == R_349_RESP_B) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (B)";
-    if (R == R_349_RESP_C) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (C)";
-    if (R == R_349_RESP_D) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (D)";
-    if (R == R_349_RESP_E) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (E)";
-    if (R == R_351_RESP_A) print (RulePrintingRule) REP_PREFER_ABBREVIATED_R, " response (A)";
-    if (R == R_353_RESP_A) print (RulePrintingRule) REP_PREFER_UNABBREVIATED_R, " response (A)";
-    if (R == R_355_RESP_A) print (RulePrintingRule) REP_PREFER_SOMETIMES_ABBR_R, " response (A)";
-    if (R == R_357_RESP_A) print (RulePrintingRule) REP_SWITCH_NOTIFY_ON_R, " response (A)";
-    if (R == R_359_RESP_A) print (RulePrintingRule) REP_SWITCH_NOTIFY_OFF_R, " response (A)";
-    if (R == R_360_RESP_A) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (A)";
-    if (R == R_360_RESP_B) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (B)";
-    if (R == R_360_RESP_C) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (C)";
-    if (R == R_360_RESP_D) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (D)";
+    if (R == R_300_RESP_A) print (RulePrintingRule) ADJUST_LIGHT_R, " response (A)";
+    if (R == R_302_RESP_A) print (RulePrintingRule) GENERATE_ACTION_R, " response (A)";
+    if (R == R_302_RESP_B) print (RulePrintingRule) GENERATE_ACTION_R, " response (B)";
+    if (R == R_309_RESP_A) print (RulePrintingRule) BASIC_ACCESSIBILITY_R, " response (A)";
+    if (R == R_310_RESP_A) print (RulePrintingRule) BASIC_VISIBILITY_R, " response (A)";
+    if (R == R_312_RESP_A) print (RulePrintingRule) REQUESTED_ACTIONS_REQUIRE_R, " response (A)";
+    if (R == R_313_RESP_A) print (RulePrintingRule) CARRY_OUT_REQUESTED_ACTIONS_R, " response (A)";
+    if (R == R_316_RESP_A) print (RulePrintingRule) ACCESS_THROUGH_BARRIERS_R, " response (A)";
+    if (R == R_317_RESP_A) print (RulePrintingRule) CANT_REACH_INSIDE_CLOSED_R, " response (A)";
+    if (R == R_318_RESP_A) print (RulePrintingRule) CANT_REACH_INSIDE_ROOMS_R, " response (A)";
+    if (R == R_319_RESP_A) print (RulePrintingRule) CANT_REACH_OUTSIDE_CLOSED_R, " response (A)";
+    if (R == R_320_RESP_A) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (A)";
+    if (R == R_320_RESP_B) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (B)";
+    if (R == R_320_RESP_C) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (C)";
+    if (R == R_320_RESP_D) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (D)";
+    if (R == R_320_RESP_E) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (E)";
+    if (R == R_320_RESP_F) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (F)";
+    if (R == R_320_RESP_G) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (G)";
+    if (R == R_320_RESP_H) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (H)";
+    if (R == R_320_RESP_I) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (I)";
+    if (R == R_320_RESP_J) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (J)";
+    if (R == R_320_RESP_K) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (K)";
+    if (R == R_320_RESP_L) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (L)";
+    if (R == R_320_RESP_M) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (M)";
+    if (R == R_320_RESP_N) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (N)";
+    if (R == R_320_RESP_O) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (O)";
+    if (R == R_320_RESP_P) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (P)";
+    if (R == R_320_RESP_Q) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (Q)";
+    if (R == R_320_RESP_R) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (R)";
+    if (R == R_320_RESP_S) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (S)";
+    if (R == R_320_RESP_T) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (T)";
+    if (R == R_320_RESP_U) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (U)";
+    if (R == R_320_RESP_V) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (V)";
+    if (R == R_320_RESP_W) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (W)";
+    if (R == R_320_RESP_X) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (X)";
+    if (R == R_320_RESP_Y) print (RulePrintingRule) LIST_WRITER_INTERNAL_R, " response (Y)";
+    if (R == R_321_RESP_A) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (A)";
+    if (R == R_321_RESP_B) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (B)";
+    if (R == R_321_RESP_C) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (C)";
+    if (R == R_321_RESP_D) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (D)";
+    if (R == R_321_RESP_E) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (E)";
+    if (R == R_321_RESP_F) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (F)";
+    if (R == R_321_RESP_G) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (G)";
+    if (R == R_321_RESP_H) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (H)";
+    if (R == R_321_RESP_I) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (I)";
+    if (R == R_321_RESP_J) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (J)";
+    if (R == R_321_RESP_K) print (RulePrintingRule) ACTION_PROCESSING_INTERNAL_R, " response (K)";
+    if (R == R_322_RESP_A) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (A)";
+    if (R == R_322_RESP_B) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (B)";
+    if (R == R_322_RESP_C) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (C)";
+    if (R == R_322_RESP_D) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (D)";
+    if (R == R_322_RESP_E) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (E)";
+    if (R == R_322_RESP_F) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (F)";
+    if (R == R_322_RESP_G) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (G)";
+    if (R == R_322_RESP_H) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (H)";
+    if (R == R_322_RESP_I) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (I)";
+    if (R == R_322_RESP_J) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (J)";
+    if (R == R_322_RESP_K) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (K)";
+    if (R == R_322_RESP_L) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (L)";
+    if (R == R_322_RESP_M) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (M)";
+    if (R == R_322_RESP_N) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (N)";
+    if (R == R_322_RESP_O) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (O)";
+    if (R == R_322_RESP_P) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (P)";
+    if (R == R_322_RESP_Q) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (Q)";
+    if (R == R_322_RESP_R) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (R)";
+    if (R == R_322_RESP_S) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (S)";
+    if (R == R_322_RESP_T) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (T)";
+    if (R == R_322_RESP_U) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (U)";
+    if (R == R_322_RESP_V) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (V)";
+    if (R == R_322_RESP_W) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (W)";
+    if (R == R_322_RESP_X) print (RulePrintingRule) PARSER_ERROR_INTERNAL_R, " response (X)";
+    if (R == R_323_RESP_A) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (A)";
+    if (R == R_323_RESP_B) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (B)";
+    if (R == R_323_RESP_C) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (C)";
+    if (R == R_323_RESP_D) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (D)";
+    if (R == R_323_RESP_E) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (E)";
+    if (R == R_323_RESP_F) print (RulePrintingRule) PARSER_N_ERROR_INTERNAL_R, " response (F)";
+    if (R == R_324_RESP_A) print (RulePrintingRule) DARKNESS_NAME_INTERNAL_R, " response (A)";
+    if (R == R_325_RESP_A) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (A)";
+    if (R == R_325_RESP_B) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (B)";
+    if (R == R_325_RESP_C) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (C)";
+    if (R == R_325_RESP_D) print (RulePrintingRule) PARSER_COMMAND_INTERNAL_R, " response (D)";
+    if (R == R_326_RESP_A) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (A)";
+    if (R == R_326_RESP_B) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (B)";
+    if (R == R_326_RESP_C) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (C)";
+    if (R == R_326_RESP_D) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (D)";
+    if (R == R_326_RESP_E) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (E)";
+    if (R == R_326_RESP_F) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (F)";
+    if (R == R_326_RESP_G) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (G)";
+    if (R == R_326_RESP_H) print (RulePrintingRule) PARSER_CLARIF_INTERNAL_R, " response (H)";
+    if (R == R_327_RESP_A) print (RulePrintingRule) YES_OR_NO_QUESTION_INTERNAL_R, " response (A)";
+    if (R == R_328_RESP_A) print (RulePrintingRule) PRINT_PROTAGONIST_INTERNAL_R, " response (A)";
+    if (R == R_328_RESP_B) print (RulePrintingRule) PRINT_PROTAGONIST_INTERNAL_R, " response (B)";
+    if (R == R_328_RESP_C) print (RulePrintingRule) PRINT_PROTAGONIST_INTERNAL_R, " response (C)";
+    if (R == R_331_RESP_A) print (RulePrintingRule) STANDARD_IMPLICIT_TAKING_R, " response (A)";
+    if (R == R_331_RESP_B) print (RulePrintingRule) STANDARD_IMPLICIT_TAKING_R, " response (B)";
+    if (R == R_333_RESP_A) print (RulePrintingRule) PRINT_OBITUARY_HEADLINE_R, " response (A)";
+    if (R == R_333_RESP_B) print (RulePrintingRule) PRINT_OBITUARY_HEADLINE_R, " response (B)";
+    if (R == R_333_RESP_C) print (RulePrintingRule) PRINT_OBITUARY_HEADLINE_R, " response (C)";
+    if (R == R_339_RESP_A) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (A)";
+    if (R == R_339_RESP_B) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (B)";
+    if (R == R_339_RESP_C) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (C)";
+    if (R == R_339_RESP_D) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (D)";
+    if (R == R_339_RESP_E) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (E)";
+    if (R == R_339_RESP_F) print (RulePrintingRule) IMMEDIATELY_UNDO_R, " response (F)";
+    if (R == R_342_RESP_A) print (RulePrintingRule) QUIT_THE_GAME_R, " response (A)";
+    if (R == R_343_RESP_A) print (RulePrintingRule) SAVE_THE_GAME_R, " response (A)";
+    if (R == R_343_RESP_B) print (RulePrintingRule) SAVE_THE_GAME_R, " response (B)";
+    if (R == R_344_RESP_A) print (RulePrintingRule) RESTORE_THE_GAME_R, " response (A)";
+    if (R == R_344_RESP_B) print (RulePrintingRule) RESTORE_THE_GAME_R, " response (B)";
+    if (R == R_345_RESP_A) print (RulePrintingRule) RESTART_THE_GAME_R, " response (A)";
+    if (R == R_345_RESP_B) print (RulePrintingRule) RESTART_THE_GAME_R, " response (B)";
+    if (R == R_346_RESP_A) print (RulePrintingRule) VERIFY_THE_STORY_FILE_R, " response (A)";
+    if (R == R_346_RESP_B) print (RulePrintingRule) VERIFY_THE_STORY_FILE_R, " response (B)";
+    if (R == R_347_RESP_A) print (RulePrintingRule) SWITCH_TRANSCRIPT_ON_R, " response (A)";
+    if (R == R_347_RESP_B) print (RulePrintingRule) SWITCH_TRANSCRIPT_ON_R, " response (B)";
+    if (R == R_347_RESP_C) print (RulePrintingRule) SWITCH_TRANSCRIPT_ON_R, " response (C)";
+    if (R == R_348_RESP_A) print (RulePrintingRule) SWITCH_TRANSCRIPT_OFF_R, " response (A)";
+    if (R == R_348_RESP_B) print (RulePrintingRule) SWITCH_TRANSCRIPT_OFF_R, " response (B)";
+    if (R == R_348_RESP_C) print (RulePrintingRule) SWITCH_TRANSCRIPT_OFF_R, " response (C)";
+    if (R == R_350_RESP_A) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (A)";
+    if (R == R_350_RESP_B) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (B)";
+    if (R == R_350_RESP_C) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (C)";
+    if (R == R_350_RESP_D) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (D)";
+    if (R == R_350_RESP_E) print (RulePrintingRule) ANNOUNCE_SCORE_R, " response (E)";
+    if (R == R_352_RESP_A) print (RulePrintingRule) REP_PREFER_ABBREVIATED_R, " response (A)";
+    if (R == R_354_RESP_A) print (RulePrintingRule) REP_PREFER_UNABBREVIATED_R, " response (A)";
+    if (R == R_356_RESP_A) print (RulePrintingRule) REP_PREFER_SOMETIMES_ABBR_R, " response (A)";
+    if (R == R_358_RESP_A) print (RulePrintingRule) REP_SWITCH_NOTIFY_ON_R, " response (A)";
+    if (R == R_360_RESP_A) print (RulePrintingRule) REP_SWITCH_NOTIFY_OFF_R, " response (A)";
+    if (R == R_361_RESP_A) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (A)";
+    if (R == R_361_RESP_B) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (B)";
+    if (R == R_361_RESP_C) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (C)";
+    if (R == R_361_RESP_D) print (RulePrintingRule) ANNOUNCE_PRONOUN_MEANINGS_R, " response (D)";
     if (R == R_11_RESP_A) print (RulePrintingRule) R_22, " response (A)";
     if (R == R_39_RESP_A) print (RulePrintingRule) R_77, " response (A)";
     if (R == R_41_RESP_A) print (RulePrintingRule) R_79, " response (A)";
@@ -51395,24 +51375,25 @@ Verb 'notify'
 
 
 
-Constant TX_PS_45 = ">";
+Constant TX_PS_46 = ">";
 Constant TX_PS_39 = "A desk sits in the corner of the room.";
 Constant TX_PS_43 = "A divan sits in the corner of the room.";
 Constant TX_PS_3 = "An Interactive Fiction";
 Constant TX_PS_31 = "As good-looking as ever.";
-Constant TX_PS_46 = "Fiction";
+Constant TX_PS_47 = "Fiction";
 Constant TX_PS_37 = "Lab";
 Constant TX_PS_36 = "Now the quantity of zorkmids";
-Constant TX_PS_50 = "QUIT";
+Constant TX_PS_51 = "QUIT";
 Constant TX_PS_34 = "Quantity of zorkmids";
-Constant TX_PS_47 = "RESTART";
-Constant TX_PS_48 = "RESTORE a saved game";
-Constant TX_PS_51 = "UNDO the last command";
+Constant TX_PS_48 = "RESTART";
+Constant TX_PS_49 = "RESTORE a saved game";
+Constant TX_PS_52 = "UNDO the last command";
 Constant TX_PS_2 = "Welcome";
 Array TX_L_2 --> CONSTANT_PACKED_TEXT_STORAGE TX_PS_2;
 Constant TX_PS_32 = "Yourself";
 Constant TX_PS_8 = "animals";
 Constant TX_PS_13 = "backdrops";
+Constant TX_PS_45 = "bag";
 Constant TX_PS_44 = "box";
 Constant TX_PS_10 = "containers";
 Constant TX_PS_38 = "desk";
@@ -51435,7 +51416,7 @@ Constant TX_PS_5 = "people";
 Constant TX_PS_12 = "player's holdalls";
 Constant TX_PS_33 = "quantity of zorkmids";
 Constant TX_PS_15 = "regions";
-Constant TX_PS_49 = "see some suggestions for AMUSING things to do";
+Constant TX_PS_50 = "see some suggestions for AMUSING things to do";
 Constant TX_PS_21 = "south";
 Constant TX_PS_22 = "southeast";
 Constant TX_PS_23 = "southwest";
@@ -58802,15 +58783,21 @@ Array BC_193 --> PACKED_TEXT_STORAGE TX_PS_10;
 Array BC_194 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
 Array BC_195 --> PACKED_TEXT_STORAGE TX_PS_45;
 Array BC_196 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
-Array BC_197 --> PACKED_TEXT_STORAGE TX_PS_3;
-Array BC_198 --> PACKED_TEXT_STORAGE TX_PS_46;
-Array BC_199 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
-Array BC_200 --> Default_Value_0 0;
-Array BC_201 --> PACKED_TEXT_STORAGE TX_PS_47;
-Array BC_202 --> PACKED_TEXT_STORAGE TX_PS_48;
-Array BC_203 --> PACKED_TEXT_STORAGE TX_PS_49;
-Array BC_204 --> PACKED_TEXT_STORAGE TX_PS_50;
-Array BC_205 --> PACKED_TEXT_STORAGE TX_PS_51;
+Array BC_197 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
+Array BC_198 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
+Array BC_199 --> PACKED_TEXT_STORAGE TX_PS_10;
+Array BC_200 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
+Array BC_201 --> PACKED_TEXT_STORAGE TX_PS_46;
+Array BC_202 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
+Array BC_203 --> PACKED_TEXT_STORAGE TX_PS_3;
+Array BC_204 --> PACKED_TEXT_STORAGE TX_PS_47;
+Array BC_205 --> PACKED_TEXT_STORAGE EMPTY_TEXT_PACKED;
+Array BC_206 --> Default_Value_0 0;
+Array BC_207 --> PACKED_TEXT_STORAGE TX_PS_48;
+Array BC_208 --> PACKED_TEXT_STORAGE TX_PS_49;
+Array BC_209 --> PACKED_TEXT_STORAGE TX_PS_50;
+Array BC_210 --> PACKED_TEXT_STORAGE TX_PS_51;
+Array BC_211 --> PACKED_TEXT_STORAGE TX_PS_52;
 
 
 

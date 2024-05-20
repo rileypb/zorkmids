@@ -12,6 +12,9 @@ The box is a container in the Lab. The zorkmid content of the box is $5. The box
 
 The zorkmid content of the Lab is $17.
 
+The bag is a container in the Lab. The zorkmid content of the bag is $51. The bag is openable and open.
+
+
 The pencil is on the desk.
 
 test me with "take $11/take $5 from desk/i/put $3 on divan/l/take box/open box/i/take all".
