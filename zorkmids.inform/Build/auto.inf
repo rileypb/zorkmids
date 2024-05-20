@@ -5745,7 +5745,7 @@ Global match_from;                  ! At what word of the input do they begin?
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
 [ KeyboardPrimitive a_buffer a_table;
-#Ifdef DEBUG; #Iftrue (0 > 0);
+#Ifdef DEBUG; #Iftrue (1 > 0);
 	return TestKeyboardPrimitive(a_buffer, a_table);
 #Endif; #Endif;
 	return VM_ReadKeyboard(a_buffer, a_table);
@@ -11147,7 +11147,7 @@ Object I128_lab ""
     class K1_room
     with short_name BC_160
     with description BC_161
-    with p15_zorkmid_content 23
+    with p15_zorkmid_content 17
     has proper
     with vector 0
     with room_index -1
@@ -37723,6 +37723,10 @@ Array TableOfVerbs --> ConjugateVerb_0 ConjugateVerb_2 ConjugateVerb_3 Conjugate
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
 #IFDEF DEBUG;
+Array TestText_0 ->
+    "take $11/take $5 from desk/i/put $3 on divan/l/take box/open box/i/take all||||";
+Array TestReq_0 -->
+    0 0;
 
 
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
@@ -38177,13 +38181,15 @@ if (t_0 ofclass K8_person) {if (na > 0) { na = 0; print "^"; }
 ! Tests.i6t: Test Command
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
-#Iftrue (0 > 0);
+#Iftrue (1 > 0);
 
 [ TestScriptSub;
 	switch(special_word) {
+'me//': TestStart(TestText_0, TestReq_0, 75);
 
 	default:
 		print ">--> The following tests are available:^";
+print "'test me'^";
 
 	}
 ];
