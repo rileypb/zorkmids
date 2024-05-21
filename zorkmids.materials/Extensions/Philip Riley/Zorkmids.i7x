@@ -1,5 +1,7 @@
 Zorkmids by Philip Riley begins here.
 
+Include Dynamic Objects by Jesse McGrew.
+
 Quantity of money is kind of value. $1 specifies a quantity of money.
 
 A thing has a Quantity of money called the zorkmid content.
@@ -7,63 +9,68 @@ A room has a Quantity of money called the zorkmid content.
 
 The already described zorkmids is a list of things that varies.
 
-quantity of zorkmids is a thing. 
-quantity2 of zorkmids is a thing.
+quantity of zorkmids is a kind of thing. A quantity of zorkmids is proper-named.
+
+The original quantity is a quantity of zorkmids.
+
+all quantities is a list of things that varies. all quantities is {}.
+used quantities is a list of things that varies. used quantities is {}.
+
 
 Instead of examining a quantity of zorkmids:
 	say "There are ";
-	say the zorkmid content of the quantity of zorkmids;
+	say the zorkmid content of the noun;
 	say " here."
 
-Rule for printing the name of a quantity of zorkmids:
-	say the zorkmid content of the quantity of zorkmids;
+Rule for printing the name of a quantity of zorkmids (called Q):
+	say the zorkmid content of Q;
 
-Instead of examining a quantity2 of zorkmids:
-	say "There are ";
-	say the zorkmid content of the quantity2 of zorkmids;
-	say " here."
-
-Rule for printing the name of a quantity2 of zorkmids:
-	say the zorkmid content of the quantity2 of zorkmids;
-
-Before examining: 
+[ Before examining: 
 	if the noun is a container and the noun is not the holder of the player:
 		if the zorkmid content of the noun > $0:
 			now the zorkmid content of the quantity of zorkmids is the zorkmid content of the noun;
-			now the quantity of zorkmids is contained by the noun;
+			now the quantity of zorkmids is contained by the noun; ]
 			
-Before printing the locale description (this is the add zorkmids rule):
+[ Before printing the locale description (this is the add zorkmids rule):
 	if the zorkmid content of the location > $0:
 		now the zorkmid content of the quantity of zorkmids is the zorkmid content of the location;
-		now the quantity of zorkmids is in the location;
+		now the quantity of zorkmids is in the location; ]
 
-The add zorkmids rule is listed before the find notable locale objects rule in the before printing the locale description rules.
+[ The add zorkmids rule is listed before the find notable locale objects rule in the before printing the locale description rules. ]
 			
-After examining:
+[ After examining:
 	now the quantity of zorkmids is nowhere;
-	continue the action;
+	continue the action; ]
 			
-Before printing room description details of a container (called the holder):
+[ Before printing room description details of a container (called the holder):
 	if the zorkmid content of the holder > $0:
 		now the zorkmid content of the quantity of zorkmids is the zorkmid content of the holder;
-		now the quantity of zorkmids is contained by the holder;
+		now the quantity of zorkmids is contained by the holder; ]
 
 [After printing room description details of a container:
 	now the quantity of zorkmids is nowhere;]
 
-Before taking inventory:
+[ Before taking inventory:
 	if the zorkmid content of the player > $0:
 		now the player carries the quantity of zorkmids;
-		now the zorkmid content of the quantity of zorkmids is the zorkmid content of the player;
+		now the zorkmid content of the quantity of zorkmids is the zorkmid content of the player; ]
 
-After taking inventory:
+[ After taking inventory:
 	now the quantity of zorkmids is nowhere;
-	continue the action;
+	continue the action; ]
+
+Check taking a quantity of zorkmids (this is the no stealing rule):
+	if the holder of the noun is a person and the holder of the noun is not the player:
+		say "That seems to belong to [the holder of the noun]." instead;
+
+Check taking a quantity of zorkmids:
+	try appropriating the zorkmid content of the noun from the holder of the noun instead;
 	
 Appropriating is an action applying to one quantity of money. Understand "take [Quantity of money]" as appropriating.
 Appropriating it from is an action applying to one quantity of money and one thing. Understand "take [Quantity of money] from [something]" as appropriating it from.
 
 Check appropriating (this is the can't take too much money rule):
+	let total zorkmids available be 0;
 	if the zorkmid content of the holder of the player < the quantity of money understood:
 		say "[There] [aren't] that much money here." instead;
 		
@@ -111,7 +118,7 @@ Check wasting money (this is the can't drop too little money rule):
 
 Carry out wasting money:
 	now the zorkmid content of the player is the zorkmid content of the player minus the quantity of money understood;
-	now the zorkmid content of the location is the zorkmid content of the location plus the quantity of money understood;
+	now the zorkmid content of the holder of the player is the zorkmid content of the holder of the player plus the quantity of money understood;
 
 Report wasting money:
 	say "[We] [are] [quantity of money understood] poorer!";
@@ -173,7 +180,7 @@ Report depositing it onto:
 	say "[We] [have] left [quantity of money understood] on [the second noun], and [we] [are] [quantity of money understood] poorer!";
 
 
-For printing a locale paragraph about a thing (called the item)
+[ For printing a locale paragraph about a thing (called the item)
 	(this is the new describe what's on scenery supporters in room descriptions rule):
 	if the item is scenery and the item does not enclose the player:
 		if the zorkmid content of the item > $0 and the item is not listed in the already described zorkmids:
@@ -341,15 +348,9 @@ The new reveal any newly visible interior rule is listed instead of the reveal a
 Before listing contents of something (called the holder):
 	if the zorkmid content of the holder > $0 and the holder is not the holder of the player:
 		now the zorkmid content of the quantity of zorkmids is the zorkmid content of the holder;
-		now the quantity of zorkmids is in the holder;
+		now the quantity of zorkmids is in the holder; ]
 
-After listing contents of something:
-	now the quantity of zorkmids is nowhere;
-
-The sneaky rulebook is an object based rulebook.
-
-Instead of taking the quantity2 of zorkmids:
-	try appropriating the zorkmid content of the quantity2 of zorkmids;
+[ The sneaky rulebook is an object based rulebook.
 
 First sneaky rule (this is the sneaky nothing rule):
 	if the zorkmid content of the holder of the player > $0:
@@ -366,7 +367,63 @@ First sneaky rule (this is the sneaky reset rule):
 	now the quantity2 of zorkmids is nowhere;
 
 Every turn:
-	now the quantity2 of zorkmids is nowhere.
+	now the quantity2 of zorkmids is nowhere. ]
+
+When play begins:
+	populate quantities.
 	
+Before reading a command:
+	remove quantities;
+	populate quantities.
+
+To populate quantities:
+	repeat with item running through visible things:
+		if the zorkmid content of the item > $0:
+			if the item is a container:
+				[ say "getting next quantity for [item]: "; ]
+				let this quantity be the next quantity;
+				now the zorkmid content of this quantity is the zorkmid content of the item;
+				now this quantity is in the item;
+			otherwise if the item is a supporter:
+				[ say "getting next quantity for [item]: "; ]
+				let this quantity be the next quantity;
+				now the zorkmid content of this quantity is the zorkmid content of the item;
+				now this quantity is on the item;
+	repeat with P running through visible people:
+		if the zorkmid content of P > $0:
+			[ say "getting next quantity for [P]: "; ]
+			let this quantity be the next quantity;
+			now the zorkmid content of this quantity is the zorkmid content of P;
+			now this quantity is in P;
+	if the zorkmid content of the location > $0:
+		[ say "getting next quantity for location: "; ]
+		let this quantity be the next quantity;
+		now the zorkmid content of this quantity is the zorkmid content of the location;
+		now this quantity is in the location;
+	[ say "number of quantities: [number of entries in used quantities], [number of entries in all quantities].";		 ]
+
+To remove quantities:
+	while the number of entries in used quantities is not 0:
+		let item be entry 1 of used quantities;
+		[ say "removing [item] from used quantities: [holder of item]."; ]
+		now item is nowhere;
+		remove item from used quantities;
+		add item to all quantities;
+	[ say "number of quantities: [number of entries in used quantities], [number of entries in all quantities].";		 ]
+
+
+To decide which quantity of zorkmids is the next quantity:
+	[ say "number of quantities: [number of entries in used quantities], [number of entries in all quantities].";		 ]
+	if the number of entries in all quantities is not 0:
+		[ say "OK."; ]
+		let NQ be entry 1 of all quantities;
+		remove NQ from all quantities;
+		add NQ to used quantities;
+		decide on NQ;
+	otherwise:
+		[ say "cloning new quantity."; ]
+		let new quantity be a new object cloned from the original quantity;
+		add new quantity to used quantities;
+		decide on new quantity.
 
 Zorkmids ends here.

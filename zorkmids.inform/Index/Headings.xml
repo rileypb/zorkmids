@@ -925,4 +925,81 @@
         <key>Level</key><integer>0</integer>
         <key>Indentation</key><integer>0</integer>
     </dict>
+    <key>132</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic objects.i7x</string>
+        <key>Line</key><integer>1</integer>
+        <key>Title</key><string>Version 8/140515 of Dynamic Objects (for Glulx only) by Jesse McGrew begins here</string>
+        <key>Level</key><integer>0</integer>
+        <key>Indentation</key><integer>0</integer>
+    </dict>
+    <key>133</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic objects.i7x</string>
+        <key>Line</key><integer>7</integer>
+        <key>Title</key><string>Chapter 1 - Cloning objects</string>
+        <key>Level</key><integer>4</integer>
+        <key>Indentation</key><integer>1</integer>
+    </dict>
+    <key>134</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic objects.i7x</string>
+        <key>Line</key><integer>16</integer>
+        <key>Title</key><string>Section 1 - 'a new object cloned from'</string>
+        <key>Level</key><integer>5</integer>
+        <key>Indentation</key><integer>2</integer>
+    </dict>
+    <key>135</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic objects.i7x</string>
+        <key>Line</key><integer>70</integer>
+        <key>Title</key><string>Section 2 - Cloning the property table</string>
+        <key>Level</key><integer>5</integer>
+        <key>Indentation</key><integer>2</integer>
+    </dict>
+    <key>136</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic objects.i7x</string>
+        <key>Line</key><integer>109</integer>
+        <key>Title</key><string>Section 3 - Linking the new object into the world model</string>
+        <key>Level</key><integer>5</integer>
+        <key>Indentation</key><integer>2</integer>
+    </dict>
+    <key>137</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic objects.i7x</string>
+        <key>Line</key><integer>196</integer>
+        <key>Title</key><string>Section 4 - Restoring the object's ability to relate, and possibly its relationships</string>
+        <key>Level</key><integer>5</integer>
+        <key>Indentation</key><integer>2</integer>
+    </dict>
+    <key>138</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic objects.i7x</string>
+        <key>Line</key><integer>420</integer>
+        <key>Title</key><string>Section 5 - A hack to make block-valued properties work in cloned objects</string>
+        <key>Level</key><integer>5</integer>
+        <key>Indentation</key><integer>2</integer>
+    </dict>
+    <key>139</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic tables.i7x</string>
+        <key>Line</key><integer>1</integer>
+        <key>Title</key><string>Version 5/140908 of Dynamic Tables by Jesse McGrew begins here</string>
+        <key>Level</key><integer>0</integer>
+        <key>Indentation</key><integer>0</integer>
+    </dict>
+    <key>140</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic tables.i7x</string>
+        <key>Line</key><integer>5</integer>
+        <key>Title</key><string>Chapter 1 - New stuff</string>
+        <key>Level</key><integer>4</integer>
+        <key>Indentation</key><integer>1</integer>
+    </dict>
+    <key>141</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic tables.i7x</string>
+        <key>Line</key><integer>444</integer>
+        <key>Title</key><string>Chapter 2 - Library replacements</string>
+        <key>Level</key><integer>4</integer>
+        <key>Indentation</key><integer>1</integer>
+    </dict>
+    <key>142</key><dict>
+        <key>Filename</key><string>zorkmids.materials/Extensions/jesse mcgrew/dynamic tables.i7x</string>
+        <key>Line</key><integer>446</integer>
+        <key>Title</key><string>Section 1 - Using the dynamic blank bits</string>
+        <key>Level</key><integer>5</integer>
+        <key>Indentation</key><integer>2</integer>
+    </dict>
 </dict></plist>

@@ -14,6 +14,7 @@ The zorkmid content of the Lab is $17.
 
 The bag is a container in the Lab. The zorkmid content of the bag is $51. The bag is openable and open.
 
+Dan is a person in the Lab. The zorkmid content of Dan is $100.
 
 The pencil is on the desk.
 The chair is an enterable supporter on the desk.
