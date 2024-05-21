@@ -14,7 +14,7 @@ Reading language definition from </Applications/Inform.app_old.app/Contents/Reso
 Phase I ... Lexical analysis
 -----------------------------------------------------
 
-I've now read your source text, which is 212 words long.
+I've now read your source text, which is 231 words long.
 
 
 -----------------------------------------------------
@@ -23,7 +23,7 @@ Phase II ... Semantic analysis Ia
 
 I've also read Standard Rules by Graham Nelson, which is 42655 words long.
 I've also read English Language by Graham Nelson, which is 2297 words long.
-I've also read Zorkmids by Philip Riley, which is 1496 words long.
+I've also read Zorkmids by Philip Riley, which is 1584 words long.
 I've also read Dynamic Objects by Jesse McGrew, which is 1222 words long.
 I've also read Dynamic Tables by Jesse McGrew, which is 1979 words long.
 
@@ -178,7 +178,7 @@ Phase XIII ... Compilation now complete
 -----------------------------------------------------
 
 Total of 130 files written as streams.
-CPU time: 142 centiseconds
+CPU time: 140 centiseconds
 
 
 That concludes the debugging log from this run of Inform.

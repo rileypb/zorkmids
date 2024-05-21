@@ -13,6 +13,8 @@ quantity of zorkmids is a kind of thing. A quantity of zorkmids is proper-named.
 
 The original quantity is a quantity of zorkmids.
 
+total quantity is a quantity of money that varies. total quantity is $0.
+
 all quantities is a list of things that varies. all quantities is {}.
 used quantities is a list of things that varies. used quantities is {}.
 
@@ -63,15 +65,17 @@ Check taking a quantity of zorkmids (this is the no stealing rule):
 	if the holder of the noun is a person and the holder of the noun is not the player:
 		say "That seems to belong to [the holder of the noun]." instead;
 
+appropriating-taking is a truth state that varies. appropriating-taking is false.
+
 Check taking a quantity of zorkmids:
+	now appropriating-taking is true;
 	try appropriating the zorkmid content of the noun from the holder of the noun instead;
-	
+
 Appropriating is an action applying to one quantity of money. Understand "take [Quantity of money]" as appropriating.
 Appropriating it from is an action applying to one quantity of money and one thing. Understand "take [Quantity of money] from [something]" as appropriating it from.
 
 Check appropriating (this is the can't take too much money rule):
-	let total zorkmids available be 0;
-	if the zorkmid content of the holder of the player < the quantity of money understood:
+	if total quantity < the quantity of money understood:
 		say "[There] [aren't] that much money here." instead;
 		
 Check appropriating (this is the can't take too little money rule):
@@ -81,8 +85,20 @@ Check appropriating (this is the can't take too little money rule):
 		say "[We] [can't] take negative money!" instead;
 		
 Carry out appropriating:
-	now the zorkmid content of the holder of the player is the zorkmid content of the holder of the player minus the quantity of money understood;
-	now the zorkmid content of the player is the zorkmid content of the player plus the quantity of money understood;
+	if the zorkmid content of the holder of the player >= the quantity of money understood:
+		now the zorkmid content of the holder of the player is the zorkmid content of the holder of the player minus the quantity of money understood;
+		now the zorkmid content of the player is the zorkmid content of the player plus the quantity of money understood;
+	[ otherwise:
+		let total money appropriated be 0;
+		let upwards frontier be a list of things;
+		let downwards frontier be a list of things;
+		add the holder of the player to the upwards frontier;
+		add the holder of the player to the downwards frontier; ]
+
+
+
+	[ now the zorkmid content of the holder of the player is the zorkmid content of the holder of the player minus the quantity of money understood;
+	now the zorkmid content of the player is the zorkmid content of the player plus the quantity of money understood; ]
 
 Report appropriating:
 	say "[We] [are] [quantity of money understood] richer!";
@@ -102,7 +118,10 @@ Carry out appropriating it from:
 	now the zorkmid content of the player is the zorkmid content of the player plus the quantity of money understood;
 
 Report appropriating it from:
-	say "[We] [are] [quantity of money understood] richer!";
+	if appropriating-taking is true:
+		say "Taken (from [the second noun]).";
+	otherwise:
+		say "Taken.";
 
 Wasting money is an action applying to one quantity of money. Understand "drop [Quantity of money]" as wasting money.
 
@@ -376,29 +395,39 @@ Before reading a command:
 	remove quantities;
 	populate quantities.
 
+After going:
+	remove quantities;
+	populate quantities;
+	continue the action.
+
 To populate quantities:
+	now total quantity is $0;
 	repeat with item running through visible things:
 		if the zorkmid content of the item > $0:
 			if the item is a container:
 				[ say "getting next quantity for [item]: "; ]
 				let this quantity be the next quantity;
 				now the zorkmid content of this quantity is the zorkmid content of the item;
+				increase total quantity by the zorkmid content of the item;
 				now this quantity is in the item;
 			otherwise if the item is a supporter:
 				[ say "getting next quantity for [item]: "; ]
 				let this quantity be the next quantity;
 				now the zorkmid content of this quantity is the zorkmid content of the item;
+				increase total quantity by the zorkmid content of the item;
 				now this quantity is on the item;
 	repeat with P running through visible people:
 		if the zorkmid content of P > $0:
 			[ say "getting next quantity for [P]: "; ]
 			let this quantity be the next quantity;
 			now the zorkmid content of this quantity is the zorkmid content of P;
+			increase total quantity by the zorkmid content of P;
 			now this quantity is in P;
 	if the zorkmid content of the location > $0:
 		[ say "getting next quantity for location: "; ]
 		let this quantity be the next quantity;
 		now the zorkmid content of this quantity is the zorkmid content of the location;
+		increase total quantity by the zorkmid content of the location;
 		now this quantity is in the location;
 	[ say "number of quantities: [number of entries in used quantities], [number of entries in all quantities].";		 ]
 
