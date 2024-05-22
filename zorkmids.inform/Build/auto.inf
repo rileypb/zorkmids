@@ -11428,6 +11428,7 @@ Array Global_Vars -->
   (0) ! 65 total money appropriated
   (0) ! 66 total money required
   (BC_231) ! 67 appropriation sources
+  (0) ! 68 during-appropriation
 ;
 
 
@@ -12210,10 +12211,10 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! When play begins:
-[ R_839 ;
-    if (debug_rules) DB_Rule(R_839, 839);
+[ R_840 ;
+    if (debug_rules) DB_Rule(R_840, 840);
     ! [2: populate quantities]
-    (PHR_842_r0 ());
+    (PHR_843_r0 ());
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -12690,18 +12691,18 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! After going:
-[ R_841 ;
+[ R_842 ;
     if ((((action ==##Go) &&  (actor==player)))) { ! Runs only when pattern matches
     self = noun;
-    if (debug_rules) DB_Rule(R_841, 841);
+    if (debug_rules) DB_Rule(R_842, 842);
     ! [2: remove quantities]
-    (PHR_843_r1 ());
+    (PHR_844_r1 ());
     ! [3: populate quantities]
-    (PHR_842_r0 ());
+    (PHR_843_r0 ());
     ! [4: continue the action]
     rfalse;
     RulebookSucceeds(); rtrue;
-    } else if (debug_rules > 1) DB_Rule(R_841, 841, 'action');
+    } else if (debug_rules > 1) DB_Rule(R_842, 842, 'action');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -12858,12 +12859,12 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Before reading a command:
-[ R_840 ;
-    if (debug_rules) DB_Rule(R_840, 840);
+[ R_841 ;
+    if (debug_rules) DB_Rule(R_841, 841);
     ! [2: remove quantities]
-    (PHR_843_r1 ());
+    (PHR_844_r1 ());
     ! [3: populate quantities]
-    (PHR_842_r0 ());
+    (PHR_843_r0 ());
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -19901,20 +19902,25 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Report appropriating it from:
-[ R_822 ;
+[ R_823 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_822, 822);
+    if (debug_rules) DB_Rule(R_823, 823);
     ! [2: if appropriating-taking is true]
     if (((((Global_Vars-->14) && true) == (1 && true))))
     {! [3: say ~Taken from [the second noun].~]
         say__p=1;! [4: ~Taken from ~]
         ParaContent(); print "Taken from ";! [5: the second noun]
         ParaContent(); print (the) second;! [6: ~.~]
-        ParaContent(); print "."; new_line; .L_Say305; .L_SayX305;} else {
-        ! [7: say ~Taken.~]
-        say__p=1;! [8: ~Taken.~]
+        ParaContent(); print "."; new_line; .L_Say305; .L_SayX305;! [7: if during-appropriation is true]
+        if (((((Global_Vars-->18) && true) == (1 && true))))
+        {! [8: cancel parabreak]
+            say__p = 0;
+            }
+            } else {
+        ! [9: say ~Taken.~]
+        say__p=1;! [10: ~Taken.~]
         ParaContent(); print "Taken."; new_line; .L_Say306; .L_SayX306;}
-        } else if (debug_rules > 1) DB_Rule(R_822, 822, 'actor');
+        } else if (debug_rules > 1) DB_Rule(R_823, 823, 'actor');
         rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -19929,9 +19935,9 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check wasting money ( this is the can't drop too much money rule ):
-[ R_823 ;
+[ R_824 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_823, 823);
+    if (debug_rules) DB_Rule(R_824, 824);
     ! [2: if the zorkmid content of the player < the quantity of money understood]
     if (((GProperty(10, player,p15_zorkmid_content) < parsed_number)))
     {! [3: say ~[We] [don't] have that much money to drop.~]
@@ -19941,15 +19947,15 @@ Array ActionHappened --> 0 0 0 0 0 0;
         ConjugateVerb_79(CV_POS, PNToVP(), story_tense); say__p=1; ! [7: ~ have that much money to drop.~]
         ParaContent(); print " have that much money to drop."; new_line; .L_Say307; .L_SayX307;rtrue;
         }
-        } else if (debug_rules > 1) DB_Rule(R_823, 823, 'actor');
+        } else if (debug_rules > 1) DB_Rule(R_824, 824, 'actor');
         rfalse;
 ];
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check wasting money ( this is the can't drop too little money rule ):
-[ R_824 ;
+[ R_825 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_824, 824);
+    if (debug_rules) DB_Rule(R_825, 825);
     ! [2: if the quantity of money understood is $0]
     if (((parsed_number == 0)))
     {! [3: say ~[We] [can't] drop no money at all.~]
@@ -19969,7 +19975,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
             ParaContent(); print " drop negative money!"; new_line; .L_Say309; .L_SayX309;rtrue;
             }
             }
-            } else if (debug_rules > 1) DB_Rule(R_824, 824, 'actor');
+            } else if (debug_rules > 1) DB_Rule(R_825, 825, 'actor');
             rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -19982,14 +19988,14 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Carry out wasting money:
-[ R_825 ;
+[ R_826 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_825, 825);
+    if (debug_rules) DB_Rule(R_826, 826);
     ! [2: now the zorkmid content of the player is the zorkmid content of the player minus the quantity of money understood]
     WriteGProperty(10, player,p15_zorkmid_content,(GProperty(10, player,p15_zorkmid_content) - parsed_number));
     ! [3: now the zorkmid content of the holder of the player is the zorkmid content of the holder of the player plus the quantity of money understood]
     WriteGProperty(OBJECT_TY, (HolderOf(player)),p15_zorkmid_content,(GProperty(OBJECT_TY, (HolderOf(player)),p15_zorkmid_content) + parsed_number));
-    } else if (debug_rules > 1) DB_Rule(R_825, 825, 'actor');
+    } else if (debug_rules > 1) DB_Rule(R_826, 826, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20002,9 +20008,9 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Report wasting money:
-[ R_826 ;
+[ R_827 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_826, 826);
+    if (debug_rules) DB_Rule(R_827, 827);
     ! [2: say ~[We] [are] [quantity of money understood] poorer!~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
@@ -20012,7 +20018,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ ~]
     ParaContent(); print " ";! [7: quantity of money understood]
     ParaContent(); E67(parsed_number);! [8: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say310; .L_SayX310;} else if (debug_rules > 1) DB_Rule(R_826, 826, 'actor');
+    ParaContent(); print " poorer!"; new_line; .L_Say310; .L_SayX310;} else if (debug_rules > 1) DB_Rule(R_827, 827, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20027,10 +20033,10 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check donating ( this is the can't give too much money rule ):
-[ R_827 ;
+[ R_828 ;
     if ((( (actor==player)))) { ! Runs only when pattern matches
     self = noun;
-    if (debug_rules) DB_Rule(R_827, 827);
+    if (debug_rules) DB_Rule(R_828, 828);
     ! [2: if the zorkmid content of the player < the quantity of money understood]
     if (((GProperty(10, player,p15_zorkmid_content) < parsed_number)))
     {! [3: say ~[We] [don't] have that much money to give.~]
@@ -20040,16 +20046,16 @@ Array ActionHappened --> 0 0 0 0 0 0;
         ConjugateVerb_79(CV_POS, PNToVP(), story_tense); say__p=1; ! [7: ~ have that much money to give.~]
         ParaContent(); print " have that much money to give."; new_line; .L_Say311; .L_SayX311;rtrue;
         }
-        } else if (debug_rules > 1) DB_Rule(R_827, 827, 'action');
+        } else if (debug_rules > 1) DB_Rule(R_828, 828, 'action');
         rfalse;
 ];
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check donating ( this is the can't give too little money rule ):
-[ R_828 ;
+[ R_829 ;
     if ((( (actor==player)))) { ! Runs only when pattern matches
     self = noun;
-    if (debug_rules) DB_Rule(R_828, 828);
+    if (debug_rules) DB_Rule(R_829, 829);
     ! [2: if the quantity of money understood is $0]
     if (((parsed_number == 0)))
     {! [3: say ~[We] [can't] give no money at all.~]
@@ -20069,7 +20075,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
             ParaContent(); print " give negative money!"; new_line; .L_Say313; .L_SayX313;rtrue;
             }
             }
-            } else if (debug_rules > 1) DB_Rule(R_828, 828, 'action');
+            } else if (debug_rules > 1) DB_Rule(R_829, 829, 'action');
             rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20082,15 +20088,15 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Carry out donating:
-[ R_829 ;
+[ R_830 ;
     if ((( (actor==player)))) { ! Runs only when pattern matches
     self = noun;
-    if (debug_rules) DB_Rule(R_829, 829);
+    if (debug_rules) DB_Rule(R_830, 830);
     ! [2: now the zorkmid content of the player is the zorkmid content of the player minus the quantity of money understood]
     WriteGProperty(10, player,p15_zorkmid_content,(GProperty(10, player,p15_zorkmid_content) - parsed_number));
     ! [3: now the zorkmid content of the second noun is the zorkmid content of the second noun plus the quantity of money understood]
     WriteGProperty(OBJECT_TY, second,p15_zorkmid_content,(GProperty(OBJECT_TY, second,p15_zorkmid_content) + parsed_number));
-    } else if (debug_rules > 1) DB_Rule(R_829, 829, 'action');
+    } else if (debug_rules > 1) DB_Rule(R_830, 830, 'action');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20103,10 +20109,10 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Report donating:
-[ R_830 ;
+[ R_831 ;
     if ((( (actor==player)))) { ! Runs only when pattern matches
     self = noun;
-    if (debug_rules) DB_Rule(R_830, 830);
+    if (debug_rules) DB_Rule(R_831, 831);
     ! [2: say ~[We] [are] [quantity of money understood] poorer!~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
@@ -20114,7 +20120,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ ~]
     ParaContent(); print " ";! [7: quantity of money understood]
     ParaContent(); E67(parsed_number);! [8: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say314; .L_SayX314;} else if (debug_rules > 1) DB_Rule(R_830, 830, 'action');
+    ParaContent(); print " poorer!"; new_line; .L_Say314; .L_SayX314;} else if (debug_rules > 1) DB_Rule(R_831, 831, 'action');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20129,9 +20135,9 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check depositing it into ( this is the can't deposit too much money rule ):
-[ R_831 ;
+[ R_832 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_831, 831);
+    if (debug_rules) DB_Rule(R_832, 832);
     ! [2: if the zorkmid content of the player < the quantity of money understood]
     if (((GProperty(10, player,p15_zorkmid_content) < parsed_number)))
     {! [3: say ~[We] [don't] have that much money.~]
@@ -20141,15 +20147,15 @@ Array ActionHappened --> 0 0 0 0 0 0;
         ConjugateVerb_79(CV_POS, PNToVP(), story_tense); say__p=1; ! [7: ~ have that much money.~]
         ParaContent(); print " have that much money."; new_line; .L_Say315; .L_SayX315;rtrue;
         }
-        } else if (debug_rules > 1) DB_Rule(R_831, 831, 'actor');
+        } else if (debug_rules > 1) DB_Rule(R_832, 832, 'actor');
         rfalse;
 ];
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check depositing it into ( this is the can't deposit too little money rule ):
-[ R_832 ;
+[ R_833 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_832, 832);
+    if (debug_rules) DB_Rule(R_833, 833);
     ! [2: if the quantity of money understood is $0]
     if (((parsed_number == 0)))
     {! [3: say ~[We] [can't] leave no money at all.~]
@@ -20169,7 +20175,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
             ParaContent(); print " leave negative money!"; new_line; .L_Say317; .L_SayX317;rtrue;
             }
             }
-            } else if (debug_rules > 1) DB_Rule(R_832, 832, 'actor');
+            } else if (debug_rules > 1) DB_Rule(R_833, 833, 'actor');
             rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20182,14 +20188,14 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Carry out depositing it into:
-[ R_833 ;
+[ R_834 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_833, 833);
+    if (debug_rules) DB_Rule(R_834, 834);
     ! [2: now the zorkmid content of the player is the zorkmid content of the player minus the quantity of money understood]
     WriteGProperty(10, player,p15_zorkmid_content,(GProperty(10, player,p15_zorkmid_content) - parsed_number));
     ! [3: now the zorkmid content of the second noun is the zorkmid content of the second noun plus the quantity of money understood]
     WriteGProperty(OBJECT_TY, second,p15_zorkmid_content,(GProperty(OBJECT_TY, second,p15_zorkmid_content) + parsed_number));
-    } else if (debug_rules > 1) DB_Rule(R_833, 833, 'actor');
+    } else if (debug_rules > 1) DB_Rule(R_834, 834, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20202,9 +20208,9 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Report depositing it into:
-[ R_834 ;
+[ R_835 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_834, 834);
+    if (debug_rules) DB_Rule(R_835, 835);
     ! [2: say ~[We] [have] left [quantity of money understood] in [the second noun], and [we] [are] [quantity of money understood] poorer!~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
@@ -20220,7 +20226,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [14: ~ ~]
     ParaContent(); print " ";! [15: quantity of money understood]
     ParaContent(); E67(parsed_number);! [16: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say318; .L_SayX318;} else if (debug_rules > 1) DB_Rule(R_834, 834, 'actor');
+    ParaContent(); print " poorer!"; new_line; .L_Say318; .L_SayX318;} else if (debug_rules > 1) DB_Rule(R_835, 835, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20235,9 +20241,9 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check depositing it onto ( this is the can't deposit too much money on rule ):
-[ R_835 ;
+[ R_836 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_835, 835);
+    if (debug_rules) DB_Rule(R_836, 836);
     ! [2: if the zorkmid content of the player < the quantity of money understood]
     if (((GProperty(10, player,p15_zorkmid_content) < parsed_number)))
     {! [3: say ~[We] [don't] have that much money.~]
@@ -20247,15 +20253,15 @@ Array ActionHappened --> 0 0 0 0 0 0;
         ConjugateVerb_79(CV_POS, PNToVP(), story_tense); say__p=1; ! [7: ~ have that much money.~]
         ParaContent(); print " have that much money."; new_line; .L_Say319; .L_SayX319;rtrue;
         }
-        } else if (debug_rules > 1) DB_Rule(R_835, 835, 'actor');
+        } else if (debug_rules > 1) DB_Rule(R_836, 836, 'actor');
         rfalse;
 ];
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Check depositing it onto ( this is the can't deposit too little money pn rule ):
-[ R_836 ;
+[ R_837 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_836, 836);
+    if (debug_rules) DB_Rule(R_837, 837);
     ! [2: if the quantity of money understood is $0]
     if (((parsed_number == 0)))
     {! [3: say ~[We] [can't] leave no money at all.~]
@@ -20275,7 +20281,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
             ParaContent(); print " leave negative money!"; new_line; .L_Say321; .L_SayX321;rtrue;
             }
             }
-            } else if (debug_rules > 1) DB_Rule(R_836, 836, 'actor');
+            } else if (debug_rules > 1) DB_Rule(R_837, 837, 'actor');
             rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20288,14 +20294,14 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Carry out depositing it onto:
-[ R_837 ;
+[ R_838 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_837, 837);
+    if (debug_rules) DB_Rule(R_838, 838);
     ! [2: now the zorkmid content of the player is the zorkmid content of the player minus the quantity of money understood]
     WriteGProperty(10, player,p15_zorkmid_content,(GProperty(10, player,p15_zorkmid_content) - parsed_number));
     ! [3: now the zorkmid content of the second noun is the zorkmid content of the second noun plus the quantity of money understood]
     WriteGProperty(OBJECT_TY, second,p15_zorkmid_content,(GProperty(OBJECT_TY, second,p15_zorkmid_content) + parsed_number));
-    } else if (debug_rules > 1) DB_Rule(R_837, 837, 'actor');
+    } else if (debug_rules > 1) DB_Rule(R_838, 838, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20308,9 +20314,9 @@ Array ActionHappened --> 0 0 0 0 0 0;
 ! From "Zorkmids" by Philip Riley
 ! No specific request
 ! Report depositing it onto:
-[ R_838 ;
+[ R_839 ;
     if (actor == player) {
-    if (debug_rules) DB_Rule(R_838, 838);
+    if (debug_rules) DB_Rule(R_839, 839);
     ! [2: say ~[We] [have] left [quantity of money understood] on [the second noun], and [we] [are] [quantity of money understood] poorer!~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
@@ -20326,7 +20332,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [14: ~ ~]
     ParaContent(); print " ";! [15: quantity of money understood]
     ParaContent(); E67(parsed_number);! [16: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say322; .L_SayX322;} else if (debug_rules > 1) DB_Rule(R_838, 838, 'actor');
+    ParaContent(); print " poorer!"; new_line; .L_Say322; .L_SayX322;} else if (debug_rules > 1) DB_Rule(R_839, 839, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -22423,10 +22429,10 @@ Array rulebooks_array --> B0_startup B1_turn_sequence B2_shutdown B3_scene_chang
     forbid_breaks ! Implied call parameter
     rv ! return value
     ;
-    rv = R_839();
+    rv = R_840();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
-        return R_839;
+        return R_840;
     }
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
@@ -22784,10 +22790,10 @@ Constant B22_carry_out = EMPTY_RULEBOOK;
     rv ! return value
     ;
     if (action == ##Go) {
-        rv = R_841();
+        rv = R_842();
         if (rv) {
             if (rv == 2) return reason_the_action_failed;
-            return R_841;
+            return R_842;
         }
         latest_rule_result-->0 = 0;
     } else {
@@ -22979,10 +22985,10 @@ Constant B76_after_printing_the_banne = EMPTY_RULEBOOK;
     ;
     p = parameter_value;
     parameter_value = p;
-    rv = R_840();
+    rv = R_841();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
-        return R_840;
+        return R_841;
     }
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
@@ -26129,10 +26135,10 @@ Constant B363_for_cloning_a_new_objec = EMPTY_RULEBOOK;
     forbid_breaks ! Implied call parameter
     rv ! return value
     ;
-    rv = R_822();
+    rv = R_823();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
-        return R_822;
+        return R_823;
     }
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
@@ -26143,35 +26149,23 @@ Constant B363_for_cloning_a_new_objec = EMPTY_RULEBOOK;
     original_deadflag ! saved state
     ;
     original_deadflag = deadflag;
-    rv = R_823();
-    if (rv) {
-        if (rv == 2) return reason_the_action_failed;
-        return R_823;
-    }
-    latest_rule_result-->0 = 0;
-    if (original_deadflag ~= deadflag) return 0;
-    if (say__p) RulebookParBreak(forbid_breaks);
     rv = R_824();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_824;
     }
     latest_rule_result-->0 = 0;
-    return 0; ! 2 rule(s)
-];
-[ B372_carry_out_wasting_money 
-    forbid_breaks ! Implied call parameter
-    rv ! return value
-    ;
+    if (original_deadflag ~= deadflag) return 0;
+    if (say__p) RulebookParBreak(forbid_breaks);
     rv = R_825();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_825;
     }
     latest_rule_result-->0 = 0;
-    return 0; ! 1 rule(s)
+    return 0; ! 2 rule(s)
 ];
-[ B373_report_wasting_money 
+[ B372_carry_out_wasting_money 
     forbid_breaks ! Implied call parameter
     rv ! return value
     ;
@@ -26183,41 +26177,41 @@ Constant B363_for_cloning_a_new_objec = EMPTY_RULEBOOK;
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
 ];
-[ B374_check_donating_it_to 
+[ B373_report_wasting_money 
     forbid_breaks ! Implied call parameter
     rv ! return value
-    original_deadflag ! saved state
     ;
-    original_deadflag = deadflag;
     rv = R_827();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_827;
     }
     latest_rule_result-->0 = 0;
-    if (original_deadflag ~= deadflag) return 0;
-    if (say__p) RulebookParBreak(forbid_breaks);
+    return 0; ! 1 rule(s)
+];
+[ B374_check_donating_it_to 
+    forbid_breaks ! Implied call parameter
+    rv ! return value
+    original_deadflag ! saved state
+    ;
+    original_deadflag = deadflag;
     rv = R_828();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_828;
     }
     latest_rule_result-->0 = 0;
-    return 0; ! 2 rule(s)
-];
-[ B375_carry_out_donating_it_t 
-    forbid_breaks ! Implied call parameter
-    rv ! return value
-    ;
+    if (original_deadflag ~= deadflag) return 0;
+    if (say__p) RulebookParBreak(forbid_breaks);
     rv = R_829();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_829;
     }
     latest_rule_result-->0 = 0;
-    return 0; ! 1 rule(s)
+    return 0; ! 2 rule(s)
 ];
-[ B376_report_donating_it_to 
+[ B375_carry_out_donating_it_t 
     forbid_breaks ! Implied call parameter
     rv ! return value
     ;
@@ -26229,41 +26223,41 @@ Constant B363_for_cloning_a_new_objec = EMPTY_RULEBOOK;
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
 ];
-[ B377_check_depositing_it_int 
+[ B376_report_donating_it_to 
     forbid_breaks ! Implied call parameter
     rv ! return value
-    original_deadflag ! saved state
     ;
-    original_deadflag = deadflag;
     rv = R_831();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_831;
     }
     latest_rule_result-->0 = 0;
-    if (original_deadflag ~= deadflag) return 0;
-    if (say__p) RulebookParBreak(forbid_breaks);
+    return 0; ! 1 rule(s)
+];
+[ B377_check_depositing_it_int 
+    forbid_breaks ! Implied call parameter
+    rv ! return value
+    original_deadflag ! saved state
+    ;
+    original_deadflag = deadflag;
     rv = R_832();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_832;
     }
     latest_rule_result-->0 = 0;
-    return 0; ! 2 rule(s)
-];
-[ B378_carry_out_depositing_it 
-    forbid_breaks ! Implied call parameter
-    rv ! return value
-    ;
+    if (original_deadflag ~= deadflag) return 0;
+    if (say__p) RulebookParBreak(forbid_breaks);
     rv = R_833();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_833;
     }
     latest_rule_result-->0 = 0;
-    return 0; ! 1 rule(s)
+    return 0; ! 2 rule(s)
 ];
-[ B379_report_depositing_it_in 
+[ B378_carry_out_depositing_it 
     forbid_breaks ! Implied call parameter
     rv ! return value
     ;
@@ -26275,24 +26269,36 @@ Constant B363_for_cloning_a_new_objec = EMPTY_RULEBOOK;
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
 ];
-[ B380_check_depositing_it_ont 
+[ B379_report_depositing_it_in 
     forbid_breaks ! Implied call parameter
     rv ! return value
-    original_deadflag ! saved state
     ;
-    original_deadflag = deadflag;
     rv = R_835();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_835;
     }
     latest_rule_result-->0 = 0;
-    if (original_deadflag ~= deadflag) return 0;
-    if (say__p) RulebookParBreak(forbid_breaks);
+    return 0; ! 1 rule(s)
+];
+[ B380_check_depositing_it_ont 
+    forbid_breaks ! Implied call parameter
+    rv ! return value
+    original_deadflag ! saved state
+    ;
+    original_deadflag = deadflag;
     rv = R_836();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
         return R_836;
+    }
+    latest_rule_result-->0 = 0;
+    if (original_deadflag ~= deadflag) return 0;
+    if (say__p) RulebookParBreak(forbid_breaks);
+    rv = R_837();
+    if (rv) {
+        if (rv == 2) return reason_the_action_failed;
+        return R_837;
     }
     latest_rule_result-->0 = 0;
     return 0; ! 2 rule(s)
@@ -26301,10 +26307,10 @@ Constant B363_for_cloning_a_new_objec = EMPTY_RULEBOOK;
     forbid_breaks ! Implied call parameter
     rv ! return value
     ;
-    rv = R_837();
+    rv = R_838();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
-        return R_837;
+        return R_838;
     }
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
@@ -26313,10 +26319,10 @@ Constant B363_for_cloning_a_new_objec = EMPTY_RULEBOOK;
     forbid_breaks ! Implied call parameter
     rv ! return value
     ;
-    rv = R_838();
+    rv = R_839();
     if (rv) {
         if (rv == 2) return reason_the_action_failed;
-        return R_838;
+        return R_839;
     }
     latest_rule_result-->0 = 0;
     return 0; ! 1 rule(s)
@@ -30962,14 +30968,14 @@ Array RulebookNames -->
         if (R == R_814) { print "can't take too little money rule"; rtrue; } ! rule 279
         if (R == R_819) { print "can't take too much money from rule"; rtrue; } ! rule 280
         if (R == R_820) { print "can't take too little money from rule"; rtrue; } ! rule 281
-        if (R == R_823) { print "can't drop too much money rule"; rtrue; } ! rule 282
-        if (R == R_824) { print "can't drop too little money rule"; rtrue; } ! rule 283
-        if (R == R_827) { print "can't give too much money rule"; rtrue; } ! rule 284
-        if (R == R_828) { print "can't give too little money rule"; rtrue; } ! rule 285
-        if (R == R_831) { print "can't deposit too much money rule"; rtrue; } ! rule 286
-        if (R == R_832) { print "can't deposit too little money rule"; rtrue; } ! rule 287
-        if (R == R_835) { print "can't deposit too much money on rule"; rtrue; } ! rule 288
-        if (R == R_836) { print "can't deposit too little money pn rule"; rtrue; } ! rule 289
+        if (R == R_824) { print "can't drop too much money rule"; rtrue; } ! rule 282
+        if (R == R_825) { print "can't drop too little money rule"; rtrue; } ! rule 283
+        if (R == R_828) { print "can't give too much money rule"; rtrue; } ! rule 284
+        if (R == R_829) { print "can't give too little money rule"; rtrue; } ! rule 285
+        if (R == R_832) { print "can't deposit too much money rule"; rtrue; } ! rule 286
+        if (R == R_833) { print "can't deposit too little money rule"; rtrue; } ! rule 287
+        if (R == R_836) { print "can't deposit too much money on rule"; rtrue; } ! rule 288
+        if (R == R_837) { print "can't deposit too little money pn rule"; rtrue; } ! rule 289
         if (R == LITTLE_USED_DO_NOTHING_R) { print "little-used do nothing rule"; rtrue; } ! rule 290
         if (R == VIRTUAL_MACHINE_STARTUP_R) { print "virtual machine startup rule"; rtrue; } ! rule 291
         if (R == INITIALISE_MEMORY_R) { print "initialise memory rule"; rtrue; } ! rule 292
@@ -31049,18 +31055,18 @@ Array RulebookNames -->
         if (R == R_817) { print "Carry out appropriating"; rtrue; } ! rule 366
         if (R == R_818) { print "Report appropriating"; rtrue; } ! rule 367
         if (R == R_821) { print "Carry out appropriating it from"; rtrue; } ! rule 368
-        if (R == R_822) { print "Report appropriating it from"; rtrue; } ! rule 369
-        if (R == R_825) { print "Carry out wasting money"; rtrue; } ! rule 370
-        if (R == R_826) { print "Report wasting money"; rtrue; } ! rule 371
-        if (R == R_829) { print "Carry out donating"; rtrue; } ! rule 372
-        if (R == R_830) { print "Report donating"; rtrue; } ! rule 373
-        if (R == R_833) { print "Carry out depositing it into"; rtrue; } ! rule 374
-        if (R == R_834) { print "Report depositing it into"; rtrue; } ! rule 375
-        if (R == R_837) { print "Carry out depositing it onto"; rtrue; } ! rule 376
-        if (R == R_838) { print "Report depositing it onto"; rtrue; } ! rule 377
-        if (R == R_839) { print "When play begins"; rtrue; } ! rule 378
-        if (R == R_840) { print "Before reading a command"; rtrue; } ! rule 379
-        if (R == R_841) { print "After going"; rtrue; } ! rule 380
+        if (R == R_823) { print "Report appropriating it from"; rtrue; } ! rule 369
+        if (R == R_826) { print "Carry out wasting money"; rtrue; } ! rule 370
+        if (R == R_827) { print "Report wasting money"; rtrue; } ! rule 371
+        if (R == R_830) { print "Carry out donating"; rtrue; } ! rule 372
+        if (R == R_831) { print "Report donating"; rtrue; } ! rule 373
+        if (R == R_834) { print "Carry out depositing it into"; rtrue; } ! rule 374
+        if (R == R_835) { print "Report depositing it into"; rtrue; } ! rule 375
+        if (R == R_838) { print "Carry out depositing it onto"; rtrue; } ! rule 376
+        if (R == R_839) { print "Report depositing it onto"; rtrue; } ! rule 377
+        if (R == R_840) { print "When play begins"; rtrue; } ! rule 378
+        if (R == R_841) { print "Before reading a command"; rtrue; } ! rule 379
+        if (R == R_842) { print "After going"; rtrue; } ! rule 380
 
 		print "(nameless rule at address ", R, ")";
 	}
@@ -38455,7 +38461,7 @@ Constant VTOVS_HDR_WORDS = 8;
 
 Array LIST_CONST_59975 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 ;
 Array LIST_CONST_59991 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 ;
-Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 ;
+Array LIST_CONST_60735 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 ;
 
 
 
@@ -38467,7 +38473,7 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
 ! From "Zorkmids" by Philip Riley
 ! Request 0: phrase nothing -> nothing
 ! To populate quantities:
-[ PHR_842_r0  
+[ PHR_843_r0  
     tmp_0 ! Let/loop value (deallocated by end of phrase)
     tmp_1 ! Let/loop value (deallocated by end of phrase)
     tmp_2 ! Let/loop value (deallocated by end of phrase)
@@ -38482,7 +38488,7 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
             if (((tmp_0 ofclass K5_container)))
             {! [6: let this quantity be the next quantity]
 
-                		tmp_2 = (PHR_844_r50 ());
+                		tmp_2 = (PHR_845_r50 ());
                 ! [7: now the zorkmid content of this quantity is the zorkmid content of the item]
                 WriteGProperty(10, tmp_2,p15_zorkmid_content,GProperty(10, tmp_0,p15_zorkmid_content));
                 ! [8: if the item is open and the item is not enclosed by the player]
@@ -38497,7 +38503,7 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
                 if (((tmp_0 ofclass K6_supporter)))
                 {! [12: let this quantity be the next quantity]
 
-                    		tmp_2 = (PHR_844_r50 ());
+                    		tmp_2 = (PHR_845_r50 ());
                     ! [13: now the zorkmid content of this quantity is the zorkmid content of the item]
                     WriteGProperty(10, tmp_2,p15_zorkmid_content,GProperty(10, tmp_0,p15_zorkmid_content));
                     ! [14: if the item is not enclosed by the player]
@@ -38517,7 +38523,7 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
         if (((GProperty(10, tmp_0,p15_zorkmid_content) > 0)))
         {! [19: let this quantity be the next quantity]
 
-            		tmp_2 = (PHR_844_r50 ());
+            		tmp_2 = (PHR_845_r50 ());
             ! [20: now the zorkmid content of this quantity is the zorkmid content of p]
             WriteGProperty(10, tmp_2,p15_zorkmid_content,GProperty(10, tmp_0,p15_zorkmid_content));
             ! [21: now this quantity is in p]
@@ -38528,7 +38534,7 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
     if (((GProperty(OBJECT_TY, real_location,p15_zorkmid_content) > 0)))
     {! [23: let this quantity be the next quantity]
 
-        		tmp_0 = (PHR_844_r50 ());
+        		tmp_0 = (PHR_845_r50 ());
         ! [24: now the zorkmid content of this quantity is the zorkmid content of the location]
         WriteGProperty(10, tmp_0,p15_zorkmid_content,GProperty(OBJECT_TY, real_location,p15_zorkmid_content));
         ! [25: increase total quantity by the zorkmid content of the location]
@@ -38541,7 +38547,7 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
 ! From "Zorkmids" by Philip Riley
 ! Request 1: phrase nothing -> nothing
 ! To remove quantities:
-[ PHR_843_r1  
+[ PHR_844_r1  
     tmp_0 ! Let/loop value (deallocated by end of phrase)
     ;
     ! [2: while the number of entries in used quantities is not 0]
@@ -39935,54 +39941,62 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
                 		tmp_0 = ((Global_Vars-->16) - (Global_Vars-->15));
                 ! [7: now appropriating-taking is true]
                 (Global_Vars-->14) = 1;
-                ! [8: say ~[money to take]: [run paragraph on]~]
-                say__p=1;! [9: money to take]
-                ParaContent(); E67(tmp_0);! [10: ~: ~]
-                ParaContent(); print ": ";! [11: run paragraph on]
-                ParaContent(); RunParagraphOn(); .L_Say495; .L_SayX493;! [12: try appropriating money to take from holder of holder]
+                ! [8: now during-appropriation is true]
+                (Global_Vars-->18) = 1;
+                ! [9: say ~[money to take]: [run paragraph on]~]
+                say__p=1;! [10: money to take]
+                ParaContent(); E67(tmp_0);! [11: ~: ~]
+                ParaContent(); print ": ";! [12: run paragraph on]
+                ParaContent(); RunParagraphOn(); .L_Say495; .L_SayX493;! [13: try appropriating money to take from holder of holder]
                 TryAction(0, player, ##A78_appropriating_it_from, tmp_0, (HolderOf(t_0)));
-                ! [13: now appropriating-taking is false]
+                ! [14: now appropriating-taking is false]
                 (Global_Vars-->14) = 0;
-                ! [14: now total money appropriated is total money appropriated + money to take]
+                ! [15: now during-appropriation is false]
+                (Global_Vars-->18) = 0;
+                ! [16: now total money appropriated is total money appropriated + money to take]
                 (Global_Vars-->15) = ((Global_Vars-->15) + tmp_0);
                 } else {
-                ! [15: now appropriating-taking is true]
+                ! [17: now appropriating-taking is true]
                 (Global_Vars-->14) = 1;
-                ! [16: say ~[zorkmid content of holder]: [run paragraph on]~]
-                say__p=1;! [17: zorkmid content of holder]
-                ParaContent(); @push self; E67(GProperty(OBJECT_TY, self=t_0,p15_zorkmid_content));@pull self; ! [18: ~: ~]
-                ParaContent(); print ": ";! [19: run paragraph on]
-                ParaContent(); RunParagraphOn(); .L_Say496; .L_SayX494;! [20: try appropriating the zorkmid content of holder from holder of holder]
+                ! [18: now during-appropriation is true]
+                (Global_Vars-->18) = 1;
+                ! [19: say ~[zorkmid content of holder]: [run paragraph on]~]
+                say__p=1;! [20: zorkmid content of holder]
+                ParaContent(); @push self; E67(GProperty(OBJECT_TY, self=t_0,p15_zorkmid_content));@pull self; ! [21: ~: ~]
+                ParaContent(); print ": ";! [22: run paragraph on]
+                ParaContent(); RunParagraphOn(); .L_Say496; .L_SayX494;! [23: try appropriating the zorkmid content of holder from holder of holder]
                 TryAction(0, player, ##A78_appropriating_it_from, GProperty(OBJECT_TY, t_0,p15_zorkmid_content), (HolderOf(t_0)));
-                ! [21: now appropriating-taking is false]
+                ! [24: now appropriating-taking is false]
                 (Global_Vars-->14) = 0;
-                ! [22: now total money appropriated is total money appropriated + zorkmid content of holder]
+                ! [25: now during-appropriation is false]
+                (Global_Vars-->18) = 0;
+                ! [26: now total money appropriated is total money appropriated + zorkmid content of holder]
                 (Global_Vars-->15) = ((Global_Vars-->15) + GProperty(OBJECT_TY, t_0,p15_zorkmid_content));
                 }
                 } else {
-            ! [23: if total money appropriated < total money required]
+            ! [27: if total money appropriated < total money required]
             if ((((Global_Vars-->15) < (Global_Vars-->16))))
-            {! [24: if holder is a container and the holder is open]
+            {! [28: if holder is a container and the holder is open]
                 if ((((t_0 ofclass K5_container))) && ((((Adj_72_t1_v10(t_0))))))
-                {! [25: repeat with item running through things in holder]
+                {! [29: repeat with item running through things in holder]
                     for (tmp_0=Prop_38(t_0,0), tmp_1=Prop_38(t_0,tmp_0): tmp_0: tmp_0=tmp_1, tmp_1=Prop_38(t_0,tmp_1))
-                    {! [26: appropriate money descending from item]
+                    {! [30: appropriate money descending from item]
                         (PHR_816_r49 (tmp_0));
                         }
                         } else {
-                    ! [27: if holder is a supporter]
+                    ! [31: if holder is a supporter]
                     if (((t_0 ofclass K6_supporter)))
-                    {! [28: repeat with item running through things on holder]
+                    {! [32: repeat with item running through things on holder]
                         for (tmp_0=Prop_39(t_0,0), tmp_1=Prop_39(t_0,tmp_0): tmp_0: tmp_0=tmp_1, tmp_1=Prop_39(t_0,tmp_1))
-                        {! [29: appropriate money descending from item]
+                        {! [33: appropriate money descending from item]
                             (PHR_816_r49 (tmp_0));
                             }
                             } else {
-                        ! [30: if holder is a room]
+                        ! [34: if holder is a room]
                         if (((t_0 ofclass K1_room)))
-                        {! [31: repeat with item running through things in holder]
+                        {! [35: repeat with item running through things in holder]
                             for (tmp_0=Prop_40(t_0,0), tmp_1=Prop_40(t_0,tmp_0): tmp_0: tmp_0=tmp_1, tmp_1=Prop_40(t_0,tmp_1))
-                            {! [32: appropriate money descending from item]
+                            {! [36: appropriate money descending from item]
                                 (PHR_816_r49 (tmp_0));
                                 }
                                 }
@@ -39996,7 +40010,7 @@ Array LIST_CONST_60702 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
 ! From "Zorkmids" by Philip Riley
 ! Request 50: phrase nothing -> quantity of zorkmids
 ! To decide which quantity of zorkmids is the next quantity:
-[ PHR_844_r50  
+[ PHR_845_r50  
     tmp_0 ! Let/loop value (deallocated by end of phrase)
     ;
     ! [2: if the number of entries in all quantities is not 0]
@@ -59148,7 +59162,7 @@ Array BC_233 --> PACKED_TEXT_STORAGE TX_PS_53;
 Array BC_234 --> PACKED_TEXT_STORAGE TX_PS_54;
 Array BC_235 --> PACKED_TEXT_STORAGE TX_PS_55;
 Array BC_236 --> PACKED_TEXT_STORAGE TX_PS_56;
-Array BC_237 --> LIST_CONST_60702 0;
+Array BC_237 --> LIST_CONST_60735 0;
 
 
 

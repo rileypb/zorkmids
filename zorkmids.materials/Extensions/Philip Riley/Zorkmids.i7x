@@ -62,6 +62,8 @@ To appropriate money starting at (holder - an object):
 		if holder is not a room:
 			appropriate money starting at the holder of holder;
 
+during-appropriation is a truth state that varies. during-appropriation is false.
+
 To appropriate money descending from (holder - an object):
 	if holder is not marked for appropriation and holder is not the player:
 		now holder is marked for appropriation;
@@ -69,15 +71,19 @@ To appropriate money descending from (holder - an object):
 			if zorkmid content of holder > total money required - total money appropriated:
 				let money to take be total money required - total money appropriated;
 				now appropriating-taking is true;
+				now during-appropriation is true;
 				say "[money to take]: [run paragraph on]";
 				try appropriating money to take from holder of holder;
 				now appropriating-taking is false;
+				now during-appropriation is false;
 				now total money appropriated is total money appropriated + money to take;
 			otherwise:
 				now appropriating-taking is true;
+				now during-appropriation is true;
 				say "[zorkmid content of holder]: [run paragraph on]";
 				try appropriating the zorkmid content of holder from holder of holder;
 				now appropriating-taking is false;
+				now during-appropriation is false;
 				now total money appropriated is total money appropriated + zorkmid content of holder;
 		otherwise if total money appropriated < total money required:
 			if holder is a container and the holder is open:
@@ -122,9 +128,14 @@ Carry out appropriating it from:
 	now the zorkmid content of the second noun is the zorkmid content of the second noun minus the quantity of money understood;
 	now the zorkmid content of the player is the zorkmid content of the player plus the quantity of money understood;
 
+To cancel parabreak:
+	(- say__p = 0; -)
+
 Report appropriating it from:
 	if appropriating-taking is true:
 		say "Taken from [the second noun].";
+		if during-appropriation is true:
+			cancel parabreak;
 	otherwise:
 		say "Taken.";
 
