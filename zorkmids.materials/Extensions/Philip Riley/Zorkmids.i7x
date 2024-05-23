@@ -18,11 +18,6 @@ total quantity is a quantity of money that varies. total quantity is $0.
 all quantities is a list of things that varies. all quantities is {}.
 used quantities is a list of things that varies. used quantities is {}.
 
-Instead of examining a quantity of zorkmids:
-	say "There are ";
-	say the zorkmid content of the noun;
-	say " here."
-
 Rule for printing the name of a quantity of zorkmids (called Q):
 	say the zorkmid content of Q;
 
@@ -32,7 +27,7 @@ Check taking a quantity of zorkmids (this is the no stealing rule):
 
 appropriating-taking is a truth state that varies. appropriating-taking is false.
 
-Check taking a quantity of zorkmids:
+Check taking a quantity of zorkmids (this is the redirect to appropriating rule):
 	now appropriating-taking is true;
 	try appropriating the zorkmid content of the noun from the holder of the noun instead;
 
@@ -65,9 +60,9 @@ To appropriate money starting at (holder - an object):
 during-appropriation is a truth state that varies. during-appropriation is false.
 
 To appropriate money descending from (holder - an object):
-	if holder is not marked for appropriation and holder is not the player:
+	if holder is not marked for appropriation:
 		now holder is marked for appropriation;
-		if the holder is a quantity of zorkmids:
+		if the holder is a quantity of zorkmids and the holder of the holder is not the player:
 			if zorkmid content of holder > total money required - total money appropriated:
 				let money to take be total money required - total money appropriated;
 				now appropriating-taking is true;
@@ -94,6 +89,9 @@ To appropriate money descending from (holder - an object):
 					appropriate money descending from item;
 			otherwise if holder is a room:
 				repeat with item running through things in holder:
+					appropriate money descending from item;
+			otherwise if holder is a person:
+				repeat with item running through things carried by the holder:
 					appropriate money descending from item;
 
 Carry out appropriating:
@@ -233,14 +231,13 @@ To populate quantities:
 			if the item is a container:
 				let this quantity be the next quantity;
 				now the zorkmid content of this quantity is the zorkmid content of the item;
-				if the item is open and the item is not enclosed by the player:
+				if the item is open:
 					increase total quantity by the zorkmid content of the item;
 				now this quantity is in the item;
 			otherwise if the item is a supporter:
 				let this quantity be the next quantity;
 				now the zorkmid content of this quantity is the zorkmid content of the item;
-				if the item is not enclosed by the player:
-					increase total quantity by the zorkmid content of the item;
+				increase total quantity by the zorkmid content of the item;
 				now this quantity is on the item;
 	repeat with P running through visible people:
 		if the zorkmid content of P > $0:

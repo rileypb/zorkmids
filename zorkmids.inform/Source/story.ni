@@ -18,8 +18,10 @@ Dan is a person in the Lab. The zorkmid content of Dan is $100.
 
 The pencil is on the desk.
 The chair is an enterable supporter on the desk.
-The player is on the chair.
 the cucumber is on the chair.
+
+The player carries a napsack. The pickle is in the napsack.
+Understand "cucumber" as the pickle.
 
 Garden is east of the Lab. "You are in a garden."
 The zorkmid content of the Garden is $10.
