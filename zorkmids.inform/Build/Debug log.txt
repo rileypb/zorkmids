@@ -23,7 +23,7 @@ Phase II ... Semantic analysis Ia
 
 I've also read Standard Rules by Graham Nelson, which is 42655 words long.
 I've also read English Language by Graham Nelson, which is 2297 words long.
-I've also read Zorkmids by Philip Riley, which is 2000 words long.
+I've also read Zorkmids by Philip Riley, which is 2032 words long.
 I've also read Dynamic Objects by Jesse McGrew, which is 1222 words long.
 I've also read Dynamic Tables by Jesse McGrew, which is 1979 words long.
 
@@ -179,7 +179,7 @@ Phase XIII ... Compilation now complete
 -----------------------------------------------------
 
 Total of 130 files written as streams.
-CPU time: 141 centiseconds
+CPU time: 142 centiseconds
 
 
 That concludes the debugging log from this run of Inform.

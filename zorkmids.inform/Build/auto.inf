@@ -19729,12 +19729,12 @@ Array ActionHappened --> 0 0 0 0 0 0;
     if (debug_rules) DB_Rule(R_812, 812);
     ! [2: if total quantity < the quantity of money understood]
     if ((((Global_Vars-->11) < parsed_number)))
-    {! [3: say ~[There] [aren't] that much money here.~]
+    {! [3: say ~[There] [aren't] that much money available.~]
         say__p=1;! [4: there]
         ParaContent(); (PHR_790_r4 ());! [5: ~ ~]
         ParaContent(); print " ";! [6: aren't]
-        ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [7: ~ that much money here.~]
-        ParaContent(); print " that much money here."; new_line; .L_Say294; .L_SayX294;rtrue;
+        ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [7: ~ that much money available.~]
+        ParaContent(); print " that much money available."; new_line; .L_Say294; .L_SayX294;rtrue;
         }
         } else if (debug_rules > 1) DB_Rule(R_812, 812, 'actor');
         rfalse;
@@ -19824,14 +19824,18 @@ Array ActionHappened --> 0 0 0 0 0 0;
 [ R_817 ;
     if (actor == player) {
     if (debug_rules) DB_Rule(R_817, 817);
-    ! [2: say ~[We] [are] [quantity of money understood] richer!~]
+    ! [2: say ~[We] [are] [quantity of money understood] richer, bringing [us] to a total of [the zorkmid content of the player].~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: are]
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ ~]
     ParaContent(); print " ";! [7: quantity of money understood]
-    ParaContent(); E67(parsed_number);! [8: ~ richer!~]
-    ParaContent(); print " richer!"; new_line; .L_Say298; .L_SayX298;} else if (debug_rules > 1) DB_Rule(R_817, 817, 'actor');
+    ParaContent(); E67(parsed_number);! [8: ~ richer, bringing ~]
+    ParaContent(); print " richer, bringing ";! [9: us]
+    ParaContent(); (PHR_764_r7 ());! [10: ~ to a total of ~]
+    ParaContent(); print " to a total of ";! [11: the zorkmid content of the player]
+    ParaContent(); @push self; E67(GProperty(10, self=player,p15_zorkmid_content));@pull self; ! [12: ~.~]
+    ParaContent(); print "."; new_line; .L_Say298; .L_SayX298;} else if (debug_rules > 1) DB_Rule(R_817, 817, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20026,14 +20030,18 @@ Array ActionHappened --> 0 0 0 0 0 0;
 [ R_826 ;
     if (actor == player) {
     if (debug_rules) DB_Rule(R_826, 826);
-    ! [2: say ~[We] [are] [quantity of money understood] poorer!~]
+    ! [2: say ~[We] [are] [quantity of money understood] poorer, leaving [us] with [the zorkmid content of the player].~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: are]
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ ~]
     ParaContent(); print " ";! [7: quantity of money understood]
-    ParaContent(); E67(parsed_number);! [8: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say307; .L_SayX307;} else if (debug_rules > 1) DB_Rule(R_826, 826, 'actor');
+    ParaContent(); E67(parsed_number);! [8: ~ poorer, leaving ~]
+    ParaContent(); print " poorer, leaving ";! [9: us]
+    ParaContent(); (PHR_764_r7 ());! [10: ~ with ~]
+    ParaContent(); print " with ";! [11: the zorkmid content of the player]
+    ParaContent(); @push self; E67(GProperty(10, self=player,p15_zorkmid_content));@pull self; ! [12: ~.~]
+    ParaContent(); print "."; new_line; .L_Say307; .L_SayX307;} else if (debug_rules > 1) DB_Rule(R_826, 826, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20128,14 +20136,18 @@ Array ActionHappened --> 0 0 0 0 0 0;
     if ((( (actor==player)))) { ! Runs only when pattern matches
     self = noun;
     if (debug_rules) DB_Rule(R_830, 830);
-    ! [2: say ~[We] [are] [quantity of money understood] poorer!~]
+    ! [2: say ~[We] [are] [quantity of money understood] poorer, leaving [us] with [the zorkmid content of the player].~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: are]
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ ~]
     ParaContent(); print " ";! [7: quantity of money understood]
-    ParaContent(); E67(parsed_number);! [8: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say311; .L_SayX311;} else if (debug_rules > 1) DB_Rule(R_830, 830, 'action');
+    ParaContent(); E67(parsed_number);! [8: ~ poorer, leaving ~]
+    ParaContent(); print " poorer, leaving ";! [9: us]
+    ParaContent(); (PHR_764_r7 ());! [10: ~ with ~]
+    ParaContent(); print " with ";! [11: the zorkmid content of the player]
+    ParaContent(); @push self; E67(GProperty(10, self=player,p15_zorkmid_content));@pull self; ! [12: ~.~]
+    ParaContent(); print "."; new_line; .L_Say311; .L_SayX311;} else if (debug_rules > 1) DB_Rule(R_830, 830, 'action');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20226,7 +20238,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
 [ R_834 ;
     if (actor == player) {
     if (debug_rules) DB_Rule(R_834, 834);
-    ! [2: say ~[We] [have] left [quantity of money understood] in [the second noun], and [we] [are] [quantity of money understood] poorer!~]
+    ! [2: say ~[We] [have] left [quantity of money understood] in [the second noun], leaving [us] with [the zorkmid content of the player].~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: have]
@@ -20234,14 +20246,12 @@ Array ActionHappened --> 0 0 0 0 0 0;
     ParaContent(); print " left ";! [7: quantity of money understood]
     ParaContent(); E67(parsed_number);! [8: ~ in ~]
     ParaContent(); print " in ";! [9: the second noun]
-    ParaContent(); print (the) second;! [10: ~, and ~]
-    ParaContent(); print ", and ";! [11: we]
-    ParaContent(); (PHR_763_r7 ());! [12: ~ ~]
-    ParaContent(); print " ";! [13: are]
-    ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [14: ~ ~]
-    ParaContent(); print " ";! [15: quantity of money understood]
-    ParaContent(); E67(parsed_number);! [16: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say315; .L_SayX315;} else if (debug_rules > 1) DB_Rule(R_834, 834, 'actor');
+    ParaContent(); print (the) second;! [10: ~, leaving ~]
+    ParaContent(); print ", leaving ";! [11: us]
+    ParaContent(); (PHR_764_r7 ());! [12: ~ with ~]
+    ParaContent(); print " with ";! [13: the zorkmid content of the player]
+    ParaContent(); @push self; E67(GProperty(10, self=player,p15_zorkmid_content));@pull self; ! [14: ~.~]
+    ParaContent(); print "."; new_line; .L_Say315; .L_SayX315;} else if (debug_rules > 1) DB_Rule(R_834, 834, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -20332,7 +20342,7 @@ Array ActionHappened --> 0 0 0 0 0 0;
 [ R_838 ;
     if (actor == player) {
     if (debug_rules) DB_Rule(R_838, 838);
-    ! [2: say ~[We] [have] left [quantity of money understood] on [the second noun], and [we] [are] [quantity of money understood] poorer!~]
+    ! [2: say ~[We] [have] left [quantity of money understood] on [the second noun], leaving [us] with [the zorkmid content of the player].~]
     say__p=1;! [3: we]
     ParaContent(); (PHR_768_r5 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: have]
@@ -20340,14 +20350,12 @@ Array ActionHappened --> 0 0 0 0 0 0;
     ParaContent(); print " left ";! [7: quantity of money understood]
     ParaContent(); E67(parsed_number);! [8: ~ on ~]
     ParaContent(); print " on ";! [9: the second noun]
-    ParaContent(); print (the) second;! [10: ~, and ~]
-    ParaContent(); print ", and ";! [11: we]
-    ParaContent(); (PHR_763_r7 ());! [12: ~ ~]
-    ParaContent(); print " ";! [13: are]
-    ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [14: ~ ~]
-    ParaContent(); print " ";! [15: quantity of money understood]
-    ParaContent(); E67(parsed_number);! [16: ~ poorer!~]
-    ParaContent(); print " poorer!"; new_line; .L_Say319; .L_SayX319;} else if (debug_rules > 1) DB_Rule(R_838, 838, 'actor');
+    ParaContent(); print (the) second;! [10: ~, leaving ~]
+    ParaContent(); print ", leaving ";! [11: us]
+    ParaContent(); (PHR_764_r7 ());! [12: ~ with ~]
+    ParaContent(); print " with ";! [13: the zorkmid content of the player]
+    ParaContent(); @push self; E67(GProperty(10, self=player,p15_zorkmid_content));@pull self; ! [14: ~.~]
+    ParaContent(); print "."; new_line; .L_Say319; .L_SayX319;} else if (debug_rules > 1) DB_Rule(R_838, 838, 'actor');
     rfalse;
 ];
 ! ----------------------------------------------------------------------------------------------------
@@ -38685,15 +38693,15 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
 ];
 ! From "English Language" by Graham Nelson
 ! Request 7: phrase nothing -> nothing
-! To say we:
-[ PHR_763_r7  ;
+! To say us:
+[ PHR_764_r7  ;
     ! [2: now the prior named object is the player]
     prior_named_noun = player;
     ! [3: if the story viewpoint is first person singular]
     if (((story_viewpoint == I112_first_person_singular)))
-    {! [4: say ~I~]
-        say__p=1;! [5: ~I~]
-        ParaContent(); print "I"; .L_Say328; .L_SayX328;}
+    {! [4: say ~me~]
+        say__p=1;! [5: ~me~]
+        ParaContent(); print "me"; .L_Say328; .L_SayX328;}
     ! [6: if the story viewpoint is second person singular]
     if (((story_viewpoint == I113_second_person_singular)))
     {! [7: say ~you~]
@@ -38703,18 +38711,18 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
     if (((story_viewpoint == I114_third_person_singular)))
     {! [10: if the player is male]
         if ((((Adj_80_t1_v10(player)))))
-        {! [11: say ~he~]
-            say__p=1;! [12: ~he~]
-            ParaContent(); print "he"; .L_Say330; .L_SayX330;} else {
-            ! [13: say ~she~]
-            say__p=1;! [14: ~she~]
-            ParaContent(); print "she"; .L_Say331; .L_SayX331;}
+        {! [11: say ~him~]
+            say__p=1;! [12: ~him~]
+            ParaContent(); print "him"; .L_Say330; .L_SayX330;} else {
+            ! [13: say ~her~]
+            say__p=1;! [14: ~her~]
+            ParaContent(); print "her"; .L_Say331; .L_SayX331;}
             }
     ! [15: if the story viewpoint is first person plural]
     if (((story_viewpoint == I115_first_person_plural)))
-    {! [16: say ~we~]
-        say__p=1;! [17: ~we~]
-        ParaContent(); print "we"; .L_Say332; .L_SayX332;}
+    {! [16: say ~us~]
+        say__p=1;! [17: ~us~]
+        ParaContent(); print "us"; .L_Say332; .L_SayX332;}
     ! [18: if the story viewpoint is second person plural]
     if (((story_viewpoint == I116_second_person_plural)))
     {! [19: say ~you~]
@@ -38722,9 +38730,9 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
         ParaContent(); print "you"; .L_Say333; .L_SayX333;}
     ! [21: if the story viewpoint is third person plural]
     if (((story_viewpoint == I117_third_person_plural)))
-    {! [22: say ~they~]
-        say__p=1;! [23: ~they~]
-        ParaContent(); print "they"; .L_Say334; .L_SayX334;}
+    {! [22: say ~them~]
+        say__p=1;! [23: ~them~]
+        ParaContent(); print "them"; .L_Say334; .L_SayX334;}
         rfalse;
 ];
 ! From the Standard Rules
@@ -38837,15 +38845,15 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
 ];
 ! From "English Language" by Graham Nelson
 ! Request 16: phrase nothing -> nothing
-! To say us:
-[ PHR_764_r16  ;
+! To say we:
+[ PHR_763_r16  ;
     ! [2: now the prior named object is the player]
     prior_named_noun = player;
     ! [3: if the story viewpoint is first person singular]
     if (((story_viewpoint == I112_first_person_singular)))
-    {! [4: say ~me~]
-        say__p=1;! [5: ~me~]
-        ParaContent(); print "me"; .L_Say339; .L_SayX337;}
+    {! [4: say ~I~]
+        say__p=1;! [5: ~I~]
+        ParaContent(); print "I"; .L_Say339; .L_SayX337;}
     ! [6: if the story viewpoint is second person singular]
     if (((story_viewpoint == I113_second_person_singular)))
     {! [7: say ~you~]
@@ -38855,18 +38863,18 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
     if (((story_viewpoint == I114_third_person_singular)))
     {! [10: if the player is male]
         if ((((Adj_80_t1_v10(player)))))
-        {! [11: say ~him~]
-            say__p=1;! [12: ~him~]
-            ParaContent(); print "him"; .L_Say341; .L_SayX339;} else {
-            ! [13: say ~her~]
-            say__p=1;! [14: ~her~]
-            ParaContent(); print "her"; .L_Say342; .L_SayX340;}
+        {! [11: say ~he~]
+            say__p=1;! [12: ~he~]
+            ParaContent(); print "he"; .L_Say341; .L_SayX339;} else {
+            ! [13: say ~she~]
+            say__p=1;! [14: ~she~]
+            ParaContent(); print "she"; .L_Say342; .L_SayX340;}
             }
     ! [15: if the story viewpoint is first person plural]
     if (((story_viewpoint == I115_first_person_plural)))
-    {! [16: say ~us~]
-        say__p=1;! [17: ~us~]
-        ParaContent(); print "us"; .L_Say343; .L_SayX341;}
+    {! [16: say ~we~]
+        say__p=1;! [17: ~we~]
+        ParaContent(); print "we"; .L_Say343; .L_SayX341;}
     ! [18: if the story viewpoint is second person plural]
     if (((story_viewpoint == I116_second_person_plural)))
     {! [19: say ~you~]
@@ -38874,9 +38882,9 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
         ParaContent(); print "you"; .L_Say344; .L_SayX342;}
     ! [21: if the story viewpoint is third person plural]
     if (((story_viewpoint == I117_third_person_plural)))
-    {! [22: say ~them~]
-        say__p=1;! [23: ~them~]
-        ParaContent(); print "them"; .L_Say345; .L_SayX343;}
+    {! [22: say ~they~]
+        say__p=1;! [23: ~they~]
+        ParaContent(); print "they"; .L_Say345; .L_SayX343;}
         rfalse;
 ];
 ! From "English Language" by Graham Nelson
@@ -39224,7 +39232,7 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
             if (((tmp_0 == player)))
             {! [8: say ~[we]~]
                 say__p=1;! [9: we]
-                ParaContent(); (PHR_763_r7 ()); .L_Say398; .L_SayX396;} else {
+                ParaContent(); (PHR_763_r16 ()); .L_Say398; .L_SayX396;} else {
                 ! [10: if the item is a male person and item is not neuter]
                 if ((((tmp_0 ofclass K8_person) && ((Adj_80_t1_v10(tmp_0))))) && (((~~(((Adj_81_t1_v10(tmp_0))))))))
                 {! [11: say ~he~]
@@ -39254,7 +39262,7 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
             if (((tmp_0 == player)))
             {! [23: say ~[we]~]
                 say__p=1;! [24: we]
-                ParaContent(); (PHR_763_r7 ()); .L_Say403; .L_SayX401;} else {
+                ParaContent(); (PHR_763_r16 ()); .L_Say403; .L_SayX401;} else {
                 ! [25: if the item is a male person and item is not neuter]
                 if ((((tmp_0 ofclass K8_person) && ((Adj_80_t1_v10(tmp_0))))) && (((~~(((Adj_81_t1_v10(tmp_0))))))))
                 {! [26: say ~him~]
@@ -39363,7 +39371,7 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
         if (((tmp_0 == player)))
         {! [7: say ~[we]~]
             say__p=1;! [8: we]
-            ParaContent(); (PHR_763_r7 ()); .L_Say418; .L_SayX416;} else {
+            ParaContent(); (PHR_763_r16 ()); .L_Say418; .L_SayX416;} else {
             ! [9: if the item is a male person and item is not neuter]
             if ((((tmp_0 ofclass K8_person) && ((Adj_80_t1_v10(tmp_0))))) && (((~~(((Adj_81_t1_v10(tmp_0))))))))
             {! [10: say ~he~]
@@ -39511,7 +39519,7 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
         if (((tmp_0 == player)))
         {! [7: say ~[us]~]
             say__p=1;! [8: us]
-            ParaContent(); (PHR_764_r16 ()); .L_Say438; .L_SayX436;} else {
+            ParaContent(); (PHR_764_r7 ()); .L_Say438; .L_SayX436;} else {
             ! [9: if the item is a male person and item is not neuter]
             if ((((tmp_0 ofclass K8_person) && ((Adj_80_t1_v10(tmp_0))))) && (((~~(((Adj_81_t1_v10(tmp_0))))))))
             {! [10: say ~him~]
@@ -39733,7 +39741,7 @@ Array LIST_CONST_60763 --> (85721088) LIST_OF_TY MAX_POSITIVE_NUMBER VALUE_TY 0 
         if (((tmp_0 == player)))
         {! [7: say ~[we]~]
             say__p=1;! [8: we]
-            ParaContent(); (PHR_763_r7 ()); .L_Say468; .L_SayX466;} else {
+            ParaContent(); (PHR_763_r16 ()); .L_Say468; .L_SayX466;} else {
             ! [9: if the item is a male person and item is not neuter]
             if ((((tmp_0 ofclass K8_person) && ((Adj_80_t1_v10(tmp_0))))) && (((~~(((Adj_81_t1_v10(tmp_0))))))))
             {! [10: say ~he~]
@@ -44116,7 +44124,7 @@ Array TX_S_3 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_3;
     ParaContent(); print " ";! [4: are]
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [5: ~ pitch dark, and ~]
     ParaContent(); print " pitch dark, and ";! [6: we]
-    ParaContent(); (PHR_763_r7 ());! [7: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [7: ~ ~]
     ParaContent(); print " ";! [8: can't see]
     ConjugateVerb_77(CV_POS, PNToVP(), story_tense, ConjugateVerb_16); say__p=1; ! [9: ~ a thing.~]
     ParaContent(); print " a thing."; .L_Say502; .L_SayX499;rtrue;
@@ -45463,7 +45471,7 @@ ct_1=LocalParking-->5;
     ParaContent(); print "On ";! [3: the domain]
     ParaContent(); print (the) tmp_0;! [4: ~ ~]
     ParaContent(); print " ";! [5: we]
-    ParaContent(); (PHR_763_r7 ());! [6: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [6: ~ ~]
     ParaContent(); print " "; .L_Say656; .L_SayX646;rtrue;
 ];
 Array TX_S_142 --> CONSTANT_PERISHABLE_TEXT_STORAGE R_TX_S_142;
@@ -45488,7 +45496,7 @@ ct_1=LocalParking-->5;
     ParaContent(); print "In ";! [3: the domain]
     ParaContent(); print (the) tmp_0;! [4: ~ ~]
     ParaContent(); print " ";! [5: we]
-    ParaContent(); (PHR_763_r7 ());! [6: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [6: ~ ~]
     ParaContent(); print " "; .L_Say657; .L_SayX647;rtrue;
 ];
 Array TX_S_143 --> CONSTANT_PERISHABLE_TEXT_STORAGE R_TX_S_143;
@@ -46510,7 +46518,7 @@ Array TX_S_216 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_216;
     ParaContent(); print ", pushing ";! [3: the thing gone with]
     ParaContent(); print (the) (MStack-->MstVO(20007,4));! [4: ~ in front, and ~]
     ParaContent(); print " in front, and ";! [5: us]
-    ParaContent(); (PHR_764_r16 ());! [6: ~ along too~]
+    ParaContent(); (PHR_764_r7 ());! [6: ~ along too~]
     ParaContent(); print " along too"; .L_Say733; .L_SayX722;rtrue;
 ];
 Array TX_S_217 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_217;
@@ -46566,7 +46574,7 @@ Array TX_S_220 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_220;
     ! [1: ~, taking [us] along~]
     say__p=1;! [2: ~, taking ~]
     ParaContent(); print ", taking ";! [3: us]
-    ParaContent(); (PHR_764_r16 ());! [4: ~ along~]
+    ParaContent(); (PHR_764_r7 ());! [4: ~ along~]
     ParaContent(); print " along"; .L_Say737; .L_SayX726;rtrue;
 ];
 Array TX_S_221 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_221;
@@ -46578,7 +46586,7 @@ Array TX_S_221 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_221;
     ! [1: ~But [we]['re] already on [the noun].~]
     say__p=1;! [2: ~But ~]
     ParaContent(); print "But ";! [3: we]
-    ParaContent(); (PHR_763_r7 ());! [4: 're]
+    ParaContent(); (PHR_763_r16 ());! [4: 're]
     ConjugateVerb_74(CV_POS, PNToVP(), story_tense); say__p=1; ! [5: ~ already on ~]
     ParaContent(); print " already on ";! [6: the noun]
     ParaContent(); print (the) noun;! [7: ~.~]
@@ -46593,7 +46601,7 @@ Array TX_S_222 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_222;
     ! [1: ~But [we]['re] already in [the noun].~]
     say__p=1;! [2: ~But ~]
     ParaContent(); print "But ";! [3: we]
-    ParaContent(); (PHR_763_r7 ());! [4: 're]
+    ParaContent(); (PHR_763_r16 ());! [4: 're]
     ConjugateVerb_74(CV_POS, PNToVP(), story_tense); say__p=1; ! [5: ~ already in ~]
     ParaContent(); print " already in ";! [6: the noun]
     ParaContent(); print (the) noun;! [7: ~.~]
@@ -46608,7 +46616,7 @@ Array TX_S_223 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_223;
     ParaContent(); RegardingSingleObject(noun);! [3: they're]
     ParaContent(); (PHR_788_r39 ());! [4: ~ not something ~]
     ParaContent(); print " not something ";! [5: we]
-    ParaContent(); (PHR_763_r7 ());! [6: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [6: ~ ~]
     ParaContent(); print " ";! [7: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [8: ~ stand on.~]
     ParaContent(); print " stand on."; .L_Say740; .L_SayX729;rtrue;
@@ -46622,7 +46630,7 @@ Array TX_S_224 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_224;
     ParaContent(); RegardingSingleObject(noun);! [3: they're]
     ParaContent(); (PHR_788_r39 ());! [4: ~ not something ~]
     ParaContent(); print " not something ";! [5: we]
-    ParaContent(); (PHR_763_r7 ());! [6: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [6: ~ ~]
     ParaContent(); print " ";! [7: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [8: ~ sit down on.~]
     ParaContent(); print " sit down on."; .L_Say741; .L_SayX730;rtrue;
@@ -46636,7 +46644,7 @@ Array TX_S_225 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_225;
     ParaContent(); RegardingSingleObject(noun);! [3: they're]
     ParaContent(); (PHR_788_r39 ());! [4: ~ not something ~]
     ParaContent(); print " not something ";! [5: we]
-    ParaContent(); (PHR_763_r7 ());! [6: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [6: ~ ~]
     ParaContent(); print " ";! [7: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [8: ~ lie down on.~]
     ParaContent(); print " lie down on."; .L_Say742; .L_SayX731;rtrue;
@@ -46650,7 +46658,7 @@ Array TX_S_226 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_226;
     ParaContent(); RegardingSingleObject(noun);! [3: they're]
     ParaContent(); (PHR_788_r39 ());! [4: ~ not something ~]
     ParaContent(); print " not something ";! [5: we]
-    ParaContent(); (PHR_763_r7 ());! [6: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [6: ~ ~]
     ParaContent(); print " ";! [7: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [8: ~ enter.~]
     ParaContent(); print " enter."; .L_Say743; .L_SayX732;rtrue;
@@ -46849,7 +46857,7 @@ Array TX_S_240 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_240;
     ! [1: ~But [we] [aren't] in anything at the [if story tense is present tense]moment[otherwise]time[end if].~]
     say__p=1;! [2: ~But ~]
     ParaContent(); print "But ";! [3: we]
-    ParaContent(); (PHR_763_r7 ());! [4: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: aren't]
     ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ in anything at the ~]
     ParaContent(); print " in anything at the ";! [7: if story tense is present tense]
@@ -46923,7 +46931,7 @@ Array TX_S_245 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_245;
     ! [1: ~But [we] [aren't] on [the noun] at the [if story tense is present tense]moment[otherwise]time[end if].~]
     say__p=1;! [2: ~But ~]
     ParaContent(); print "But ";! [3: we]
-    ParaContent(); (PHR_763_r7 ());! [4: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: aren't]
     ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ on ~]
     ParaContent(); print " on ";! [7: the noun]
@@ -47000,7 +47008,7 @@ Array TX_S_250 --> CONSTANT_PERISHABLE_TEXT_STORAGE R_TX_S_250;
     ParaContent(); print " ";! [4: are]
     ConjugateVerb_0(CV_POS, PNToVP(), story_tense); say__p=1; ! [5: ~ pitch dark, and ~]
     ParaContent(); print " pitch dark, and ";! [6: we]
-    ParaContent(); (PHR_763_r7 ());! [7: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [7: ~ ~]
     ParaContent(); print " ";! [8: can't see]
     ConjugateVerb_77(CV_POS, PNToVP(), story_tense, ConjugateVerb_16); say__p=1; ! [9: ~ a thing.~]
     ParaContent(); print " a thing."; .L_Say771; .L_SayX758;rtrue;
@@ -47255,7 +47263,7 @@ Array TX_S_270 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_270;
     ParaContent(); print " ";! [5: don't]
     ConjugateVerb_79(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ seem to be something ~]
     ParaContent(); print " seem to be something ";! [7: we]
-    ParaContent(); (PHR_763_r7 ());! [8: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [8: ~ ~]
     ParaContent(); print " ";! [9: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [10: ~ lock.~]
     ParaContent(); print " lock."; .L_Say794; .L_SayX780;rtrue;
@@ -47287,7 +47295,7 @@ Array TX_S_272 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_272;
     ! [1: ~First [we] [would have] to close [the noun].~]
     say__p=1;! [2: ~First ~]
     ParaContent(); print "First ";! [3: we]
-    ParaContent(); (PHR_763_r7 ());! [4: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: would have]
     ConjugateVerb_73(CV_POS, PNToVP(), story_tense, ConjugateVerb_2); say__p=1; ! [6: ~ to close ~]
     ParaContent(); print " to close ";! [7: the noun]
@@ -47343,7 +47351,7 @@ Array TX_S_276 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_276;
     ParaContent(); print " ";! [5: don't]
     ConjugateVerb_79(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ seem to be something ~]
     ParaContent(); print " seem to be something ";! [7: we]
-    ParaContent(); (PHR_763_r7 ());! [8: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [8: ~ ~]
     ParaContent(); print " ";! [9: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [10: ~ unlock.~]
     ParaContent(); print " unlock."; .L_Say802; .L_SayX787;rtrue;
@@ -47417,7 +47425,7 @@ Array TX_S_281 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_281;
     ParaContent(); print " ";! [5: aren't]
     ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ something ~]
     ParaContent(); print " something ";! [7: we]
-    ParaContent(); (PHR_763_r7 ());! [8: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [8: ~ ~]
     ParaContent(); print " ";! [9: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [10: ~ switch.~]
     ParaContent(); print " switch."; .L_Say809; .L_SayX793;rtrue;
@@ -47456,7 +47464,7 @@ Array TX_S_284 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_284;
     ParaContent(); print " ";! [5: aren't]
     ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ something ~]
     ParaContent(); print " something ";! [7: we]
-    ParaContent(); (PHR_763_r7 ());! [8: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [8: ~ ~]
     ParaContent(); print " ";! [9: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [10: ~ switch.~]
     ParaContent(); print " switch."; .L_Say812; .L_SayX796;rtrue;
@@ -47495,7 +47503,7 @@ Array TX_S_287 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_287;
     ParaContent(); print " ";! [5: aren't]
     ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ something ~]
     ParaContent(); print " something ";! [7: we]
-    ParaContent(); (PHR_763_r7 ());! [8: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [8: ~ ~]
     ParaContent(); print " ";! [9: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [10: ~ open.~]
     ParaContent(); print " open."; .L_Say815; .L_SayX799;rtrue;
@@ -47583,7 +47591,7 @@ Array TX_S_294 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_294;
     ParaContent(); print " ";! [5: aren't]
     ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ something ~]
     ParaContent(); print " something ";! [7: we]
-    ParaContent(); (PHR_763_r7 ());! [8: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [8: ~ ~]
     ParaContent(); print " ";! [9: can]
     ConjugateVerb_15(CV_POS, PNToVP(), story_tense); say__p=1; ! [10: ~ close.~]
     ParaContent(); print " close."; .L_Say822; .L_SayX806;rtrue;
@@ -47850,7 +47858,7 @@ Array TX_S_315 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_315;
     ParaContent(); print " ";! [6: the noun]
     ParaContent(); print (the) noun;! [7: ~ to ~]
     ParaContent(); print " to ";! [8: us]
-    ParaContent(); (PHR_764_r16 ());! [9: ~.~]
+    ParaContent(); (PHR_764_r7 ());! [9: ~.~]
     ParaContent(); print "."; .L_Say843; .L_SayX827;rtrue;
 ];
 Array TX_S_316 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_316;
@@ -48085,7 +48093,7 @@ Array TX_S_335 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_335;
     ParaContent(); print " ";! [4: touch]
     ConjugateVerb_18(CV_POS, PNToVP(), story_tense); say__p=1; ! [5: ~ ~]
     ParaContent(); print " ";! [6: us]
-    ParaContent(); (PHR_764_r16 ());! [7: ~.~]
+    ParaContent(); (PHR_764_r7 ());! [7: ~.~]
     ParaContent(); print "."; .L_Say865; .L_SayX848;rtrue;
 ];
 Array TX_S_336 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_336;
@@ -48132,7 +48140,7 @@ Array TX_S_339 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_339;
     ! [1: ~But [we] [aren't] holding [regarding the noun][those].~]
     say__p=1;! [2: ~But ~]
     ParaContent(); print "But ";! [3: we]
-    ParaContent(); (PHR_763_r7 ());! [4: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: aren't]
     ConjugateVerb_76(CV_POS, PNToVP(), story_tense); say__p=1; ! [6: ~ holding ~]
     ParaContent(); print " holding ";! [7: regarding the noun]
@@ -48668,7 +48676,7 @@ Array TX_S_386 --> CONSTANT_PACKED_TEXT_STORAGE R_TX_S_386;
     ! [1: ~No, [we] [can't set] [regarding the noun][those] to anything.~]
     say__p=1;! [2: ~No, ~]
     ParaContent(); print "No, ";! [3: we]
-    ParaContent(); (PHR_763_r7 ());! [4: ~ ~]
+    ParaContent(); (PHR_763_r16 ());! [4: ~ ~]
     ParaContent(); print " ";! [5: can't set]
     ConjugateVerb_77(CV_POS, PNToVP(), story_tense, ConjugateVerb_56); say__p=1; ! [6: ~ ~]
     ParaContent(); print " ";! [7: regarding the noun]

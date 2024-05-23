@@ -36,7 +36,7 @@ Appropriating it from is an action applying to one quantity of money and one thi
 
 Check appropriating (this is the can't take too much money rule):
 	if total quantity < the quantity of money understood:
-		say "[There] [aren't] that much money here." instead;
+		say "[There] [aren't] that much money available." instead;
 		
 Check appropriating (this is the can't take too little money rule):
 	if the quantity of money understood is $0:
@@ -110,7 +110,7 @@ Carry out appropriating:
 
 
 Report appropriating:
-	say "[We] [are] [quantity of money understood] richer!";
+	say "[We] [are] [quantity of money understood] richer, bringing [us] to a total of [the zorkmid content of the player].";
 
 Check appropriating it from (this is the can't take too much money from rule):
 	if the zorkmid content of the second noun < the quantity of money understood:
@@ -154,7 +154,7 @@ Carry out wasting money:
 	now the zorkmid content of the holder of the player is the zorkmid content of the holder of the player plus the quantity of money understood;
 
 Report wasting money:
-	say "[We] [are] [quantity of money understood] poorer!";
+	say "[We] [are] [quantity of money understood] poorer, leaving [us] with [the zorkmid content of the player].";
 
 
 Donating it to is an action applying to one quantity of money and one thing. Understand "give [Quantity of money] to [someone]" as donating it to.
@@ -176,7 +176,7 @@ Carry out donating:
 	now the zorkmid content of the second noun is the zorkmid content of the second noun plus the quantity of money understood;
 
 Report donating:
-	say "[We] [are] [quantity of money understood] poorer!";
+	say "[We] [are] [quantity of money understood] poorer, leaving [us] with [the zorkmid content of the player].";
 
 Check depositing it into (this is the can't deposit too much money rule):
 	if the zorkmid content of the player < the quantity of money understood:
@@ -193,7 +193,7 @@ Carry out depositing it into:
 	now the zorkmid content of the second noun is the zorkmid content of the second noun plus the quantity of money understood;
 
 Report depositing it into:
-	say "[We] [have] left [quantity of money understood] in [the second noun], and [we] [are] [quantity of money understood] poorer!";
+	say "[We] [have] left [quantity of money understood] in [the second noun], leaving [us] with [the zorkmid content of the player].";
 
 Check depositing it onto (this is the can't deposit too much money on rule):
 	if the zorkmid content of the player < the quantity of money understood:
@@ -210,7 +210,7 @@ Carry out depositing it onto:
 	now the zorkmid content of the second noun is the zorkmid content of the second noun plus the quantity of money understood;
 
 Report depositing it onto:
-	say "[We] [have] left [quantity of money understood] on [the second noun], and [we] [are] [quantity of money understood] poorer!";
+	say "[We] [have] left [quantity of money understood] on [the second noun], leaving [us] with [the zorkmid content of the player].";
 
 When play begins:
 	populate quantities.
