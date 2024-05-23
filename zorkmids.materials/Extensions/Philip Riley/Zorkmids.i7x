@@ -158,8 +158,11 @@ Report wasting money:
 
 
 Donating it to is an action applying to one quantity of money and one thing. Understand "give [Quantity of money] to [someone]" as donating it to.
+Understand "give [someone] [Quantity of money]" as donating it to (with nouns reversed).
 Depositing it into is an action applying to one quantity of money and one thing. Understand "put [Quantity of money] in/into [something]" as depositing it into.
 Depositing it onto is an action applying to one quantity of money and one thing. Understand "put [Quantity of money] on/onto [something]" as depositing it onto.
+
+
 
 Check donating (this is the can't give too much money rule):
 	if the zorkmid content of the player < the quantity of money understood:
@@ -169,14 +172,12 @@ Check donating (this is the can't give too little money rule):
 	if the quantity of money understood is $0:
 		say "[We] [can't] give no money at all." instead;
 	otherwise if the quantity of money understood < $0:
-		say "[We] [can't] give negative money!" instead;
-
-Carry out donating:	
-	now the zorkmid content of the player is the zorkmid content of the player minus the quantity of money understood;
-	now the zorkmid content of the second noun is the zorkmid content of the second noun plus the quantity of money understood;
-
-Report donating:
-	say "[We] [are] [quantity of money understood] poorer, leaving [us] with [the zorkmid content of the player].";
+		say "[We] [can't] give negative money!" instead; 
+		
+Check an actor donating (this is the block donating rule):
+	if the actor is the player:
+		say "[The second noun] [don't] seem interested." (A);
+	stop the action.
 
 Check depositing it into (this is the can't deposit too much money rule):
 	if the zorkmid content of the player < the quantity of money understood:
